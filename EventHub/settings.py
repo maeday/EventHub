@@ -149,3 +149,9 @@ LOGGING = {
         },
     }
 }
+
+# Override settings from a 'settings_local.py' file
+try:
+    from settings_local import *
+except ImportError, e:
+    pass

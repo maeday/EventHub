@@ -3,4 +3,10 @@
 .pydevproject
 
 # Python compiled files
-.pyc
+*.pyc
+
+# Local settings file
+settings_local.py
+
+# Local testing database
+sqlite3.db
