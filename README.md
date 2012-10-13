@@ -14,3 +14,6 @@ Notes:
   will be merged to 'master' for each release
 * To switch to branch 'dev', enter the command: 
   `git checkout -b dev origin/dev`
+* For those of you unfamiliar with Python syntax, Python is strict 
+  about consistent indentation. _Tabs and spaces do not mix well._ 
+  **DO NOT USE TABS. ONLY USE SPACES!**
