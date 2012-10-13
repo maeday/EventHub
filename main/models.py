@@ -10,9 +10,9 @@ class Event(models.Model):
     # renamed to 'poster'?
     user = models.ForeignKey(User)
     # renamed to 'post_date'?
-    upload_date = models.DateTimeField()
+    upload_date = models.DateTimeField(auto_now_add=True)
     # renamed to 'last_modified'?
-    lmodified = models.DateTimeField() 
+    lmodified = models.DateTimeField(auto_now=True)
     description = models.TextField() 
     # ID primary key is automatically created
 #    event_id = models.IntegerField(primary_key=True)
