@@ -11,9 +11,11 @@ from accounts.models import UserProfile
 
 def register(request):
     '''Handle user registration request'''
+    template = 'register.html'
+    template_context = {}
     if request.user.is_authenticated():
         # They already have an account; don't let them register again
-        return render_to_response('register.html', {'has_account': True})
+        return render_to_response(template, {'has_account': True})
     if request.POST:
         form = RegistrationForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -37,45 +39,52 @@ def register(request):
             email_subject = 'Your new example.com account confirmation'
             email_body = "Hello, %s, and thanks for signing up for an \
 eventhub.com account!\n\nTo activate your account, click this link within 48 \
-hours:\n\nhttp://127.0.0.1:8000/register/confirm/%s" % (
-                username,
-                activation_key)
+hours:\n\nhttp://127.0.0.1:8000/register/confirm/%s" % (username, activation_key)
             send_mail(email_subject,
-                  email_body,
-                  'accounts-noreply@eventhub.com',
-                  [email])
-            return render_to_response('register.html', 
-                                      RequestContext(request, 
-                                                     {'created': True}))
+                      email_body,
+                      'accounts-noreply@eventhub.com',
+                      [email])
+            template_context = {'created': True}
         else:
+            # Form validation failed
             errors = form.errors
-            return render_to_response('register.html', 
-                                      RequestContext(request, 
-                                                     {'form': form, 
-                                                      'created': False, 
-                                                      'invalid': True, 
-                                                      'errors': errors }))
+            template_context = {
+                'form'    : form,
+                'created' : False,
+                'invalid' : True,
+                'errors'  : errors
+            }
     else:
-        return render_to_response('register.html', 
-                                      RequestContext(request, 
-                                                     {'created': False, 
-                                                      'invalid': True}))
-    form = RegistrationForm
-    return render_to_response('register.html', 
-                              RequestContext(request, {'form': form}))
+        # No registration request
+        form = RegistrationForm
+        template_context = {
+            'created' : False,
+            'form'    : form
+        }
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
 
 def confirm(request, activation_key):
     '''Confirm user's activation key'''
+    template = 'confirm.html'
+    template_context = {}
     if request.user.is_authenticated():
-        return render_to_response('confirm.html', {'has_account': True})
-    user_profile = get_object_or_404(UserProfile,
-                                     activation_key=activation_key)
-    if user_profile.key_expires < timezone.now():
-        return render_to_response('confirm.html', {'expired': True})
-    user_account = user_profile.user
-    user_account.is_active = True
-    user_account.save()
-    return render_to_response('confirm.html', {'success': True})
+        # User is already logged on and activated
+        template_context = {'has_account': True}
+    else:
+        # Trigger 404 if activation key is not valid
+        user_profile = get_object_or_404(UserProfile,
+                                         activation_key=activation_key)
+        if user_profile.key_expires < timezone.now():
+            # User's activation key has expired
+            template_context = {'expired': True}
+        else:
+            # Activate user
+            user_account = user_profile.user
+            user_account.is_active = True
+            user_account.save()
+            template_context = {'success': True}
+    return render_to_response(template, template_context)
 
 def login_user(request):
     '''Allow user to log in'''
