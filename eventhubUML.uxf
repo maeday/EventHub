@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>910</x>
+      <y>100</y>
+      <w>180</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Event
+--
+event_name: String [1]
+user : User [1]
+start_date : DateTime [1]
+end_date : DateTime [1]
+upload_date : DateTime [1]
+lmodified : DateFime [1]
+location : String [1]
+
+description : String [0..1]
+cost : float [0..1]
+categories : String [0..1]
+image : ImageFile [0..1]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>910</x>
+      <y>370</y>
+      <w>150</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>User
+{from models.User}
+--
+first_name : String [1]
+last_name : String [1]
+id : int [1]
+email : String [1]
+password : String [1]
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>480</x>
+      <y>130</y>
+      <w>260</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Event Controller
+--
+-displayedEvents : Collection&lt;Events&gt;
+-searchedEvents : Collection&lt;Events&gt;
+--
++ createEvent() : void
++ deleteEvent() : void
++ editEvent() : void
++ searchEvents() : Collection&lt;Event&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>160</y>
+      <w>220</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>View/Search Page
+--
++ display() : void
++ filter() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>40</x>
+      <y>390</y>
+      <w>300</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Log-in Page
+--
++ verify( fname, lname, email, passwd ) : void
++ create( fname, lname, email, passwd ) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>530</x>
+      <y>370</y>
+      <w>150</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>User Controller
+--
+-auth : boolean
+-curUser : User
+--
++ createUser() : void
++ deleteUser() : void
++ editUser() : void
++ serachUser() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>310</x>
+      <y>390</y>
+      <w>240</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;220;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>260</x>
+      <y>170</y>
+      <w>240</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;220;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>570</x>
+      <y>240</y>
+      <w>50</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;130;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>710</x>
+      <y>160</y>
+      <w>220</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;200;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>650</x>
+      <y>400</y>
+      <w>280</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;260;30</additional_attributes>
+  </element>
+</diagram>
