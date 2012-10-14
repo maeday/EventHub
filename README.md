@@ -4,10 +4,10 @@ EventHub
 Setup
 -----
 Creating a local settings file:  
-* Copy the file 'settings.py' from 'EventHub' and name it 
-  'settings_local.py'
-* Delete the last 5 lines of 'settings_local.py'
-* Modify any settings in 'settings_local.py' that you want
+* Copy the file 'settings\_local\_template.py' from 'EventHub' and 
+  name it 'settings_local.py'
+* Modify any settings in 'settings_local.py' that you want, or add
+  more settings
 
 Notes:  
 * Please use the branch 'dev' to do development work. This branch 
