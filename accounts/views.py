@@ -1,13 +1,19 @@
 import datetime, hashlib, random
 
+import cgi
+import urllib
+
+from EventHub import settings
+
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from django.utils import timezone
 
 from accounts.forms import RegistrationForm, LoginForm
-from accounts.models import UserProfile
+from accounts.models import UserProfile, FacebookSession
 
 def register(request):
     '''Handle user registration request'''
@@ -88,34 +94,41 @@ def confirm(request, activation_key):
 
 def login_user(request):
     '''Allow user to log in'''
+    template = 'login.html'
+    template_context = {
+        'logged_in' : False,
+        'success'   : False,
+        'active'    : True,
+        'invalid'   : False,
+        'form'      : LoginForm,
+        'username'  : ''
+    }
     if request.user.is_authenticated():
-        state = "You are already logged in!"
-        return render_to_response('login.html', 
-                                  {'already_logged_in': True, 
-                                   'state': state})
-    state = "Please log in below..."
-    username = password = ''
-    if request.POST:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                state = "You're successfully logged in!"
+        # User is already logged in
+        # TODO: Figure out how this should be handled
+        template_context['logged_in'] = True
+    else:
+        if request.POST:
+            # Login request sent
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+    
+            template_context['username'] = username
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                # Unable to authenticate
+                if user.is_active:
+                    # User has been activated
+                    login(request, user)
+                    template_context['success'] = True
+                else:
+                    # User has not yet been activated
+                    template_context['active'] = False
             else:
-                state = "Your account has not yet been activated. \
-                Please check your email for the activation link."
-        else:
-            state = "Your username and/or password were incorrect."
-
-    form = LoginForm
-    return render_to_response('login.html', 
-                              RequestContext(request, 
-                                             {'state': state, 
-                                              'username': username, 
-                                              'form': form}))
+                # Username/password combo incorrect
+                template_context['invalid'] = True
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
 
 def logout_user(request):
     '''Allow user to log out'''
@@ -126,3 +139,46 @@ def logout_user(request):
     return render_to_response('logout.html', 
                               RequestContext(request, 
                                              {'state': state, 'form': form}))
+    
+def login_facebook(request):
+    error = None
+
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/yay/')
+
+    if request.GET:
+        if 'code' in request.GET:
+            args = {
+                'client_id': settings.FACEBOOK_APP_ID,
+                'redirect_uri': settings.FACEBOOK_REDIRECT_URI,
+                'client_secret': settings.FACEBOOK_API_SECRET,
+                'code': request.GET['code'],
+            }
+
+            url = 'https://graph.facebook.com/oauth/access_token?' + \
+                    urllib.urlencode(args)
+            response = cgi.parse_qs(urllib.urlopen(url).read())
+            access_token = response['access_token'][0]
+            expires = response['expires'][0]
+
+            facebook_session = FacebookSession.objects.get_or_create(
+                access_token=access_token,
+            )[0]
+
+            facebook_session.expires = expires
+            facebook_session.save()
+
+            user = authenticate(token=access_token)
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect('/yay/')
+                else:
+                    error = 'AUTH_DISABLED'
+            else:
+                error = 'AUTH_FAILED'
+        elif 'error_reason' in request.GET:
+            error = 'AUTH_DENIED'
+
+    template_context = {'settings': settings, 'error': error}
+    return render_to_response('login.html', template_context, context_instance=RequestContext(request))
