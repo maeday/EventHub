@@ -1,0 +1,11 @@
+<h1>Most Recently Created Events</h1>
+{% if latest_event_list %}
+    <ol>
+    {% for event in latest_event_list %}
+        <li><strong>{{ event.event_name }}</strong> - {{ event.description }}</li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No events are available.</p>
+{% endif %}
+

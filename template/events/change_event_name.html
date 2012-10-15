@@ -1,0 +1,11 @@
+<h1>Change Event Name For Event ID {{ event.id }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<p>Previous name for event: {{ event.event_name }}</p>
+
+<form action="/events/{{ event.id }}/change_event_name/" method="post">
+{% csrf_token %}
+<input type="text" name="New Name for Event" id="new">
+<input type="submit" value="Submit">
+</form>
