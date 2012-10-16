@@ -4,11 +4,12 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('events.views',
     # Examples:
     # url(r'^$', 'EventHub.views.home', name='home'),
     # url(r'^EventHub/', include('EventHub.foo.urls')),
-    url(r'^events/', include('events.urls')),
+    url(r'^$', 'index'),
+    url(r'^change_event_name/$', 'change_event_name'),
 
         
 
