@@ -1,4 +1,7 @@
-# Django settings for EventHub project.
+# Local Django settings for EventHub project.
+
+# Only include settings here that need to overwrite those set in 'settings.py'. 
+# Otherwise, there will be unnecessary redundancy.
 
 # This shouldn't be needed, but prevents compiler errors
 from EventHub.settings import PROJECT_ROOT
