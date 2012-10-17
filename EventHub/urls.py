@@ -4,13 +4,12 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('django.views.generic.simple',
     # Examples:
     # url(r'^$', 'EventHub.views.home', name='home'),
     # url(r'^EventHub/', include('EventHub.foo.urls')),
+    (r'^$', 'direct_to_template', {'template': 'index.php'}),
     url(r'^events/', include('events.urls')),
-
-        
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
