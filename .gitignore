@@ -10,3 +10,6 @@ settings_local.py
 
 # Local testing database
 sqlite3.db
+
+# Virtual environment folder (if set up)
+venv
