@@ -1,4 +1,5 @@
-# Django settings for mysite project.
+# Django settings for EventHub project.
+from os import path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -9,22 +10,30 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# gets directory of root of project (assuming settings.py is not at the root)
+PROJECT_ROOT = path.dirname(path.dirname(path.abspath(__file__)))
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'kunData',                      # Or path to database file if using sqlite3.
-        'USER': 'kun',                      # Not used with sqlite3.
-        'PASSWORD': '123456',                  # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
+FACEBOOK_APP_ID = ''
+FACEBOOK_API_KEY = ''
+FACEBOOK_API_SECRET = ''
+FACEBOOK_REDIRECT_URI = 'http://example.com/login/' # TODO: Update this setting
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -45,18 +54,18 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = PROJECT_ROOT + '/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = PROJECT_ROOT + '/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -67,6 +76,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    PROJECT_ROOT + '/events/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -78,7 +88,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'c%w_(=4&amp;(*e(&amp;bogptr42_h(485$tslr)&amp;yxhoyuk1b+8c!ym!'
+SECRET_KEY = 't1bqpr#ao@q-v+h*nadolzq622p8&amp;twg(ym!wwp!3d6hugbl^@'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -97,15 +107,26 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'mysite.urls'
+ROOT_URLCONF = 'EventHub.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'mysite.wsgi.application'
+WSGI_APPLICATION = 'EventHub.wsgi.application'
+
+# Template context processors
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.request',
+    'django.core.context_processors.static',
+    'django.contrib.auth.context_processors.auth',
+)
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    PROJECT_ROOT + '/templates'
 )
 
 INSTALLED_APPS = (
@@ -149,3 +170,9 @@ LOGGING = {
         },
     }
 }
+
+# Override settings from a 'settings_local.py' file
+try:
+    from settings_local import *
+except ImportError, e:
+    pass

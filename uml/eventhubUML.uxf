@@ -4,9 +4,9 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>910</x>
-      <y>100</y>
-      <w>180</w>
+      <x>870</x>
+      <y>80</y>
+      <w>210</w>
       <h>220</h>
     </coordinates>
     <panel_attributes>Event
@@ -28,10 +28,10 @@ image : ImageFile [0..1]</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>910</x>
-      <y>370</y>
-      <w>150</w>
-      <h>140</h>
+      <x>870</x>
+      <y>350</y>
+      <w>250</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>User
 {from models.User}
@@ -41,15 +41,15 @@ last_name : String [1]
 id : int [1]
 email : String [1]
 password : String [1]
-</panel_attributes>
+events: Collection&lt;Events&gt; [0..1]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>480</x>
-      <y>130</y>
-      <w>260</w>
+      <x>440</x>
+      <y>110</y>
+      <w>380</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>Event Controller
@@ -57,32 +57,32 @@ password : String [1]
 -displayedEvents : Collection&lt;Events&gt;
 -searchedEvents : Collection&lt;Events&gt;
 --
-+ createEvent() : void
-+ deleteEvent() : void
-+ editEvent() : void
-+ searchEvents() : Collection&lt;Event&gt;</panel_attributes>
++ createEvent( event information) : void
++ deleteEvent( event name ) : void
++ editEvent( event information ) : void
++ searchEvents(search criteria) : Collection&lt;Event&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>70</x>
-      <y>160</y>
-      <w>220</w>
+      <x>0</x>
+      <y>140</y>
+      <w>260</w>
       <h>70</h>
     </coordinates>
     <panel_attributes>View/Search Page
 --
 + display() : void
-+ filter() : boolean</panel_attributes>
++ filter( search criteria ) : boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>40</x>
-      <y>390</y>
-      <w>300</w>
+      <x>0</x>
+      <y>370</y>
+      <w>350</w>
       <h>70</h>
     </coordinates>
     <panel_attributes>Log-in Page
@@ -94,49 +94,28 @@ password : String [1]
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>530</x>
-      <y>370</y>
-      <w>150</w>
-      <h>130</h>
+      <x>460</x>
+      <y>350</y>
+      <w>340</w>
+      <h>160</h>
     </coordinates>
     <panel_attributes>User Controller
 --
 -auth : boolean
 -curUser : User
 --
-+ createUser() : void
-+ deleteUser() : void
-+ editUser() : void
-+ serachUser() : void</panel_attributes>
++ createUser( user information) : void
++ deleteUser( user information ) : void
++ editUser( user information ) : void
++ serachUser( user information ) : void
++ authenticate( user information) : boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>310</x>
-      <y>390</y>
-      <w>240</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;220;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>260</x>
-      <y>170</y>
-      <w>240</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;220;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>570</x>
-      <y>240</y>
+      <x>590</x>
+      <y>220</y>
       <w>50</w>
       <h>150</h>
     </coordinates>
@@ -146,23 +125,56 @@ password : String [1]
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>710</x>
-      <y>160</y>
-      <w>220</w>
+      <x>790</x>
+      <y>140</y>
+      <w>100</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;200;30</additional_attributes>
+    <additional_attributes>30;30;80;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>650</x>
-      <y>400</y>
-      <w>280</w>
+      <x>770</x>
+      <y>380</y>
+      <w>120</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;260;30</additional_attributes>
+    <additional_attributes>30;30;100;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>950</x>
+      <y>270</y>
+      <w>50</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&gt;.</panel_attributes>
+    <additional_attributes>30;80;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>230</x>
+      <y>150</y>
+      <w>230</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>210;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>320</x>
+      <y>380</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>140;30;30;30</additional_attributes>
   </element>
 </diagram>

@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+psycopg2==2.4.5
+dj-database-url==0.2.1
+Django==1.4.1
+=======
+Django==1.4.1
+distribute==0.6.28
+dj-database-url==0.2.1
+psycopg2==2.4.5
+wsgiref==0.1.2
+>>>>>>> afd109f01b5d804d1012c827c1cbc675d2c1e245
