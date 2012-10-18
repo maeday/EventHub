@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-{% load staticfiles %}
-
 <html>
   <head>
     <meta charset="utf-8">
@@ -11,10 +9,10 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    <link href="{% static 'css/eventhub.css' %}" rel="stylesheet">
-    <script src="{% static 'js/jquery.js' %}"></script>
-    <style type="{% static 'text/css' %}">
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/eventhub.css" rel="stylesheet">
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <style type="{{ STATIC_URL }}text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
@@ -23,7 +21,7 @@
         padding: 9px 0;
       }
     </style>
-    <link href="{% static 'css/bootstrap-responsive.css' %}" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -193,12 +191,12 @@
               
               
               
-<link rel="stylesheet" href="{% static 'jquery_ui/themes/redmond/jquery.ui.all.css' %}">
-<script src="{% static 'jquery_ui/ui/jquery.ui.core.js' %}"></script>
-<script src="{% static 'jquery_ui/ui/jquery.ui.widget.js' %}"></script>
-<script src="{% static 'jquery_ui/ui/jquery.ui.position.js' %}"></script>
-<script src="{% static 'jquery_ui/ui/jquery.ui.datepicker.js' %}"></script>
-<script src="{% static 'jquery_ui/ui/jquery.ui.autocomplete.js' %}"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}jquery_ui/themes/redmond/jquery.ui.all.css">
+<script src="{{ STATIC_URL }}jquery_ui/ui/jquery.ui.core.js"></script>
+<script src="{{ STATIC_URL }}jquery_ui/ui/jquery.ui.widget.js"></script>
+<script src="{{ STATIC_URL }}jquery_ui/ui/jquery.ui.position.js"></script>
+<script src="{{ STATIC_URL }}jquery_ui/ui/jquery.ui.datepicker.js"></script>
+<script src="{{ STATIC_URL }}jquery_ui/ui/jquery.ui.autocomplete.js"></script>
               
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
@@ -361,7 +359,7 @@
 				  <tbody>
 				    <tr>
 				      <td width="240">
-						  <img src="{% static 'photos/football.png' %}" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -385,7 +383,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="{% static 'photos/football.png' %}" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -409,7 +407,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="{% static 'photos/football.png' %}" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -433,7 +431,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="{% static 'photos/football.png' %}" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -457,7 +455,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="{% static 'photos/football.png' %}" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -502,8 +500,8 @@
 
     </div><!--/.fluid-container-->
     
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/eventhub.js' %}"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}js/eventhub.js"></script>
     
   </body>
 </html>
