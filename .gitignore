@@ -13,3 +13,6 @@ sqlite3.db
 
 # Virtual environment folder (if set up)
 venv
+
+# Temporary files
+*~
