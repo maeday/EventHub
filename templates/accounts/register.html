@@ -1,0 +1,20 @@
+<!DOCTYPE>
+<html>
+<head>
+</head>
+<body>
+{% if has_account %}
+  You are already registered!!! Do you want to create a new account?
+{% elif created %}
+  Congratulations!!! You are now registered!!!
+{% else %}
+  <form method="post">
+    {% csrf_token %}
+    <table>
+      {{ form }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+{% endif %}
+</body>
+</html>

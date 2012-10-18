@@ -1,4 +1,4 @@
-from django.conf import settings
+# from django.conf import settings
 from django.contrib.auth.models import User
 
 from accounts import models
@@ -14,10 +14,13 @@ class FacebookBackend:
         profile = facebook_session.query('me')
    
         try:
+            # Try to get user from DB
             user = User.objects.get(username=profile['id'])
         except User.DoesNotExist, e:
+            # User does not exist, so create a new user
             user = User(username=profile['id'])
     
+        # Update user info (is this necessary?)
         user.set_unusable_password()
         user.email = profile['email']
         user.first_name = profile['first_name']

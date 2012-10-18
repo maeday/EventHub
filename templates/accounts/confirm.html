@@ -1,0 +1,10 @@
+{% if has_account %}
+	Your account is already activated!
+{% elif expired %}
+	Your activation key has expired!
+{% elif success %}
+	Your account has been activated!
+{% else %}
+	This is not a valid key!
+{% endif %}
+
