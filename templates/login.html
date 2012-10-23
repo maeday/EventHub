@@ -15,6 +15,7 @@
 
 <div class="login coat">
 <form method="post">
+ {% csrf_token %}
   <div class="row-fluid">
     <div class="login-upper-pad">
       <label for="user_login">Email Address</label>
