@@ -17,5 +17,5 @@ venv
 # Temporary files
 *~
 
-# DS_STORE shit
-*DS_STORE
+# DS_Store stuff
+*DS_Store
