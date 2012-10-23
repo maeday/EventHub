@@ -1,16 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Location(models.Model):
-    name=models.CharField(max_length=255)
-    url=models.URLField()
-
-class Cost(models.Model):
-    cost=models.FloatField()
-
 class Categories(models.Model):
     name=models.CharField(max_length=255)
 
+# Create your models here.
 class Event(models.Model):
     start_date = models.DateTimeField() 
     end_date = models.DateTimeField()
@@ -19,9 +13,11 @@ class Event(models.Model):
     post_date = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     description = models.TextField() 
-    location = models.ForeignKey(Location)
-    cost = models.ManyToManyField(Cost)
+    cost_max = models.FloatField()
+    cost_min = models.FloatField()
     categories = models.ManyToManyField(Categories)
+    location=models.CharField(max_length=255)
+    url=models.URLField()
     # need PIL installed for image fields to work
     #image = models.ImageField()
 
