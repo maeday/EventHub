@@ -81,8 +81,9 @@ if (isset($_POST['formsubmitted'])) {
     $fbid = $response['user_id'];
   }
   
-  include 'header.php';
   ?>
+
+{% include 'header.html' %}
 
 <style type="text/css">
   body {
@@ -217,6 +218,6 @@ if (isset($_POST['formsubmitted'])) {
   
 <?php
 }
-
-include 'footer.php';
 ?>
+
+{% include "footer.html" %}

@@ -92,7 +92,7 @@ def confirm(request, activation_key):
             template_context = {'success': True}
     return render_to_response(template, template_context)
 
-def login_user(request):
+def user_login(request):
     '''Allow user to log in'''
     template = 'login.html'
     template_context = {
@@ -130,7 +130,7 @@ def login_user(request):
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
-def logout_user(request):
+def user_logout(request):
     '''Allow user to log out'''
     # TODO: handle more cases (user not logged in, logout unsuccessful, etc.)
     logout(request)

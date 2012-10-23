@@ -10,9 +10,9 @@
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/eventhub.css" rel="stylesheet">
-    <script src="js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/base/jquery-ui.css" />
-    <script src="js/jquery-ui-1.9.0.custom.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery-ui-1.9.0.custom.min.js"></script>
     <style type="text/css">
       body {
         padding-top: 45px;
@@ -41,13 +41,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="index.php">EventHub</a>
+          <a class="brand" href="index">EventHub</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-left">
               <a href="my-event.php" class="navbar-link">myEvents</a>
             </p>
             <p class="navbar-text pull-right">
-              <a href="login.php" class="navbar-link">LOG IN</a> &nbsp; | &nbsp; <a href="register.php" class="navbar-link">SIGN UP</a>
+              <a href="login" class="navbar-link">LOG IN</a> &nbsp; | &nbsp; <a href="register" class="navbar-link">SIGN UP</a>
             </p>
             <ul class="nav">
             <!--

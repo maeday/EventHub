@@ -147,7 +147,7 @@
                         <label class="control-label-custom" for="input02">Start</label>
                         <div class="controls-custom controls-row">
                             <div class="input-append">
-                                <input type="text" class="input-small datepicker" id="input02" name="startdate" style="text-align:center;" autocomplete="off" value="<?php echo date('m/d/Y'); ?>"><span id="picker-1" class="add-on btn"><i class="icon-calendar"></i></span>
+                                <input type="text" class="input-small datepicker" id="input02" name="startdate" style="text-align:center;" autocomplete="off" value="{% now "m/d/Y" %}"><span id="picker-1" class="add-on btn"><i class="icon-calendar"></i></span>
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class="input-append">
                             	<input type="text" class="input-mini" id="starttime" name="starttime" style="text-align:center;" autocomplete="off" value="12:00"><span id="clockswitch-1" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
@@ -160,7 +160,7 @@
                         <label class="control-label-custom" for="input03">Finish</label>
                         <div class="controls-custom controls-row">
                             <div class="input-append">
-                                <input type="text" class="input-small datepicker" id="input03" name="enddate" style="text-align:center;" autocomplete="off" value="<?php echo date('m/d/Y'); ?>"><span id="picker-2" class="add-on btn"><i class="icon-calendar"></i></span>
+                                <input type="text" class="input-small datepicker" id="input03" name="enddate" style="text-align:center;" autocomplete="off" value="{% now "m/d/Y" %}"><span id="picker-2" class="add-on btn"><i class="icon-calendar"></i></span>
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class="input-append">
                             	<input type="text" class="input-mini" id="endtime" name="endtime" style="text-align:center;" autocomplete="off" value="4:00"><span id="clockswitch-2" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
@@ -274,7 +274,7 @@
 				  <tbody>
 				    <tr>
 				      <td width="240">
-						  <img src="photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -298,7 +298,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -322,7 +322,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM
@@ -346,7 +346,7 @@
 				    </tr>
 				    <tr>
 				      <td width="240">
-						  <img src="photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
+						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
 						  <p style="padding-top:5px;">
 							<strong>Saturday, October 13, 2012</strong><br>
 							4:00 PM - 7:30 PM

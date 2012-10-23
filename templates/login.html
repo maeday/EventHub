@@ -1,9 +1,7 @@
-<?php
-include 'header.php';
-?>
+{% include 'header.html' %}
 <style type="text/css">
   body {
-    background: url(img/bg.jpg) repeat 0 0 #efefef;
+    background: url({{ STATIC_URL }}img/bg.jpg) repeat 0 0 #efefef;
   }
 </style>
 
@@ -44,6 +42,4 @@ include 'header.php';
 
 <br>
 
-<?php
-include 'footer.php';
-?>
+{% include "footer.html" %}
