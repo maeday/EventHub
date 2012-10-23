@@ -2,16 +2,19 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
+from django.template.context import RequestContext
 
+from EventHub import settings
 from events.models import Event
 
 def index(request):
-     latest_event_list = Event.objects.all().order_by('-upload_date')[:5]
+     latest_event_list = Event.objects.all()
      
-     template = 'events/index.html'
+     template = 'index.html'
      template_context = {'latest_event_list': latest_event_list}
+     request_context = RequestContext(request, template_context)
      
-     return render_to_response(template, template_context)
+     return render_to_response(template, request_context)
 
 @csrf_exempt
 def change_event_name(request):     

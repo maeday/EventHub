@@ -268,10 +268,11 @@
               <button class="btn btn-primary">Publish Event</button>
             </div>
           </div>
-              
               <p>
               	<table class="table table-striped">
 				  <tbody>
+				  {% if latest_event_list %}
+				    {% for event in latest_event_list %}
 				    <tr>
 				      <td width="240">
 						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
@@ -282,9 +283,9 @@
 				      </td>
 				      <td >
 					      <div class="event-title" style="padding-top:0;padding-bottom:0;">
-							<h3>Washington vs. USC Football Game <small><a href="full-view">&raquo; more</a></small></h3>
+							<h3>{{ event.name }} <small><a href="full-view">&raquo; more</a></small></h3>
 					      </div>
-						<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula. [...]</p>
+						<p>{{ event.description }}</p>
 						<p>
 							<strong>CenturyLink Field</strong><br>
 							800 Occidental Avenue South, Seattle, WA<br>
@@ -296,102 +297,10 @@
 						</p>
 				      </td>
 				    </tr>
-				    <tr>
-				      <td width="240">
-						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
-						  <p style="padding-top:5px;">
-							<strong>Saturday, October 13, 2012</strong><br>
-							4:00 PM - 7:30 PM
-						  </p>
-				      </td>
-				      <td>
-					      <div class="event-title" style="padding-top:0;padding-bottom:0;">
-							<h3>Washington vs. USC Football Game <small><a href="#">&raquo; more</a></small></h3>
-					      </div>
-						<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-						<p>
-							<strong>CenturyLink Field</strong><br>
-							800 Occidental Avenue South, Seattle, WA<br>
-							<a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
-						</p>
-						<p>
-							<strong>Cost/Fees</strong><br>
-							$20 for UW students; $50 for general public
-						</p>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td width="240">
-						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
-						  <p style="padding-top:5px;">
-							<strong>Saturday, October 13, 2012</strong><br>
-							4:00 PM - 7:30 PM
-						  </p>
-				      </td>
-				      <td>
-					      <div class="event-title" style="padding-top:0;padding-bottom:0;">
-							<h3>Washington vs. USC Football Game <small><a href="#">&raquo; more</a></small></h3>
-					      </div>
-						<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-						<p>
-							<strong>CenturyLink Field</strong><br>
-							800 Occidental Avenue South, Seattle, WA<br>
-							<a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
-						</p>
-						<p>
-							<strong>Cost/Fees</strong><br>
-							$20 for UW students; $50 for general public
-						</p>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td width="240">
-						  <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
-						  <p style="padding-top:5px;">
-							<strong>Saturday, October 13, 2012</strong><br>
-							4:00 PM - 7:30 PM
-						  </p>
-				      </td>
-				      <td>
-					      <div class="event-title" style="padding-top:0;padding-bottom:0;">
-							<h3>Washington vs. USC Football Game <small><a href="#">&raquo; more</a></small></h3>
-					      </div>
-						<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-						<p>
-							<strong>CenturyLink Field</strong><br>
-							800 Occidental Avenue South, Seattle, WA<br>
-							<a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
-						</p>
-						<p>
-							<strong>Cost/Fees</strong><br>
-							$20 for UW students; $50 for general public
-						</p>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td width="240">
-						  <img src="{{ STATIC_URL}}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
-						  <p style="padding-top:5px;">
-							<strong>Saturday, October 13, 2012</strong><br>
-							4:00 PM - 7:30 PM
-						  </p>
-				      </td>
-				      <td>
-					      <div class="event-title" style="padding-top:0;padding-bottom:0;">
-							<h3>Washington vs. USC Football Game <small><a href="#">&raquo; more</a></small></h3>
-					      </div>
-						<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-						<p>
-							<strong>CenturyLink Field</strong><br>
-							800 Occidental Avenue South, Seattle, WA<br>
-							<a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
-						</p>
-						<p>
-							<strong>Cost/Fees</strong><br>
-							$20 for UW students; $50 for general public
-						</p>
-				      </td>
-				    </tr>				    
+				    {% endfor %}
+				  {% else %}
+    				<p>No events are available.</p>
+				  {% endif %}
 				  </tbody>
 				</table>
               </p>

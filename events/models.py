@@ -15,14 +15,14 @@ class Event(models.Model):
     description = models.TextField() 
     cost_max = models.FloatField()
     cost_min = models.FloatField()
-    categories = models.ManyToManyField(Categories)
+    #categories = models.ManyToManyField(Categories)
     location=models.CharField(max_length=255)
     url=models.URLField()
     # need PIL installed for image fields to work
     #image = models.ImageField()
 
     def __unicode__(self):
-      return self.event_name
+      return self.name
 
 
 
