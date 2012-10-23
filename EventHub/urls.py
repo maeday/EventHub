@@ -8,8 +8,6 @@ urlpatterns = patterns('django.views.generic.simple',
     # Examples:
     # url(r'^$', 'EventHub.views.home', name='home'),
     # url(r'^EventHub/', include('EventHub.foo.urls')),
-    url(r'^$', 'direct_to_template', {'template': 'index.html'}),
-    url(r'^index$', 'direct_to_template', {'template': 'index.html'}),
     url(r'^events/', include('events.urls')),
     url(r'^full-view$', 'direct_to_template', {'template': 'full-view.html'}),
     url(r'^my-event$', 'direct_to_template', {'template': 'my-event.html'}),
@@ -25,4 +23,9 @@ urlpatterns += patterns('accounts.views',
     url(r'^register$', 'register'),
     url(r'^login$', 'user_login'),
     url(r'^logout$', 'user_logout'),
+)
+
+urlpatterns += patterns('events.views',
+    url(r'^$', 'index'),
+    url(r'^index$', 'index'),
 )
