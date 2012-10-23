@@ -70,6 +70,63 @@ hours:\n\nhttp://127.0.0.1:8000/register/confirm/%s" % (username, activation_key
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
+FACEBOOK_APP_ID = "BLAHBLAHBLAH"
+
+def register2(request):
+    '''Handle user registration request'''
+    template = 'register2.html'
+    template_context = {}
+    if request.user.is_authenticated():
+        # They already have an account; don't let them register again
+        return render_to_response(template, {'has_account': True})
+    if request.POST:
+        form = RegistrationForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Get user input
+            email = form._raw_value('email')
+            username = form._raw_value('username')
+            
+            # Build activation key
+            salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
+            activation_key = hashlib.sha224(salt+username).hexdigest()
+            key_expires = datetime.datetime.today() + datetime.timedelta(2)
+            
+            # Create and save user and profile
+            new_user = form.save(request.POST.copy())
+            new_profile = new_user.get_profile()
+            new_profile.activation_key = activation_key
+            new_profile.key_expires = key_expires
+            new_profile.save()
+
+            # Send an email with the confirmation link                                                                                                                      
+            email_subject = 'Your new example.com account confirmation'
+            email_body = "Hello, %s, and thanks for signing up for an \
+eventhub.com account!\n\nTo activate your account, click this link within 48 \
+hours:\n\nhttp://127.0.0.1:8000/register/confirm/%s" % (username, activation_key)
+            send_mail(email_subject,
+                      email_body,
+                      'accounts-noreply@eventhub.com',
+                      [email])
+            template_context = {'created': True}
+        else:
+            # Form validation failed
+            errors = form.errors
+            template_context = {
+                'form'    : form,
+                'created' : False,
+                'invalid' : True,
+                'errors'  : errors
+            }
+    else:
+        # No registration request
+        form = RegistrationForm
+        template_context = {
+            'created' : False,
+            'form'    : form
+        }
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
+
 def confirm(request, activation_key):
     '''Confirm user's activation key'''
     template = 'confirm.html'
