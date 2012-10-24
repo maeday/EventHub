@@ -20,7 +20,7 @@ urlpatterns = patterns('django.views.generic.simple',
 )
 
 urlpatterns += patterns('accounts.views',
-    url(r'^register$', 'register'),
+    url(r'^register$', 'register2'),
     url(r'^register2$', 'register2'),
     url(r'^login$', 'user_login'),
     url(r'^logout$', 'user_logout'),
