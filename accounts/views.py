@@ -14,13 +14,15 @@ from django.views.decorators.csrf import csrf_exempt
 from accounts.forms import RegistrationForm, LoginForm
 from accounts.models import UserProfile, FacebookSession
 
+###############################################################################
 # Facebook signed request parser taken from:
 # http://sunilarora.org/parsing-signedrequest-parameter-in-python-bas
 
 def base64_url_decode(inp):
     padding_factor = (4 - len(inp) % 4) % 4
     inp += "="*padding_factor
-    return base64.b64decode(unicode(inp).translate(dict(zip(map(ord, u'-_'), u'+/'))))
+    b64str = unicode(inp).translate(dict(zip(map(ord, u'-_'), u'+/')))
+    return base64.b64decode(b64str)
 
 def parse_signed_request(signed_request, secret):
 
@@ -35,7 +37,8 @@ def parse_signed_request(signed_request, secret):
 #        log.error('Unknown algorithm')
         return None
     else:
-        expected_sig = hmac.new(secret, msg=payload, digestmod=hashlib.sha256).digest()
+        expected_sig = hmac.new(secret, msg=payload, 
+                                digestmod=hashlib.sha256).digest()
 
     if sig != expected_sig:
         return None
@@ -43,69 +46,14 @@ def parse_signed_request(signed_request, secret):
 #        log.debug('valid signed request received..')
         return data
 
-
-#def register(request):
-#    '''Handle user registration request'''
-#    template = 'register.html'
-#    template_context = {}
-#    if request.user.is_authenticated():
-#        # They already have an account; don't let them register again
-#        return render_to_response(template, {'has_account': True})
-#    if request.POST:
-#        form = RegistrationForm(request.POST) # A form bound to the POST data
-#        if form.is_valid(): # All validation rules pass
-#            # Get user input
-#            email = form._raw_value('email')
-#            username = form._raw_value('username')
-#            
-#            # Build activation key
-#            salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
-#            activation_key = hashlib.sha224(salt+username).hexdigest()
-#            key_expires = datetime.datetime.today() + datetime.timedelta(2)
-#            
-#            # Create and save user and profile
-#            new_user = form.save(request.POST.copy())
-#            new_profile = new_user.get_profile()
-#            new_profile.activation_key = activation_key
-#            new_profile.key_expires = key_expires
-#            new_profile.save()
-#
-#            # Send an email with the confirmation link                                                                                                                      
-#            email_subject = 'Your new example.com account confirmation'
-#            email_body = "Hello, %s, and thanks for signing up for an \
-#eventhub.com account!\n\nTo activate your account, click this link within 48 \
-#hours:\n\nhttp://127.0.0.1:8000/register/confirm/%s" % (username, activation_key)
-#            send_mail(email_subject,
-#                      email_body,
-#                      'accounts-noreply@eventhub.com',
-#                      [email])
-#            template_context = {'created': True}
-#        else:
-#            # Form validation failed
-#            errors = form.errors
-#            template_context = {
-#                'form'    : form,
-#                'created' : False,
-#                'invalid' : True,
-#                'errors'  : errors
-#            }
-#    else:
-#        # No registration request
-#        form = RegistrationForm
-#        template_context = {
-#            'created' : False,
-#            'form'    : form
-#        }
-#    request_context = RequestContext(request, template_context)
-#    return render_to_response(template, request_context)
+# end code snippet
+###############################################################################
 
 FACEBOOK_APP_ID = "291967340913194"
 FACEBOOK_APP_SECRET = "30e10b10ed1d58dabaee178d3a99ba99"
 
-import json
-
 @csrf_exempt
-def register2(request):
+def register(request):
     '''Handle user registration request'''
     template = 'register-1.html'
     template_context = {}
@@ -134,64 +82,38 @@ def register2(request):
             # What to do if fbid or email already in database?
             #template_context['facebook_request'] = True
         else:
+            # Post request received from second page
             form = RegistrationForm(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                form.save(request.POST.copy())
+                #form.save(request.POST.copy())
                 template_context['extra'] = 'SUCCESS'
+                
+                email = form._raw_value('email')
+                
+                # Build activation key
+                salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
+                activation_key = hashlib.sha224(salt+email).hexdigest()
+                key_expires = datetime.datetime.today() + datetime.timedelta(2)
+                
+                # Create and save user and profile
+                new_user = form.save(request.POST.copy())
+                new_profile = new_user.get_profile()
+                new_profile.activation_key = activation_key
+                new_profile.key_expires = key_expires
+                new_profile.save()
+    
+                # Send an email with the confirmation link                                                                                                                      
+                email_subject = 'Your new example.com account confirmation'
+                email_body = "Hello, %s, and thanks for signing up for an \
+EventHub account!\n\nTo activate your account, click this link within 48 \
+hours:\n\n%s/register/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
+                send_mail(email_subject,
+                          email_body,
+                          'accounts-noreply@theeventhub.com',
+                          [email])
             else:
-                template_context['extra'] = 'FAIL'
-#            template_context['firstname'] = request.POST.get('firstname')
-#            template_context['lastname'] = request.POST.get('lastname')
-#            template_context['email'] = request.POST.get('email')
-#            template_context['fbid'] = request.POST.get('fbid')
+                template_context['extra'] = form.errors
         
-        request_context = RequestContext(request, template_context);
-        return render_to_response(template, request_context)
-
-        form = RegistrationForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
-            # Get user input
-            email = form._raw_value('email')
-            username = form._raw_value('username')
-            
-            # Build activation key
-            salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
-            activation_key = hashlib.sha224(salt+username).hexdigest()
-            key_expires = datetime.datetime.today() + datetime.timedelta(2)
-            
-            # Create and save user and profile
-            new_user = form.save(request.POST.copy())
-            new_profile = new_user.get_profile()
-            new_profile.activation_key = activation_key
-            new_profile.key_expires = key_expires
-            new_profile.save()
-
-            # Send an email with the confirmation link                                                                                                                      
-            email_subject = 'Your new example.com account confirmation'
-            email_body = "Hello, %s, and thanks for signing up for an \
-eventhub.com account!\n\nTo activate your account, click this link within 48 \
-hours:\n\nhttp://127.0.0.1:8000/register/confirm/%s" % (username, activation_key)
-            send_mail(email_subject,
-                      email_body,
-                      'accounts-noreply@eventhub.com',
-                      [email])
-            template_context = {'created': True}
-        else:
-            # Form validation failed
-            errors = form.errors
-            template_context = {
-                'form'    : form,
-                'created' : False,
-                'invalid' : True,
-                'errors'  : errors
-            }
-    else:
-        # No registration request
-        form = RegistrationForm
-        template_context = {
-            'created' : False,
-            'form'    : form
-        }
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 

@@ -12,6 +12,7 @@ MANAGERS = ADMINS
 
 # gets directory of root of project (assuming settings.py is not at the root)
 PROJECT_ROOT = path.dirname(path.dirname(path.abspath(__file__)))
+WEB_ROOT = 'http://theeventhub.herokuapp.com'
 
 DATABASES = {
     'default': {

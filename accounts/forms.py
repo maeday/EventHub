@@ -24,7 +24,7 @@ def isValidEmail(field_data):
     '''Checks to make sure the email was given and it hasn't already been 
     taken'''
     try:
-        User.objects.get(email=field_data)
+        User.objects.get(username=field_data)
     except User.DoesNotExist:
         return
     raise validators.ValidationError('The email "%s" has already been used.' 
