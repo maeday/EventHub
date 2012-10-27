@@ -130,13 +130,16 @@ def register2(request):
             template_context['fbid'] = -1
             if 'user_id' in data:
                 template_context['fbid'] = data['user_id']
-#            
-#            payload = unicode.replace(payload, '-_', '+/')
-#            payload = base64.urlsafe_b64decode(payload.encode('ascii')+'=')
             
-            #template_context['extra'] = request.POST.get('signed_request')
-            template_context['extra'] = json.dumps(data)
-            template_context['facebook_request'] = True
+            # What to do if fbid or email already in database?
+            #template_context['facebook_request'] = True
+        else:
+            form = RegistrationForm(request.POST) # A form bound to the POST data
+            if form.is_valid(): # All validation rules pass
+                form.save(request.POST.copy())
+                template_context['extra'] = 'SUCCESS'
+            else:
+                template_context['extra'] = 'FAIL'
 #            template_context['firstname'] = request.POST.get('firstname')
 #            template_context['lastname'] = request.POST.get('lastname')
 #            template_context['email'] = request.POST.get('email')
@@ -232,13 +235,14 @@ def user_login(request):
     else:
         if request.POST:
             # Login request sent
-            #username = request.POST.get('email')
-            username = request.POST.get('username')
+            username = request.POST.get('email')
+            #username = request.POST.get('username')
             password = request.POST.get('password')
     
             template_context['username'] = username
             user = authenticate(username=username, password=password)
             if user is not None:
+                template_context['success'] = True
                 # Unable to authenticate
                 if user.is_active:
                     # User has been activated
