@@ -29,6 +29,8 @@ FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
 FACEBOOK_REDIRECT_URI = 'http://example.com/login/' # TODO: Update this setting
 
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
