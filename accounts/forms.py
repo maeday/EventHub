@@ -3,12 +3,30 @@ from django.core import validators
 from django.contrib.auth.models import User
 
 import re
+from accounts.models import UserProfile
 
 alnum_re = re.compile(r'^\w+$')
 
 from django.utils.functional import lazy
 
 lazy_inter = lazy(lambda a,b: str(a) % b, str)
+
+def isUniqueEmail(field_data):
+    '''Test if email is unique'''
+    try:
+        User.objects.get(email=field_data)
+    except User.DoesNotExist:
+        return True
+    return False
+
+def isUniqueFbid(fbid):
+    '''Test if Facebook ID is unique'''
+    if (fbid != -1):
+        try:
+            UserProfile.objects.get(fbid=fbid)
+        except UserProfile.DoesNotExist:
+            return True
+    return False
 
 def isValidUsername(field_data):
     '''Checks to make sure the username was given and it hasn't already been 
@@ -68,6 +86,10 @@ class RegistrationForm(forms.Form):
         u.is_active = False
         u.save()
         return u
+
+class FbRegistrationForm(forms.Form):
+    '''The first form used for registration (using Facebook API'''
+    
     
 class LoginForm(forms.Form):
     '''Form used for user login'''

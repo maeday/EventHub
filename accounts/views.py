@@ -1,5 +1,4 @@
-import base64, cgi, datetime, hashlib, hmac, random, urllib
-import simplejson as json
+import base64, cgi, datetime, hashlib, hmac, json, random, urllib
 
 from EventHub import settings
 
@@ -11,7 +10,7 @@ from django.template.context import RequestContext
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from accounts.forms import RegistrationForm, LoginForm
+from accounts.forms import RegistrationForm, LoginForm, isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession
 
 ###############################################################################
@@ -71,16 +70,32 @@ def register(request):
             signed_request = request.POST.get('signed_request')
             data = parse_signed_request(signed_request, FACEBOOK_APP_SECRET)
             register_info = data['registration']
-            template_context['firstname'] = register_info['first_name']
-            template_context['lastname'] = register_info['last_name']
+            if 'name' in register_info:
+                name_parts = str.split(register_info['name'], ' ')
+                template_context['firstname'] = name_parts[0]
+                template_context['lastname'] = name_parts[len(name_parts)-1]
+            else:
+                template_context['firstname'] = register_info['first_name']
+                template_context['lastname'] = register_info['last_name']
             template_context['email'] = register_info['email']
+            
+            valid = True
+            if not isUniqueEmail(template_context['email']):
+                valid = False
+                template_context['used_email'] = True
+                
             
             template_context['fbid'] = -1
             if 'user_id' in data:
                 template_context['fbid'] = data['user_id']
+                if not isUniqueFbid(template_context['fbid']):
+                    valid = False
+                    template_context['used_fbid'] = True
             
             # What to do if fbid or email already in database?
             #template_context['facebook_request'] = True
+            if not valid:
+                template = 'register-1.html'
         else:
             # Post request received from second page
             form = RegistrationForm(request.POST) # A form bound to the POST data
@@ -88,7 +103,7 @@ def register(request):
                 #form.save(request.POST.copy())
                 template_context['extra'] = 'SUCCESS'
                 
-                email = form._raw_value('email')
+                email = form.cleaned_data['email']
                 
                 # Build activation key
                 salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
@@ -102,15 +117,15 @@ def register(request):
                 new_profile.key_expires = key_expires
                 new_profile.save()
     
-                # Send an email with the confirmation link                                                                                                                      
-                email_subject = 'Your new example.com account confirmation'
-                email_body = "Hello, %s, and thanks for signing up for an \
-EventHub account!\n\nTo activate your account, click this link within 48 \
-hours:\n\n%s/register/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
-                send_mail(email_subject,
-                          email_body,
-                          'accounts-noreply@theeventhub.com',
-                          [email])
+                # Send an email with the confirmation link (disabled for now)                                                                                                                    
+#                email_subject = 'Your new example.com account confirmation'
+#                email_body = "Hello, %s, and thanks for signing up for an \
+#EventHub account!\n\nTo activate your account, click this link within 48 \
+#hours:\n\n%s/register/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
+#                send_mail(email_subject,
+#                          email_body,
+#                          'accounts-noreply@theeventhub.com',
+#                          [email])
             else:
                 template_context['extra'] = form.errors
         

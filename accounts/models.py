@@ -9,10 +9,13 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     activation_key = models.CharField(max_length=40)
     key_expires = models.DateTimeField()
+    fbid = models.IntegerField(default=-1)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance, key_expires = datetime.datetime.now())
+        UserProfile.objects.create(user = instance, 
+                                   key_expires = datetime.datetime.now(), 
+                                   fbid = -1)
 
 # Automatically create UserProfile for User if it doesn't already exist
 post_save.connect(create_user_profile, sender=User)
