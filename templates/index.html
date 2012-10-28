@@ -136,44 +136,45 @@
             
               	<div class="form-horizontal">
               	
-                    <div class="control-group">
-                        <label class="control-label-custom" for="input01">Event Title</label>
+                    <div id="ctrl-title" class="control-group">
+                        <label class="control-label-custom" for="input-title">Event Title</label>
                         <div class="controls-custom">
-                            <input type="text" class="span10" id="input01" name="title"> <span class="help-inline"></span>
+                            <input type="text" class="span10" id="input-title" name="title">
+                            <span id="err-title" class="help-block" style="display:none;"></span>
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <label class="control-label-custom" for="input02">Start</label>
+                    <div id="ctrl-start" class="control-group">
+                        <label class="control-label-custom" for="input-startdate">Start</label>
                         <div class="controls-custom controls-row">
                             <div class="input-append">
-                                <input type="text" class="input-small datepicker" id="input02" name="startdate" style="text-align:center;" autocomplete="off" value="{% now "m/d/Y" %}"><span id="picker-1" class="add-on btn"><i class="icon-calendar"></i></span>
+                                <input type="text" class="input-small datepicker" id="input-startdate" name="startdate" style="text-align:center;" autocomplete="off" value="{% now "m/d/Y" %}"><span id="picker-1" class="add-on btn"><i class="icon-calendar"></i></span>
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class="input-append">
-                            	<input type="text" class="input-mini" id="starttime" name="starttime" style="text-align:center;" autocomplete="off" value="12:00"><span id="clockswitch-1" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
+                            	<input type="text" class="input-mini" id="input-starttime" name="starttime" style="text-align:center;" autocomplete="off" value="12:00"><span id="clockswitch-1" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
                             </div>
-                            <span class="help-inline"></span>
+                            <span id="err-start" class="help-block" style="display:none;padding-top:10px;"></span>
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <label class="control-label-custom" for="input03">Finish</label>
+                    <div id="ctrl-end" class="control-group">
+                        <label class="control-label-custom" for="input-enddate">Finish</label>
                         <div class="controls-custom controls-row">
                             <div class="input-append">
-                                <input type="text" class="input-small datepicker" id="input03" name="enddate" style="text-align:center;" autocomplete="off" value="{% now "m/d/Y" %}"><span id="picker-2" class="add-on btn"><i class="icon-calendar"></i></span>
+                                <input type="text" class="input-small datepicker" id="input-enddate" name="enddate" style="text-align:center;" autocomplete="off" value="{% now "m/d/Y" %}"><span id="picker-2" class="add-on btn"><i class="icon-calendar"></i></span>
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class="input-append">
-                            	<input type="text" class="input-mini" id="endtime" name="endtime" style="text-align:center;" autocomplete="off" value="4:00"><span id="clockswitch-2" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
+                            	<input type="text" class="input-mini" id="input-endtime" name="endtime" style="text-align:center;" autocomplete="off" value="4:00"><span id="clockswitch-2" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
                             </div>
-                            <span class="help-inline"></span>
+                            <span id="err-end" class="help-block" style="display:none;padding-top:10px;"></span>
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <label class="control-label-custom" for="input04">Description</label>
+                    <div id="ctrl-description" class="control-group">
+                        <label class="control-label-custom" for="input-description">Description</label>
                         <div class="controls-custom">
-                            <textarea class="span10" id="input04" rows="5" name="description"></textarea>
-                            <span class="help-inline"></span>
+                            <textarea class="span10" id="input-description" rows="5" name="description"></textarea>
+                            <span id="err-description" class="help-block" style="display:none;"></span>
                         </div>
                     </div>
                     
@@ -265,7 +266,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary">Publish Event</button>
+              <button id="finish" class="btn btn-primary">Publish Event</button>
             </div>
           </div>
               <p>
