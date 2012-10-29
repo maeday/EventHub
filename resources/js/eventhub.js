@@ -79,8 +79,12 @@ function requestCreate() {
 	});
 	
 	request.done(function(msg) {
-		$("#myModal").modal('hide');
-		refreshEventList();
+		if (msg == "1") {
+			$("#myModal").modal('hide');
+			refreshEventList();
+		} else {
+			alert("Could not create event");
+		}
 	});
 	
 	request.fail(function(jqXHR, textStatus) {
