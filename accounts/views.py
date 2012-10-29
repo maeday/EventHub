@@ -71,7 +71,8 @@ def register(request):
             data = parse_signed_request(signed_request, FACEBOOK_APP_SECRET)
             register_info = data['registration']
             if 'name' in register_info:
-                name_parts = str.split(register_info['name'], ' ')
+#                name_parts = str.split(register_info['name'], ' ')
+                name_parts = register_info['name'].split(u' ')
                 template_context['firstname'] = name_parts[0]
                 template_context['lastname'] = name_parts[len(name_parts)-1]
             else:
