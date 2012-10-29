@@ -6,7 +6,7 @@ from django.template.context import RequestContext
 from django.utils import timezone
 
 from EventHub import settings
-from events.models import Event
+from events.models import Event, Categories, Neighborhoods
 from django.contrib.auth.models import User
 
 def index(request):
@@ -34,9 +34,10 @@ def create_event(request):
           eDesc = request.POST.get('description')
           
           u = User(id=1)
+          n = Neighborhoods(id=1)
           e = Event(start_date=timezone.now(), end_date=timezone.now(), name=eName, 
-                    poster=u, description=eDesc,
-                    cost_max=10.0, cost_min=0.0, location="UW", url="www.uw.edu")
+                    poster=u, description=eDesc, free=False, neighborhood=n,
+                    cost_max=10.0, cost_min=0.0, venue="UW", url="www.uw.edu")
           e.save()
           
           template = 'text.html'

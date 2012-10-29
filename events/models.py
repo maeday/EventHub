@@ -6,7 +6,6 @@ class Categories(models.Model):
     
 class Neighborhoods(models.Model):
 		name=models.CharField(max_length=255)
-    
 
 
 # Create your models here.
