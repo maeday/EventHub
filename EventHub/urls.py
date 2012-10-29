@@ -28,5 +28,9 @@ urlpatterns += patterns('accounts.views',
 urlpatterns += patterns('events.views',
     url(r'^$', 'index'),
     url(r'^index$', 'index'),
+<<<<<<< HEAD
     url(r'^eventlist$', 'eventlist'),
+=======
+    url(r'^create_event$', 'create_event'),
+>>>>>>> Added create_event controller code
 )
