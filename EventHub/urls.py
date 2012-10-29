@@ -9,8 +9,8 @@ urlpatterns = patterns('django.views.generic.simple',
     # url(r'^$', 'EventHub.views.home', name='home'),
     # url(r'^EventHub/', include('EventHub.foo.urls')),
     url(r'^events/', include('events.urls')),
-    url(r'^full-view$', 'direct_to_template', {'template': 'full-view.html'}),
-    url(r'^my-events$', 'direct_to_template', {'template': 'my-events.html'}),
+    url(r'^event$', 'direct_to_template', {'template': 'event.html'}),
+    url(r'^mypage$', 'direct_to_template', {'template': 'mypage.html'}),
     url(r'^dummy$', 'direct_to_template', {'template': 'dummy.html'}),
     
     # Uncomment the admin/doc line below to enable admin documentation:

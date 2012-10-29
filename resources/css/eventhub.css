@@ -2,6 +2,11 @@
 	border-bottom: 1px solid #eeeeee;
 	margin-bottom: 7px;
 }
+
+.body-custom{
+	
+}
+
 .event-title h3 {
 	margin: 0;
 }
@@ -13,10 +18,23 @@
 	font-size: 13px;
 	margin: 0 0 3px 0;
 }
-.side-title-custom {
+
+.sidebar-nav {
+	padding: 9px 0;
+}
+
+.title-custom {
 	font-size: 13px;
 }
 
+.well{
+	border-radius: 3px;
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+  background-color: #EBEBEB;
+}
 .form-horizontal .control-label-custom {
   float: left;
   width: 90px;

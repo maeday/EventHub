@@ -1,66 +1,134 @@
 {% include 'header.html' %}
-      <div class="row-fluid">
-      	<div class="span12"><br>
-            <div class="tabbable tabs-left">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1" data-toggle="tab">Recently Hosted</a></li>
-                    <li><a href="#tab2" data-toggle="tab">Recently Attended</a></li>
-                    <li><a href="#tab3" data-toggle="tab">My Profile</a></li>
-                    
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
-                         <div class="span9">
-                            <div class="row-fluid">
-                                 <div class="span12">
-                                 <h2>Recently Hosted &nbsp;</h2>
 
-                                    <table class="table table-striped">
-                                      <tbody>
-                                        <tr>
-                                          <td width="240">
-                                            <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:230px;height:150px;">
-                                               <p style="padding-top:5px;">
-                                                  <strong>Saturday, October 13, 2012</strong><br>
-                                                  4:00 PM - 7:30 PM
-                                               </p>
-                                          </td>
-                                          <td >
-                                            <div class="event-title" style="padding-top:0;padding-bottom:0;">
-                                                <h3>Washington vs. USC Football Game</h3>
-                                            </div>
-                                            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula. [...]</p>
-                                                <p>
-                                                   <strong>CenturyLink Field</strong><br>
-                                                   800 Occidental Avenue South, Seattle, WA<br>
-                                                   <a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
-                                                </p>
-                                            <p>
-                                                <strong>Cost/Fees</strong><br>
-                                                $20 for UW students; $50 for general public
-                                                <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;" onclick="pop_edit_event()" >Edit Event</button>
-                                            </p>
-                                          </td>
-                                        </tr>				    	    
-                                      </tbody>
-                                    </table>
-                                 </div><!--/span-->
-                            </div><!--/row-->
-                        </div><!--/span-->
-                    </div>
-                        <div class="tab-pane" id="tab2">
-                            <p>Something nice goes here...</p>
-                        </div>
-                    <div class="tab-pane" id="tab3">
-                        <p>Profilestuff...</p>
-                        <button class="btn btn-medium btn-primary" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;" onclick="pop_edit_profile()">Edit Profile</button>			
-                    </div>
-                </div>
-            </div>
-        </div><!--/span-->
-        
-                     
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--My Profile-->
+<div class="container-fluid" style="padding-top: 20px">
+  <div class="span5">
+    <div class="well" style="height: 200px">
+      <div class="event-title" style="padding-top:0;padding-bottom:0;">
+	<h3>My Profile</h3>
+      </div>
+      <div>
+	<div class="row">
+	  <div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
+	    <img src="https://graph.facebook.com/wayne.yamamoto/picture?type=normal" class="img-polaroid"/>
+
+	  </div>
+	  <div class="span3" style="margin-left: 0px;padding-left: 0px">
+	    <p><strong>First name:</strong> Wayne</p>
+	    <p><strong>Last name: </strong>Yamamoto</p>
+	    <p><strong>Email address:</strong> yamamoto@cs.washington.edu</p>
+	    <button class="btn btn-medium btn-primary pull-right">Edit Profile</button>
+	  </div>
+	</div>
+	      
+      </div>
+    </div>
+  </div>
+  
+  <!--My events-->
+  <div class="span8" >
+    <div class="well" >
+      <div class="event-title" style="padding-top:0;padding-bottom:0;">
+	<h3>My Events</h3>
+      </div>
+          <table class="table table-hover"> 
+	    <tbody>
+	      <tr>
+		<td>
+		    <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="height: 80px"> 
+		</td>
+		<td>
+		  <div style="padding-top:0;padding-bottom:0;">
+		    <h4>Washington vs. USC Football Game<button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
+		  </div>
+		  <strong>Saturday, October 13 </strong>
+		  <p>4:00 PM - 7:30 PM</p>
+		</td>
+	      </tr>
+	      <tr>
+		<td>
+		    <img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="height: 80px"> 
+		</td>
+		<td>
+		  <div style="padding-top:0;padding-bottom:0;">
+		    <h4>Washington vs. USC Volleyball Game <button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
+		  </div>
+		  <strong>Saturday, October 13 </strong>
+		  <p>4:00 PM - 7:30 PM</p>
+		</td>
+	      </tr>
+	      <tr>
+		<td>
+		  <img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="height: 80px"> 
+		</td>
+		<td>
+		  <div style="padding-top:0;padding-bottom:0;">
+		    <h4>Washington vs. USC Volleyball Game<button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
+		  </div>
+		  <strong>Saturday, October 13 </strong>
+		  <p>4:00 PM - 7:30 PM</p>
+		</td>
+	      </tr>
+	    </tbody> 
+	  </table>
+	  <ul class="pager">
+	    <li class="previous">
+	      <a href="#">&larr; Previous</a>
+	    </li>
+	    <li class="next">
+	      <a href="#">Next &rarr;</a>
+	    </li>
+	  </ul>
+    </div>
+  </div>
+  
+  <!--Hosted-->
+  <div class="span8 offset5">
+    <div class="well">
+      <div class="event-title" style="padding-top:0;padding-bottom:0;">
+	<h3>My Hosted Events</h3>
+      </div>
+      <table class="table table-hover"> 
+	    <tbody>
+	      <tr>
+		<td>
+		    <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="height: 90px"> 
+		</td>
+		<td>
+		  <div style="padding-top:0;padding-bottom:0;">
+		    <h4>Washington vs. USC Football Game<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
+		  </div>
+		  <strong>Saturday, October 13 </strong>
+		  <p>4:00 PM - 7:30 PM<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;" onclick="pop_create_event()">Edit Event</button></p>
+		 </td>
+	      </tr>
+	      <tr>
+		<td>
+		    <img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="height: 90px"> 
+		</td>
+		<td>
+		  <div style="padding-top:0;padding-bottom:0;">
+		    <h4>Washington vs. USC Volleyball Game <button class="close" rel="popover" title="Delete Event">&times;</button></h4>
+		  </div>
+		  <strong>Saturday, October 13 </strong>
+		  <p>4:00 PM - 7:30 PM<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;" onclick="pop_create_event()">Edit Event</button></p>
+		 </td>
+	      </tr>
+	    </tbody> 
+	  </table>
+	  <ul class="pager">
+	    <li class="previous">
+	      <a href="#">&larr; Previous</a>
+	    </li>
+	    <li class="next">
+	      <a href="#">Next &rarr;</a>
+	    </li>
+	  </ul>
+    </div>
+  </div>
+</div>        
+          <!-- Edit event button-->           
+	  <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h3 id="myModalLabel">Edit event</h3>
@@ -72,7 +140,7 @@
                     <div class="control-group">
                         <label class="control-label-custom" for="input01" >Event Title</label>
                         <div class="controls-custom">
-                            <input type="text" class="span10" id="input01" name="title" value="Washington vs. USC Football Game"> <span class="help-inline"></span>
+                            <input type="text" class="span5" id="input01" name="title" value="Washington vs. USC Football Game"> <span class="help-inline"></span>
                         </div>
                     </div>
                     
@@ -105,8 +173,8 @@
                     <div class="control-group">
                         <label class="control-label-custom" for="input04">Description</label>
                         <div class="controls-custom">
-                            <textarea class="span10" id="input04" rows="5" name="description">Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-                                  </textarea>
+                            <textarea class="span5" id="input04" rows="5" name="description">Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                            </textarea>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -202,6 +270,5 @@
               <button class="btn btn-primary" >Edit Event</button>
             </div>
           </div>
-
 
 {% include "footer.html" %}
