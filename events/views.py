@@ -15,6 +15,15 @@ def index(request):
      request_context = RequestContext(request, template_context)
      
      return render_to_response(template, request_context)
+     
+def eventlist(request):
+     latest_event_list = Event.objects.all()
+     
+     template = 'eventlist.html'
+     template_context = {'latest_event_list': latest_event_list}
+     request_context = RequestContext(request, template_context)
+     
+     return render_to_response(template, request_context)
 
 @csrf_exempt
 def change_event_name(request):     

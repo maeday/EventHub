@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
-	$(".datepicker").datepicker({ minDate: new Date() });
-	
+	$(".datepicker").datepicker({ minDate:new Date() });
+		
 	$("#picker-1").click(function() {
     	$("#input02").focus();
     });
@@ -57,9 +57,45 @@ $(document).ready(function(){
 		}
     });
     
-    $("#finish").click(function() { check_all(); });
+    $("#publish").click(function() {
+    	if (!check_all()) {
+    		return false;
+    	}
+    	requestCreate();
+    });
     
+	$("#login-error").fadeIn("slow"); 
+    	
 });
+
+function requestCreate() {
+	var input_title = $("#input-title").val();
+	var input_desc = $("#input-description").val();
+	
+	var request = $.ajax({
+		url: "create_event",
+		type: "POST",
+		data: { title : input_title, description: input_desc }
+	});
+	
+	request.done(function(msg) {
+		$("#myModal").modal('hide');
+		refreshEventList();
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+
+	});
+}
+
+function refreshEventList() {
+	$.get("eventlist", function(data) {
+		$("#refresher").hide();
+		$("#refresher").html(data);
+		$("#refresher").fadeIn(2000);
+	});
+}
 
 function pop_create_event() {
 	$("#input-title").focus();
@@ -68,10 +104,9 @@ function pop_edit_event() {
 	$("#input-title").focus();
 }
 
+// Checks for errors in the form.
 function check_all() {
-	if (check_title() && check_times_comprehensive() && check_summary() && check_location()) {
-		// submit 
-	}
+	return check_title() && check_times_comprehensive() && check_summary() && check_location();
 }
 
 function check_title() {

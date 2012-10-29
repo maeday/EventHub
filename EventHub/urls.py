@@ -28,4 +28,5 @@ urlpatterns += patterns('accounts.views',
 urlpatterns += patterns('events.views',
     url(r'^$', 'index'),
     url(r'^index$', 'index'),
+    url(r'^eventlist$', 'eventlist'),
 )

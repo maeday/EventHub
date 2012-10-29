@@ -6,10 +6,18 @@
 </style>
 
 <div class="row-fluid">
-  <div class="span12">
+  <div class="span6 offset3">
+  
+	{% if success %}SUCCESS!{% endif %}
+	{% if invalid %}
+		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Oh snap!</strong> Please check your email address or password and try again.		
+		</div>
+	{% endif %}
+	
     <div class="registration-title">
       <h2>Log in to EventHub</h2>
-      <h3>{% if success %}SUCCESS!{% endif %}{% if invalid %}INVALID!{% endif %}</h3>
     </div>
   </div>
 </div>
@@ -31,7 +39,7 @@
   <div class="form-actions">
     <div class="row-fluid">
       <div class="span12">
-        <button class="btn btn-primary btn-large" type="submit" name="login" style="float:left;margin-left:15px;">Log in</button>
+        <button id="login-btn" class="btn btn-primary btn-large" type="submit" name="login" style="float:left;margin-left:15px;">Log in</button>
         <label class="checkbox" for="user_remember_me" style="float:right;padding-top:8px;margin-right:20px;">
         <input id="user_remember_me" type="checkbox" value="1">
         Remember me
