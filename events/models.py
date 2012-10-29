@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 
 class Categories(models.Model):
     name=models.CharField(max_length=255)
+    
+class Neighborhoods(models.Model):
+		name=models.CharField(max_length=255)
+    
+
 
 # Create your models here.
 class Event(models.Model):
@@ -15,8 +20,10 @@ class Event(models.Model):
     description = models.TextField() 
     cost_max = models.FloatField()
     cost_min = models.FloatField()
-    #categories = models.ManyToManyField(Categories)
-    location=models.CharField(max_length=255)
+    free = models.BooleanField()
+    categories = models.ManyToManyField(Categories)
+    neighborhood=models.ForeignKey(Neighborhoods)
+    venue = models.CharField(max_length=100)
     url=models.URLField()
     # need PIL installed for image fields to work
     #image = models.ImageField()
