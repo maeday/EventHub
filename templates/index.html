@@ -179,10 +179,10 @@
                     </div>
                     
                     <div class="control-group">
-                        <label class="control-label-custom" for="input05">Location</label>
+                        <label class="control-label-custom" for="input05">Neighborhood</label>
                         <div class="controls-custom">
                             <select>
-                              <option>Select a location</option>
+                              <option>Select a Neighborhoood</option>
 							  <option>Downtown</option>
 							  <option>University District</option>
 							  <option>Ballard</option>
@@ -192,18 +192,50 @@
                             <span class="help-inline"></span>
                         </div>
                     </div>
-                    
+		    
+		    <div class="control-group">
+                        <label class="control-label-custom" for="input06">Venue</label>
+                        <div class="controls-custom">
+                            <input type="text" class="span10" id="input06" name="title" placeholder="Ex. CenturyLink Field"> <span class="help-inline"></span>
+                        </div>
+                    </div>
+		    
+		    <div class="control-group">
+                        <label class="control-label-custom" for="input07">Street Address</label>
+                        <div class="controls-custom">
+                            <input type="text" class="span10" id="input07" name="title"> <span class="help-inline"></span>
+                        </div>
+                    </div>
+		    
+		    <div class="control-group">
+		      <div class="controls-custom controls-row">
+                        <label class="control-label-custom" for="input08">Zip Code</label>
+                        <div class="controls-custom">
+                            <input type="text" class="span5" id="input08" name="title"> <span class="help-inline"></span>
+                        </div>
+			<label class="control-label-custom" for="input09">City</label>
+                        <div class="controls-custom">
+                            <input type="text" class="span5" id="input09" name="title"> <span class="help-inline"></span>
+                        </div>
+		      </div>
+                    </div>
+		    
                     <div class="control-group">
-                        <label class="control-label-custom" for="input06">Cost</label>
+                        <label class="control-label-custom" for="input10">Cost</label>
                         <div class="controls-custom">
                             <div class="input-prepend">
-                                <span class="add-on">$</span><input type="text" class="input-small" id="input06" name="cost" placeholder="0.00">
-                            </div>
+                                <span class="add-on">Min $</span><input type="text" class="input-small" id="input10" name="cost" placeholder="0.00">
+			        <span class="add-on">Max $</span><input type="text" class="input-small" id="input10" name="cost" placeholder="0.00">
+				<label class="checkbox">
+			          <input type="checkbox" value="">
+				    Free
+				</label>
+			    </div>
                         </div>
                     </div>
                     
                     <div class="control-group">
-                        <label class="control-label-custom" for="input07">Web URL</label>
+                        <label class="control-label-custom" for="input11">Web URL</label>
                         <div class="controls-custom">
                             <div class="input-prepend">
                                 <span class="add-on"><i class="icon-globe"></i></span><input type="text" class="input-xlarge" id="input07" name="url" placeholder="http://example.com">
@@ -212,7 +244,7 @@
                     </div>
                     
                     <div class="control-group">
-                        <label class="control-label-custom" for="input08">Categories</label>
+                        <label class="control-label-custom" for="input12">Categories</label>
                         <div class="controls-custom controls-row">
 			               <label class="checkbox">
 			              	  <input type="checkbox" value="">
@@ -260,7 +292,14 @@
 						  </label>
                         </div>
                     </div>
-                    
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+		      <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;"><img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" /></div>
+		      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+		      <div>
+  		      <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
+			<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+		      </div>
+		    </div>
               	</div>
               
             </div>
