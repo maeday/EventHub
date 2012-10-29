@@ -75,7 +75,10 @@ function requestCreate() {
 	var request = $.ajax({
 		url: "create_event",
 		type: "POST",
-		data: { title : input_title, description: input_desc }
+		data: {
+			title : input_title,
+			description: input_desc
+		}
 	});
 	
 	request.done(function(msg) {
@@ -88,9 +91,29 @@ function requestCreate() {
 	});
 	
 	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
-
+		alert("Ajax request failed: " + textStatus);
 	});
+	
+	// post call testing (ignore)
+	/*
+	var request = $.post("create_event", { title : input_title, description : input_desc }, function(data) {
+		// do something
+	})
+	.success(function(data) {
+		if (data == "1") {
+			$("#myModal").modal('hide');
+			refreshEventList();
+		} else {
+			alert("Could not create event");
+		}
+	})
+	.error(function() {
+		alert("Post request failed");
+	})
+	.complete(function() {
+		// do something
+	});
+	*/
 }
 
 function refreshEventList() {
