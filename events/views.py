@@ -33,9 +33,9 @@ def create_event(request):
           eName = request.POST.get('title')
           eDesc = request.POST.get('description')
           
-          u = User(username="MyUsername", password="MyPassword", email="user@email.com")
+          u = User(id=1)
           e = Event(start_date=timezone.now(), end_date=timezone.now(), name=eName, 
-                    poster=User.objects.get(username="MyUsername").id, description=eDesc,
+                    poster=u, description=eDesc,
                     cost_max=10.0, cost_min=0.0, location="UW", url="www.uw.edu")
           e.save()
           
