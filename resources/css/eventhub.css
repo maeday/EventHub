@@ -3,17 +3,6 @@
 	margin-bottom: 7px;
 }
 
-.body-custom{
-	
-}
-
-.event-title h3 {
-	margin: 0;
-}
-.event-title h3 small {
-	
-}
-
 .nav-list label {
 	font-size: 13px;
 	margin: 0 0 3px 0;
@@ -27,7 +16,7 @@
 	font-size: 13px;
 }
 
-.well{
+.well {
 	border-radius: 3px;
 }
 
@@ -135,4 +124,15 @@ hr.footer-diag {
 .footer .bottom-right {
 	padding-right: 30px;
 	text-align: right;
+}
+
+.well-custom {
+	margin-top: 15px;
+	margin-bottom: 5px;
+	padding-top: 0;
+}
+
+.fb-comments, .fb-comments span, .fb-comments iframe {
+	width: 100% !important;
+	margin-bottom: 10px;
 }
