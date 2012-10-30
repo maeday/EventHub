@@ -67,8 +67,8 @@ class RegistrationForm(forms.Form):
     email = forms.EmailField( label='Email', max_length=30, required=True, validators=[isValidEmail] )
     fbid = forms.IntegerField( label='Facebook ID')
     
-    # Verify that password2 matches password1
-    def clean_password2(self):
+    # Verify that repassword matches password
+    def clean_repassword(self):
         pw1 = self.cleaned_data['password']
         pw2 = self.cleaned_data['repassword']
         if pw1 != pw2:
