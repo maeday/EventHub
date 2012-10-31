@@ -1,6 +1,6 @@
 {% include "header.html" %}
       <div class="row-fluid">
-      	<div class="span3"><br>
+      	<div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header side-title-custom">Categories</li>
@@ -124,6 +124,7 @@
         
         <div class="span9">
           <div class="row-fluid">
+	    <div class="well well-custom">
             <div class="span12">
               <h2>Upcoming Events &nbsp;<small>Sports / Downtown</small><button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;" onclick="pop_create_event()">Create Event</button></h2>
               
@@ -139,7 +140,7 @@
                     <div id="ctrl-title" class="control-group">
                         <label class="control-label-custom" for="input-title">Event Title</label>
                         <div class="controls-custom">
-                            <input type="text" class="span10" id="input-title" name="title">
+                            <input type="text" class="input-xlarge" id="input-title" name="title">
                             <span id="err-title" class="help-block" style="display:none;"></span>
                         </div>
                     </div>
@@ -173,13 +174,13 @@
                     <div id="ctrl-description" class="control-group">
                         <label class="control-label-custom" for="input-description">Description</label>
                         <div class="controls-custom">
-                            <textarea class="span10" id="input-description" rows="5" name="description"></textarea>
+                            <textarea class="input-xlarge" id="input-description" rows="5" name="description"></textarea>
                             <span id="err-description" class="help-block" style="display:none;"></span>
                         </div>
                     </div>
                     
                     <div class="control-group">
-                        <label class="control-label-custom" for="input05">Neighborhood</label>
+                        <label class="control-label-custom" for="input05">Location</label>
                         <div class="controls-custom">
                             <select>
                               <option>Select a Neighborhoood</option>
@@ -196,24 +197,30 @@
 		    <div class="control-group">
                         <label class="control-label-custom" for="input06">Venue</label>
                         <div class="controls-custom">
-                            <input type="text" class="span10" id="input06" name="title" placeholder="Ex. CenturyLink Field"> <span class="help-inline"></span>
+                            <input type="text" class="input-xlarge" id="input06" name="title" placeholder="Ex. CenturyLink Field"> <span class="help-inline"></span>
                         </div>
                     </div>
 		    
 		    <div class="control-group">
-                        <label class="control-label-custom" for="input07">Street Address</label>
+                        <label class="control-label-custom" for="input07">Street&nbsp;Address</label>
                         <div class="controls-custom">
-                            <input type="text" class="span10" id="input07" name="title"> <span class="help-inline"></span>
+                            <input type="text" class="input-xlarge" id="input07" name="title"> <span class="help-inline"></span>
                         </div>
                     </div>
 		    
 		    <div class="control-group">
-                        <label class="control-label-custom" for="input08">Zip Code</label>
+                        <label class="control-label-custom" for="input08">City</label>
                         <div class="controls-custom controls-row">
-                          <input type="text" class="span3" id="input08" name="title"> 
-                        
-			  City
-                          <input type="text" class="span5" id="input09" name="title">
+                          <input type="text" class="input-medium" id="input08" name="title">
+			  &nbsp;State
+			  <input type="text" class="input-mini" id="input08" name="title"> 
+                        </div>
+		    </div>
+		    
+		    <div class="control-group">
+                        <label class="control-label-custom" for="input07">Zip Code</label>
+                        <div class="controls-custom">
+                            <input type="text" class="input-small" id="input07" name="title"> <span class="help-inline"></span>
                         </div>
                     </div>
 		    
@@ -221,13 +228,15 @@
                         <label class="control-label-custom" for="input10">Cost</label>
                         <div class="controls-custom">
                             <div class="input-prepend">
-                                <span class="add-on">Min $</span><input type="text" class="input-small" id="input10" name="cost" placeholder="0.00">
-			        <span class="add-on">Max $</span><input type="text" class="input-small" id="input10" name="cost" placeholder="0.00">
-				<label class="checkbox">
-			          <input type="checkbox" value="">
-				    Free
-				</label>
+                                <span class="add-on">Min</span><input type="text" class="input-small" id="input10" name="cost" placeholder="$">
 			    </div>
+			    <div class="input-prepend">
+				<span class="add-on">Max</span><input type="text" class="input-small" id="input10" name="cost" placeholder="$">
+			    </div>
+			    <label class="checkbox">
+			      <input type="checkbox" value="">
+			      Free
+			    </label>
                         </div>
                     </div>
                     
@@ -289,25 +298,30 @@
 						  </label>
                         </div>
                     </div>
-                    <div class="fileupload fileupload-new" data-provides="fileupload">
-		      <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;"><img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" /></div>
-		      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-		      <div>
-  		      <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
-			<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-		      </div>
-		    </div>
-              	</div>
-              
-            </div>
+		    
+                    <div class="control-group">
+                      <label class="control-label-custom" for="input11">Image</label>
+                      <div class="controls-custom">
+                        <div class="input-append">
+                          <input class="input-medium" id="appendedInputButton" type="text">
+			  <button class="btn" type="button">Browse image</button>
+                        </div>
+                      </div>
+                    </div>
+		    
+		</div><!-- form-->
+            </div><!-- modal-->
+	    
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal">Cancel</button>
               <button id="publish" class="btn btn-primary">Publish Event</button>
             </div>
           </div>
               <div id="refresher">
+		
 	              {% include "eventlist.html" %}
-              </div>
+		
+	      </div>
             </div><!--/span-->
             
             <ul class="pager">
@@ -318,5 +332,6 @@
 					<a href="#">Next &rarr;</a>
 				</li>
 			</ul>
+	    </div><!-- well-->
           </div><!--/row-->
 {% include "footer.html" %}
