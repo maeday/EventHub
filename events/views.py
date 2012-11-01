@@ -82,7 +82,7 @@ def search_date(request)
 	template_context = {'event_list_date': event_list_date}
 	request_context = RequestContext(request, template_context)
      
-    return render_to_response(template, request_context)
+	return render_to_response(template, request_context)
     
 def search_location(request)
 	neighborhood = request.POST.get('neighborhood')
