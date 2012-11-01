@@ -1,7 +1,20 @@
 .event-title {
 	border-bottom: 1px solid #eeeeee;
-	margin-bottom: 7px;
+	margin-bottom: 5px;
 }
+
+.list-title{
+	border-bottom: 1px solid #DDDDDD;
+	margin-bottom: 3px;
+	margin-top: 7px;
+}
+.list-item{
+	border-bottom: 1px solid #DDDDDD;
+	margin-bottom: 3px;
+	margin-top: 3px;
+	height: 80px;
+}
+
 
 .nav-list label {
 	font-size: 13px;
@@ -17,9 +30,6 @@
 	font-size: 13px;
 }
 
-.well {
-	border-radius: 3px;
-}
 
 .table-hover tbody tr:hover td,
 .table-hover tbody tr:hover th {
@@ -131,6 +141,8 @@ hr.footer-diag {
 	margin-top: 15px;
 	margin-bottom: 5px;
 	padding-top: 0;
+	border-radius: 3px;
+
 }
 
 .fb-comments, .fb-comments span, .fb-comments iframe {
@@ -222,4 +234,20 @@ hr.footer-diag {
 .navbar-inverse .navbar-link:hover {
   color: #cde3ff;
   text-decoration: none;
+}
+
+body{
+	background-image: url("../img/bg.jpg");
+}
+
+.img-list{
+	max-height: 80px;
+	max-width:  90px;
+	padding: 2px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
