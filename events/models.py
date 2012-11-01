@@ -22,6 +22,11 @@ class Event(models.Model):
     free = models.BooleanField()
     categories = models.ManyToManyField(Categories)
     neighborhood=models.ForeignKey(Neighborhoods)
+    street = models.CharField(max_length=200)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=30)
+    zipcode = models.CharField(max_length=10)
+    image_url = models.CharField(max_length=255)
     venue = models.CharField(max_length=100)
     url=models.URLField()
     # need PIL installed for image fields to work
