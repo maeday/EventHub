@@ -8,9 +8,9 @@ urlpatterns = patterns('events.views',
     # Examples:
     # url(r'^$', 'EventHub.views.home', name='home'),
     # url(r'^EventHub/', include('EventHub.foo.urls')),
-    url(r'^$', 'index'),
-    url(r'^change_event_name/$', 'change_event_name'),
-    url(r'^create_event/$', 'create_event'),
+    #url(r'^$', 'index'),
+    #url(r'^change_event_name/$', 'change_event_name'),
+    #url(r'^create_event/$', 'create_event'),
 
         
 

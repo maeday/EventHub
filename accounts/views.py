@@ -5,7 +5,7 @@ from EventHub import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.context import RequestContext
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -181,6 +181,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 template_context['success'] = True
+                return redirect('/mypage', permanent=True)
                 # Unable to authenticate
                 if user.is_active:
                     # User has been activated
