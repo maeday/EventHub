@@ -50,9 +50,9 @@ function check_password() {
 	var pwd1 = $("#input02").val();
 	var pwd2 = $("#input03").val();
 	if (pwd1 != pwd2) {
-		$("#ctrl-repassword").addClass("error");
-		$("#err-repassword").text("Passwords do not match!");
-		$("#err-repassword").show();
+		$("#ctrl-password2").addClass("error");
+		$("#err-password2").text("Passwords do not match!");
+		$("#err-password2").show();
 		$("#input03").focus();
 		return false;
 	}

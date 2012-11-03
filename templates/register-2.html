@@ -9,7 +9,7 @@
 <div class="row-fluid">
   <div class="span12">
     <div class="registration-title">
-      <h2>You're almost there! (Facebook)</h2>
+      <h2>You're almost there!</h2>
       <h3>{{ extra }}</h3>
     </div>
   </div>
@@ -23,23 +23,23 @@
           <div class="control-group">
             <label class="control-label" for="input01">Email Address</label>
             <div class="controls">
-              <input type="text" class="input-large" id="input01" value="{{ email }}" name="email">
+              <input type="text" class="input-large" id="input01" value="{{ email }}" name="email" readonly>
               <p class="help-block">This is the email address you will use to log in.</p>
             </div>
           </div>
           
-          <div id="ctrl-password" class="control-group">
+          <div id="ctrl-password1" class="control-group">
             <label class="control-label" for="input02">Create Password</label>
             <div class="controls">
-              <input type="password" class="input-medium" id="input02" name="password">
+              <input type="password" class="input-medium" id="input02" name="password1">
             </div>
           </div>
           
-          <div id="ctrl-repassword" class="control-group">
+          <div id="ctrl-password2" class="control-group">
             <label class="control-label" for="input03">Confirm Password</label>
             <div class="controls">
-              <input type="password" class="input-medium" id="input03" name="repassword">
-              <span id="err-repassword" class="help-block" style="display:none;"></span>
+              <input type="password" class="input-medium" id="input03" name="password2">
+              <span id="err-password2" class="help-block" style="display:none;"></span>
             </div>
           </div>
           
@@ -48,14 +48,14 @@
           <div class="control-group">
 			<label class="control-label" for="input04">First Name</label>
 			<div class="controls controls-row">
-				<input type="text" class="input-small" id="input04" value="{{ firstname }}" name="firstname"> &nbsp;&nbsp; Preferred Name &nbsp;&nbsp; <input type="text" class="input-small" id="input05"  placeholder="Optional" name="nickname">
+				<input type="text" class="input-small" id="input04" value="{{ firstname }}" name="firstname" readonly> &nbsp;&nbsp; Preferred Name &nbsp;&nbsp; <input type="text" class="input-small" id="input05"  placeholder="Optional" name="nickname">
 			</div>
           </div>
           
           <div class="control-group">
             <label class="control-label" for="input06">Last Name</label>
             <div class="controls">
-              <input type="text" class="input-small" id="input06" value="{{ lastname }}" name="lastname">
+              <input type="text" class="input-small" id="input06" value="{{ lastname }}" name="lastname" readonly>
             </div>
           </div>
           
