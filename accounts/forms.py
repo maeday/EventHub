@@ -59,6 +59,8 @@ class RegistrationForm(forms.Form):
 #    username = forms.CharField(label='Username', max_length=30,
 #                            required=True, validators=[isAlphaNumeric,
 #                                                              isValidUsername])
+    firstname = forms.CharField( max_length=60 )
+    lastname = forms.CharField( max_length=60 )
     password = forms.CharField( widget=forms.PasswordInput, 
                                  max_length=60, label="Password")
     repassword = forms.CharField( widget=forms.PasswordInput, 
@@ -84,6 +86,8 @@ class RegistrationForm(forms.Form):
                                      new_data['email'],
                                      new_data['password'])
         u.is_active = False
+        u.first_name = new_data['firstname']
+        u.last_name = new_data['lastname']
         u.save()
         prof = u.get_profile()
         prof.fbid = new_data['fbid']
