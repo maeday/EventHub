@@ -121,19 +121,19 @@ class EmailAuthenticationForm(forms.Form):
     """
     Form for authenticating users by their email address.
     """
-    email = forms.EmailField(label=_("Email address"))
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    email = forms.EmailField(label="Email address")
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
-    def __init__(self, request=None, *args, **kwargs):
-        """
-        If request is passed in, the form will validate that cookies are
-        enabled. Note that the request (a HttpRequest object) must have set a
-        cookie with the key TEST_COOKIE_NAME and value TEST_COOKIE_VALUE before
-        running this validation.
-        """
-        self.request = request
-        self.user_cache = None
-        super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
+#    def __init__(self, request=None, *args, **kwargs):
+#        """
+#        If request is passed in, the form will validate that cookies are
+#        enabled. Note that the request (a HttpRequest object) must have set a
+#        cookie with the key TEST_COOKIE_NAME and value TEST_COOKIE_VALUE before
+#        running this validation.
+#        """
+#        self.request = request
+#        self.user_cache = None
+#        super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         email = self.cleaned_data.get('email').lower()
@@ -144,15 +144,17 @@ class EmailAuthenticationForm(forms.Form):
             if self.user_cache is None:
                 raise forms.ValidationError(_("Please enter a correct email address and password."))
             elif not self.user_cache.is_active:
-                raise forms.ValidationError(_("This account is inactive."))
-        self.check_for_test_cookie()
+                # User hasn't been activated; allow login for now
+                pass
+                #raise forms.ValidationError(_("This account is inactive."))
+#        self.check_for_test_cookie()
         return self.cleaned_data
 
-    def check_for_test_cookie(self):
-        if self.request and not self.request.session.test_cookie_worked():
-            raise forms.ValidationError(
-                _("Your Web browser doesn't appear to have cookies enabled. "
-                  "Cookies are required for logging in."))
+#    def check_for_test_cookie(self):
+#        if self.request and not self.request.session.test_cookie_worked():
+#            raise forms.ValidationError(
+#                _("Your Web browser doesn't appear to have cookies enabled. "
+#                  "Cookies are required for logging in."))
 
     def get_user_id(self):
         if self.user_cache:
@@ -203,11 +205,13 @@ class EmailUserCreationForm(forms.ModelForm):
     
     def clean_fbid(self):
         fbid = self.cleaned_data["fbid"]
-        try:
-            UserProfile.objects.get(fbid=fbid)
-        except UserProfile.DoesNotExist:
-            return fbid
-        raise forms.ValidationError(_("A user with that Facebook account already exists."))
+        if fbid != -1:
+            try:
+                UserProfile.objects.get(fbid=fbid)
+            except UserProfile.DoesNotExist:
+                return fbid
+            raise forms.ValidationError(_("A user with that Facebook account already exists."))
+        return fbid
         
     def save(self, commit=True):
         user = super(EmailUserCreationForm, self).save(commit=False)

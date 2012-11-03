@@ -12,7 +12,9 @@ from django.template.context import RequestContext
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from accounts.forms import RegistrationForm, LoginForm, isUniqueEmail, isUniqueFbid
+from accounts.forms import RegistrationForm, LoginForm, \
+    EmailAuthenticationForm, EmailUserCreationForm, \
+    isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession
 
 ###############################################################################
@@ -88,7 +90,6 @@ def register(request):
                 valid = False
                 template_context['used_email'] = True
                 
-            
             template_context['fbid'] = -1
             if 'user_id' in data:
                 template_context['has_fbid'] = True
@@ -103,7 +104,7 @@ def register(request):
                 template = 'register-1.html'
         else:
             # Post request received from second page
-            form = RegistrationForm(request.POST) # A form bound to the POST data
+            form = EmailUserCreationForm(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
                 #form.save(request.POST.copy())
                 template_context['extra'] = 'SUCCESS'
@@ -170,8 +171,6 @@ def user_login(request):
         'success'   : False,
         'active'    : True,
         'invalid'   : False,
-        'form'      : LoginForm,
-        'username'  : ''
     }
     if request.user.is_authenticated():
         # User is already logged in
@@ -179,26 +178,31 @@ def user_login(request):
         template_context['logged_in'] = True
     else:
         if request.POST:
-            # Login request sent
-            username = request.POST.get('email')
-            #username = request.POST.get('username')
-            password = request.POST.get('password')
-    
-            template_context['username'] = username
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                template_context['success'] = True
+            form = EmailAuthenticationForm(request.POST)
+            if form.is_valid():
+                #user = form.get_user()
                 return redirect('/mypage', permanent=True)
-                # Unable to authenticate
-                if user.is_active:
-                    # User has been activated
-                    login(request, user)
-                    template_context['success'] = True
-                else:
-                    # User has not yet been activated
-                    template_context['active'] = False
+#            # Login request sent
+#            username = request.POST.get('email')
+#            #username = request.POST.get('username')
+#            password = request.POST.get('password')
+#    
+#            template_context['username'] = username
+#            user = authenticate(username=username, password=password)
+#            if user is not None:
+#                template_context['success'] = True
+#                return redirect('/mypage', permanent=True)
+#                # Unable to authenticate
+#                if user.is_active:
+#                    # User has been activated
+#                    login(request, user)
+#                    template_context['success'] = True
+#                else:
+#                    # User has not yet been activated
+#                    template_context['active'] = False
             else:
                 # Username/password combo incorrect
+                template_context['extra'] = form.errors
                 template_context['invalid'] = True
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)

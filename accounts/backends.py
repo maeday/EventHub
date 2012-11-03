@@ -1,7 +1,25 @@
 # from django.conf import settings
+from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
 
 from accounts import models
+
+###############################################################################
+# Following code taken and modified from 
+# https://bitbucket.org/tino/django-email-login
+
+class EmailBackend(ModelBackend):
+    
+    def authenticate(self, email=None, password=None):
+        try:
+            user = User.objects.get(email__iexact=email.lower())
+            if user.check_password(password):
+                return user
+        except User.DoesNotExist:
+            return None
+
+# end code snippet
+###############################################################################
 
 class FacebookBackend:
     
