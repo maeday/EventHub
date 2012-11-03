@@ -28,17 +28,18 @@
             </div>
           </div>
           
-          <div class="control-group">
+          <div id="ctrl-password" class="control-group">
             <label class="control-label" for="input02">Create Password</label>
             <div class="controls">
               <input type="password" class="input-medium" id="input02" name="password">
             </div>
           </div>
           
-          <div class="control-group">
+          <div id="ctrl-repassword" class="control-group">
             <label class="control-label" for="input03">Confirm Password</label>
             <div class="controls">
               <input type="password" class="input-medium" id="input03" name="repassword">
+              <span id="err-repassword" class="help-block" style="display:none;"></span>
             </div>
           </div>
           
@@ -70,7 +71,7 @@
   <div class="form-actions">
     <div class="row">
       <div class="span3 offset1">
-        <button type="submit" class="btn btn-large btn-success" name="formsubmitted">Create Account</button>
+        <button id="register" type="submit" class="btn btn-large btn-success" name="formsubmitted">Create Account</button>
       </div>
     </div>
   </div>
@@ -79,14 +80,16 @@
   
 </div>
 
-<div class="row-fluid">
+<!---<div class="row-fluid">
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<hr class="footer-diag">
 	<h3 style="text-align:center;color:blue;">DEV USE: front-end return array</h3>
 	<pre><?php print_r($response); ?></pre>
-</div>
+</div>-->
 
 
 <br>
+
+<script src="{{ STATIC_URL }}js/auth.js"></script>
 
 {% include 'footer.html' %}

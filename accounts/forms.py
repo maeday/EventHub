@@ -85,6 +85,9 @@ class RegistrationForm(forms.Form):
                                      new_data['password'])
         u.is_active = False
         u.save()
+        prof = u.get_profile()
+        prof.fbid = new_data['fbid']
+        prof.save()
         return u
 
 class FbRegistrationForm(forms.Form):

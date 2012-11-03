@@ -2,6 +2,8 @@ import base64, cgi, datetime, hashlib, hmac, json, random, urllib
 
 from EventHub import settings
 
+from django.views.decorators.cache import never_cache
+
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
@@ -52,6 +54,7 @@ FACEBOOK_APP_ID = "291967340913194"
 FACEBOOK_APP_SECRET = "30e10b10ed1d58dabaee178d3a99ba99"
 
 @csrf_exempt
+@never_cache
 def register(request):
     '''Handle user registration request'''
     template = 'register-1.html'
@@ -88,6 +91,7 @@ def register(request):
             
             template_context['fbid'] = -1
             if 'user_id' in data:
+                template_context['has_fbid'] = True
                 template_context['fbid'] = data['user_id']
                 if not isUniqueFbid(template_context['fbid']):
                     valid = False
@@ -127,6 +131,9 @@ def register(request):
 #                          email_body,
 #                          'accounts-noreply@theeventhub.com',
 #                          [email])
+                
+                # Redirect to 'My Page' after successful registration
+                return redirect('/mypage', permanent=True)
             else:
                 template_context['extra'] = form.errors
         
