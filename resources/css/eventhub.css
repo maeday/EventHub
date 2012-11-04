@@ -1,6 +1,11 @@
 .event-title {
 	border-bottom: 1px solid #eeeeee;
 	margin-bottom: 5px;
+	padding-top:0;
+	padding-bottom:0;
+}
+.event-title h3 {
+	margin-top:0;
 }
 
 .list-title{
