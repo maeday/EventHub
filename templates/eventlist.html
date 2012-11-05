@@ -3,7 +3,7 @@
  {% if latest_event_list %} {% for event in latest_event_list %}
 <tr>
 	<td width="205">
-		<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:190px;height:130px;">
+		<img src="{{ STATIC_URL }}photos/no-image-small.png" class="img-polaroid" style="width:190px;height:130px;">
 		<p style="padding-top:5px;padding-left:5px;">
 			<strong>{{ event.start_date|date:"l, F j" }}</strong><br>
 			Starts at {{ event.start_date|date:"g:i A" }}
