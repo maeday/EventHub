@@ -17,9 +17,9 @@
 			{{ event.description }}
 		</p>
 		<p>
-			<strong>CenturyLink Field</strong><br>
-			 800 Occidental Avenue South, Seattle, WA<br>
-			<a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
+			<strong>{{ event.venue }}</strong><br>
+			 {{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
+			<a href="{{ event.url }}">{{ event.url }}</a>
 		</p>
 		<p>
 			<strong>Cost/Fees</strong><br>
