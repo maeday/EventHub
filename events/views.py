@@ -38,6 +38,10 @@ def create_event(request):
           eStartDateTimeString = request.POST.get('start')
           eEndDateTimeString = request.POST.get('end')
           eVenue = request.POST.get('venue')
+          eStreet = request.POST.get('street')
+          eCity = request.POST.get('city')
+          eState = request.POST.get('state')
+          eZipcode = request.POST.get('zip')
           
           startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
           endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -46,7 +50,8 @@ def create_event(request):
           n = Neighborhoods(id=1)
           e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                     poster=u, description=eDesc, free=False, neighborhood=n,
-                    cost_max=10.0, cost_min=0.0, venue=eVenue, url="www.uw.edu")
+                    cost_max=10.0, cost_min=0.0, venue=eVenue, url="www.uw.edu",
+                    street=eStreet, city=eCity, state=eState, zipcode=eZipcode)
           e.save()
           
           template = 'text.html'
