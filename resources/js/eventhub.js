@@ -80,6 +80,7 @@ function requestCreate() {
 	var input_city = $("#input-city").val();
 	var input_state = $("#input-state").val().toUpperCase();
 	var input_zip = $("#input-zip").val();
+	var input_url = $("#input-url").val();
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -107,7 +108,8 @@ function requestCreate() {
 			street: input_street,
 			city: input_city,
 			state: input_state,
-			zip: input_zip
+			zip: input_zip,
+			url: input_url
 		}
 	});
 	
