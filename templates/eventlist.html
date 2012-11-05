@@ -5,8 +5,8 @@
 	<td width="205">
 		<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:190px;height:130px;">
 		<p style="padding-top:5px;">
-			<strong>{{ event.start_date|date:"F j, Y" }}</strong><br>
-			{{ event.start_date|date:"l" }} at {{ event.start_date|date:"g:i A" }}
+			<strong>{{ event.start_date|date:"l, F j, Y" }}</strong><br>
+			Starts at {{ event.start_date|date:"g:i A" }}
 		</p>
 	</td>
 	<td style="border-left:none;">
