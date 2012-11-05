@@ -24,6 +24,22 @@ $(document).ready(function(){
 		}
     });
     
+    $("#input-description").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#ctrl-description").removeClass("error");
+			$("#err-description").hide();
+			return true;
+		}
+    });
+    
+    $("#input-venue").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#ctrl-venue").removeClass("error");
+			$("#err-venue").hide();
+			return true;
+		}
+    });
+    
     $("#input-startdate").blur(function() {
 	    check_date($(this), $("#err-start"), $("#ctrl-start"));
     });
@@ -39,22 +55,6 @@ $(document).ready(function(){
     
     $("#input-startdate").change(function() {
 	    $("#input-enddate").val($("#input-startdate").val());
-    });
-    
-    $("#input04").keyup(function() {
-    	if ($(this).val() != "") {
-			$(".control-group:eq(3)").removeClass("error");
-			$(".help-block:eq(0)").text("");
-			return true;
-		}
-    });
-    
-    $("#input05").keyup(function() {
-    	if ($(this).val() != "") {
-			$(".control-group:eq(4)").removeClass("error");
-			$(".help-block:eq(1)").text("");
-			return true;
-		}
     });
     
     $("#publish").click(function() {
@@ -350,6 +350,15 @@ function switch_clock(btn) {
 }
 
 function check_location() {
-	// TO DO
-	return true;
+	if ($("#input-venue").val() == "") {
+		$("#ctrl-venue").addClass("error");
+		$("#err-venue").text("Please specify the name of the place.");
+		$("#err-venue").show();
+		$("#input-venue").focus();
+		return false;
+	} else {
+		$("#ctrl-venue").removeClass("error");
+		$("#err-venue").hide();
+		return true;
+	}
 }
