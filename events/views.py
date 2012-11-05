@@ -22,7 +22,7 @@ def index(request):
      return render_to_response(template, request_context)
      
 def eventlist(request):
-     latest_event_list = Event.objects.all()
+     latest_event_list = Event.objects.all().order_by('start_date')
      
      template = 'eventlist.html'
      template_context = {'latest_event_list': latest_event_list}
