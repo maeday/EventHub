@@ -38,8 +38,8 @@ def create_event(request):
           eStartDateTimeString = request.POST.get('start')
           eEndDateTimeString = request.POST.get('end')
           
-          startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M%p")
-          endDateTime = datetieme.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M%p")
+          startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
+          endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
           
           u = User(id=1)
           n = Neighborhoods(id=1)

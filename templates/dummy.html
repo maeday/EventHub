@@ -5,6 +5,8 @@
 <form action="create_event" method="post">
 {% csrf_token %}
 Event Name <input type="text" name="title"> <br />
-Event Description <input type="text" name="description">
+Event Description <input type="text" name="description"> <br />
+Start Time <input type="text" name="start"> <br />
+End Time <input type="text" name="end">
 <input type="submit" value="Submit">
 </form>
