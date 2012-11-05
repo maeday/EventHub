@@ -25,10 +25,10 @@ DATABASES = {
     }
 }
 
-FACEBOOK_APP_ID = ''
+FACEBOOK_APP_ID = '195774903890874'
 FACEBOOK_API_KEY = ''
-FACEBOOK_API_SECRET = ''
-FACEBOOK_REDIRECT_URI = 'http://example.com/login/' # TODO: Update this setting
+FACEBOOK_API_SECRET = '424d5e38585fcb4d1c7578ba48a76df6'
+FACEBOOK_REDIRECT_URI = 'http://theeventhub.heroku.com/' # TODO: Update this setting
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
@@ -186,5 +186,6 @@ LOGGING = {
 # Override settings from a 'settings_local.py' file
 try:
     from settings_local import *
+    from settings_shared import *
 except ImportError, e:
     pass
