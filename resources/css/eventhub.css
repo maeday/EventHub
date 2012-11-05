@@ -232,7 +232,7 @@ hr.footer-diag {
   text-decoration: none;
 }
 
-body{
+body {
 	background-image: url("../img/bg.jpg");
 }
 
@@ -246,4 +246,11 @@ body{
 	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.lead-custom {
+  margin-bottom: 7px;
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 25px;
 }
