@@ -144,13 +144,6 @@ function refreshEventList() {
 	});
 }
 
-function pop_create_event() {
-	$("#input-title").focus();
-}
-function pop_edit_event() {
-	$("#input-title").focus();
-}
-
 // Checks for errors in the form.
 function check_all() {
 	return check_title() && check_times_comprehensive() && check_summary() && check_location();

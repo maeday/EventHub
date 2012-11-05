@@ -127,20 +127,11 @@ hr.footer-diag {
 	font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif;
 	font-size: 11px;
 	color: #777;
-	padding-top: 7px;
+	padding-top: 5px;
 	border-top: 1px solid #EBEBEB;
+	text-align: center;
 }
 .footer a:hover { border: none; }
-.footer .bottom-left {
-	padding-left: 30px;
-}
-.footer .bottom-left a {
-	color: inherit;
-}
-.footer .bottom-right {
-	padding-right: 30px;
-	text-align: right;
-}
 
 .well-custom {
 	margin-top: 15px;
