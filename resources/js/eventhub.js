@@ -3,10 +3,10 @@ $(document).ready(function(){
 	$(".datepicker").datepicker({ minDate:new Date() });
 		
 	$("#picker-1").click(function() {
-    	$("#input02").focus();
+    	$("#input-startdate").focus();
     });
     $("#picker-2").click(function() {
-    	$("#input03").focus();
+    	$("#input-enddate").focus();
     });
     
     $("#clockswitch-1").click(function() {
@@ -71,13 +71,33 @@ $(document).ready(function(){
 function requestCreate() {
 	var input_title = $("#input-title").val();
 	var input_desc = $("#input-description").val();
+	var input_startdate = $("#input-startdate").val();
+	var input_starttime = $("#input-starttime").val();
+	var input_enddate = $("#input-enddate").val();
+	var input_endtime = $("#input-endtime").val();
+	
+	var start_clock = "am";
+	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
+		start_clock = "pm";
+	}
+	
+	var end_clock = "am";
+	if ($("#clockswitch-2").html() == "&nbsp;PM&nbsp;") { // if end clock is PM
+		end_clock = "pm";
+	}
+	
+	// Stringifies time variables. ex) "11/04/2012 04:15 pm"
+	var start_str = input_startdate + " " + input_starttime + " " + start_clock;
+	var end_str = input_enddate + " " + input_endtime + " " + end_clock;
 	
 	var request = $.ajax({
 		url: "create_event",
 		type: "POST",
 		data: {
 			title : input_title,
-			description: input_desc
+			description: input_desc,
+			start: start_str,
+			end: end_str
 		}
 	});
 	
