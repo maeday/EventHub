@@ -75,6 +75,7 @@ function requestCreate() {
 	var input_starttime = $("#input-starttime").val();
 	var input_enddate = $("#input-enddate").val();
 	var input_endtime = $("#input-endtime").val();
+	var input_venue = $("#input-venue").val();
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -97,7 +98,8 @@ function requestCreate() {
 			title : input_title,
 			description: input_desc,
 			start: start_str,
-			end: end_str
+			end: end_str,
+			venue: input_venue
 		}
 	});
 	
