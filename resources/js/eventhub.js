@@ -76,6 +76,10 @@ function requestCreate() {
 	var input_enddate = $("#input-enddate").val();
 	var input_endtime = $("#input-endtime").val();
 	var input_venue = $("#input-venue").val();
+	var input_street = $("#input-street").val();
+	var input_city = $("#input-city").val();
+	var input_state = $("#input-state").val();
+	var input_zip = $("#input-zip").val();
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -99,7 +103,11 @@ function requestCreate() {
 			description: input_desc,
 			start: start_str,
 			end: end_str,
-			venue: input_venue
+			venue: input_venue,
+			street: input_street,
+			city: input_city,
+			state: input_state,
+			zip: input_zip
 		}
 	});
 	

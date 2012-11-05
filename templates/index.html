@@ -155,7 +155,7 @@
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label-custom" for="input05">Location</label>
+									<label class="control-label-custom" for="input-location">Location</label>
 									<div class="controls-custom">
 										<select>
 											<option>Select a Neighborhoood</option>
@@ -175,23 +175,24 @@
 										<span id="err-venue" class="help-block" style="display:none;"></span>
 									</div>
 								</div>
-								<div class="control-group">
-									<label class="control-label-custom" for="input07">Street&nbsp;Address</label>
+								<div id="ctrl-street" class="control-group">
+									<label class="control-label-custom" for="input-street">Street&nbsp;Address</label>
 									<div class="controls-custom">
-										<input type="text" class="input-xlarge" id="input07" name="title"><span class="help-inline"></span>
+										<input type="text" class="input-xlarge" id="input-street">
+										<span id="err-street" class="help-block" style="display:none;"></span>
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label-custom" for="input08">City</label>
+									<label class="control-label-custom" for="input-city">City</label>
 									<div class="controls-custom controls-row">
-										<input type="text" class="span4" id="input08" name="title">
-										&nbsp;&nbsp;&nbsp;&nbsp;State&nbsp;&nbsp;&nbsp; <input type="text" class="input-mini" id="input08" name="title">
+										<input type="text" class="span4" id="input-city" value="Seattle">
+										&nbsp;&nbsp;&nbsp;&nbsp;State&nbsp;&nbsp;&nbsp; <input type="text" class="input-mini" id="input-state" style="text-transform:uppercase;" maxlength="2" value="WA">
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label-custom" for="input07">Zip Code</label>
+									<label class="control-label-custom" for="input-zip">Zip Code</label>
 									<div class="controls-custom">
-										<input type="text" class="input-small" id="input07" name="title"><span class="help-inline"></span>
+										<input type="text" class="input-small" id="input-zip" maxlength="5"><span class="help-inline"></span>
 									</div>
 								</div>
 								<div class="control-group">
