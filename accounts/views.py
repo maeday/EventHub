@@ -52,28 +52,28 @@ def parse_signed_request(signed_request, secret):
 # end code snippet
 ###############################################################################
 
-FACEBOOK_APP_ID = "291967340913194"
-FACEBOOK_APP_SECRET = "30e10b10ed1d58dabaee178d3a99ba99"
+#FACEBOOK_APP_ID = "291967340913194"
+#FACEBOOK_APP_SECRET = "30e10b10ed1d58dabaee178d3a99ba99"
 
 @csrf_exempt
 @never_cache
 def register(request):
     '''Handle user registration request'''
     template = 'register-1.html'
-    template_context = {}
+    template_context = {'app_id': settings.FACEBOOK_APP_ID}
     if request.user.is_authenticated():
         # They already have an account; don't let them register again
-        template_context = {'has_account': True}
+        template_context['has_account'] = True
         request_context = RequestContext(request, template_context);
         return render_to_response(template, request_context)
     if request.POST:
         template = 'register-2.html'
-        template_context = {'post_request': True}
+        template_context['post_request'] = True
         
         if request.POST.get('signed_request'):
             # Post request received from first page
             signed_request = request.POST.get('signed_request')
-            data = parse_signed_request(signed_request, FACEBOOK_APP_SECRET)
+            data = parse_signed_request(signed_request, settings.FACEBOOK_APP_SECRET)
             register_info = data['registration']
             if 'name' in register_info:
 #                name_parts = str.split(register_info['name'], ' ')

@@ -8,11 +8,12 @@ from django.utils import timezone
 from EventHub import settings
 from events.models import Event, Categories, Neighborhoods
 from django.contrib.auth.models import User
+from django.db.models.fields import DateTimeField
 
 from datetime import datetime
 
 def index(request):
-     latest_event_list = Event.objects.all()
+     latest_event_list = Event.objects.all().order_by('start_date')
      
      template = 'index.html'
      template_context = {'latest_event_list': latest_event_list}
@@ -21,7 +22,7 @@ def index(request):
      return render_to_response(template, request_context)
      
 def eventlist(request):
-     latest_event_list = Event.objects.all()
+     latest_event_list = Event.objects.all().order_by('start_date')
      
      template = 'eventlist.html'
      template_context = {'latest_event_list': latest_event_list}
@@ -34,10 +35,15 @@ def create_event(request):
      if request.POST:
           eName = request.POST.get('title')
           eDesc = request.POST.get('description')
+          eStartDateTimeString = request.POST.get('start')
+          eEndDateTimeString = request.POST.get('end')
+          
+          startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
+          endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
           
           u = User(id=1)
           n = Neighborhoods(id=1)
-          e = Event(start_date=timezone.now(), end_date=timezone.now(), name=eName, 
+          e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                     poster=u, description=eDesc, free=False, neighborhood=n,
                     cost_max=10.0, cost_min=0.0, venue="UW", url="www.uw.edu")
           e.save()

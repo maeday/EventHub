@@ -1,6 +1,60 @@
-    </div><!--/.fluid-container-->
+    </div><!--container-->
 
-	<footer></footer>
+    <div class="container">
+		<div class="row">
+			<div class="footer span12">
+				&copy; EventHub 2012 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<a href="index">Home</a> &nbsp;|&nbsp; 
+				<a href="#" data-toggle="modal" data-target="#teamModal" onclick="return false;">About</a>
+			</div>
+			
+			<div id="teamModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 id="myModalLabel">About</h3>
+				</div>
+				<div class="modal-body">
+					<div class="form-horizontal">
+					    <p>EventHub -- uniting events and interests, bringing Seattle closer to you.</p>
+					    <hr />
+					    
+					    <h4 id="myModalLabel">Team Members</h4>
+						<p class="lead-custom">
+							Chung Han<br>
+							<a href="mailto:han@cs.washington.edu">han@cs.washington.edu</a>
+						</p>
+						<p class="lead-custom">
+							Derek Tseng<br>
+							<a href="mailto:dxtseng@cs.washington.edu">dxtseng@cs.washington.edu</a>						
+						</p>
+						<p class="lead-custom">
+							Erik Chou<br>
+							<a href="mailto:erikc10@cs.washington.edu">erikc10@cs.washington.edu</a>
+						</p>
+						<p class="lead-custom">
+							Jane Liu<br>
+							<a href="mailto:liuj7@cs.washington.edu">liuj7@cs.washington.edu</a>
+						</p>
+						<p class="lead-custom">
+							Karin Hellman<br>
+							<a href="mailto:khellman@cs.washington.edu">khellman@cs.washington.edu</a>
+						</p>
+						<p class="lead-custom">
+							Kun Wang<br>
+							<a href="mailto:kunw@cs.washington.edu">kunw@cs.washington.edu</a>
+						</p>
+						<p class="lead-custom">
+							Yukio Maeda<br>
+							<a href="mailto:maeday@cs.washington.edu">maeday@cs.washington.edu</a>
+						</p>
+					</div>
+					<!-- form-->
+				</div>
+				<!-- modal-->
+			</div>
+		</div>
+    </div>
     
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}js/eventhub.js"></script>

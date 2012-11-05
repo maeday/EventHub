@@ -5,8 +5,7 @@ class Categories(models.Model):
     name=models.CharField(max_length=255)
     
 class Neighborhoods(models.Model):
-		name=models.CharField(max_length=255)
-
+	name=models.CharField(max_length=255)
 
 # Create your models here.
 class Event(models.Model):
