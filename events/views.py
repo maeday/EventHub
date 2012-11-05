@@ -13,7 +13,7 @@ from django.db.models.fields import DateTimeField
 from datetime import datetime
 
 def index(request):
-     latest_event_list = Event.objects.all()
+     latest_event_list = Event.objects.all().order_by('start_date')
      
      template = 'index.html'
      template_context = {'latest_event_list': latest_event_list}
