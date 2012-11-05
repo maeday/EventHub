@@ -78,7 +78,7 @@ function requestCreate() {
 	var input_venue = $("#input-venue").val();
 	var input_street = $("#input-street").val();
 	var input_city = $("#input-city").val();
-	var input_state = $("#input-state").val();
+	var input_state = $("#input-state").val().toUpperCase();
 	var input_zip = $("#input-zip").val();
 	
 	var start_clock = "am";
