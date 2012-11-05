@@ -9,6 +9,11 @@
 	margin-bottom:0;
 }
 
+.event-time {
+	padding-top:5px;
+	padding-left:10px;
+}
+
 .list-title{
 	border-bottom: 1px solid #DDDDDD;
 	margin-bottom: 3px;
@@ -254,4 +259,11 @@ body {
   font-size: 16px;
   font-weight: 200;
   line-height: 25px;
+}
+
+.event-image {
+  width:190px;
+  height:130px;
+  margin-top:7px;
+  margin-left:5px;
 }
