@@ -24,6 +24,30 @@ $(document).ready(function(){
 		}
     });
     
+    $("#input-description").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#ctrl-description").removeClass("error");
+			$("#err-description").hide();
+			return true;
+		}
+    });
+    
+    $("#input-venue").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#ctrl-venue").removeClass("error");
+			$("#err-venue").hide();
+			return true;
+		}
+    });
+    
+    $("#input-street").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#ctrl-street").removeClass("error");
+			$("#err-street").hide();
+			return true;
+		}
+    });
+    
     $("#input-startdate").blur(function() {
 	    check_date($(this), $("#err-start"), $("#ctrl-start"));
     });
@@ -39,22 +63,6 @@ $(document).ready(function(){
     
     $("#input-startdate").change(function() {
 	    $("#input-enddate").val($("#input-startdate").val());
-    });
-    
-    $("#input04").keyup(function() {
-    	if ($(this).val() != "") {
-			$(".control-group:eq(3)").removeClass("error");
-			$(".help-block:eq(0)").text("");
-			return true;
-		}
-    });
-    
-    $("#input05").keyup(function() {
-    	if ($(this).val() != "") {
-			$(".control-group:eq(4)").removeClass("error");
-			$(".help-block:eq(1)").text("");
-			return true;
-		}
     });
     
     $("#publish").click(function() {
@@ -75,6 +83,12 @@ function requestCreate() {
 	var input_starttime = $("#input-starttime").val();
 	var input_enddate = $("#input-enddate").val();
 	var input_endtime = $("#input-endtime").val();
+	var input_venue = $("#input-venue").val();
+	var input_street = $("#input-street").val();
+	var input_city = $("#input-city").val();
+	var input_state = $("#input-state").val().toUpperCase();
+	var input_zip = $("#input-zip").val();
+	var input_url = $("#input-url").val();
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -97,7 +111,13 @@ function requestCreate() {
 			title : input_title,
 			description: input_desc,
 			start: start_str,
-			end: end_str
+			end: end_str,
+			venue: input_venue,
+			street: input_street,
+			city: input_city,
+			state: input_state,
+			zip: input_zip,
+			url: input_url
 		}
 	});
 	
@@ -146,7 +166,7 @@ function refreshEventList() {
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_location();
+	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_zip() && check_url();
 }
 
 function check_title() {
@@ -347,7 +367,86 @@ function switch_clock(btn) {
 	}
 }
 
-function check_location() {
-	// TO DO
-	return true;
+function check_venue() {
+	if ($("#input-venue").val() == "") {
+		$("#ctrl-venue").addClass("error");
+		$("#err-venue").text("Please specify the name of the place.");
+		$("#err-venue").show();
+		$("#input-venue").focus();
+		return false;
+	} else {
+		$("#ctrl-venue").removeClass("error");
+		$("#err-venue").hide();
+		return true;
+	}
+}
+
+function check_street() {
+	if ($("#input-street").val() == "") {
+		$("#ctrl-street").addClass("error");
+		$("#err-street").text("Please enter street address.");
+		$("#err-street").show();
+		$("#input-street").focus();
+		return false;
+	} else {
+		$("#ctrl-street").removeClass("error");
+		$("#err-street").hide();
+		return true;
+	}
+}
+
+function check_city() {
+	if ($("#input-city").val() == "") {
+		$("#ctrl-city").addClass("error");
+		$("#err-city").text("Please enter city.");
+		$("#err-city").show();
+		$("#input-city").focus();
+		return false;
+	} else {
+		$("#ctrl-city").removeClass("error");
+		$("#err-city").hide();
+		return true;
+	}
+}
+
+function check_state() {
+	if ($("#input-state").val() == "") {
+		$("#ctrl-city").addClass("error");
+		$("#err-city").text("Please enter state.");
+		$("#err-city").show();
+		$("#input-state").focus();
+		return false;
+	} else {
+		$("#ctrl-city").removeClass("error");
+		$("#err-city").hide();
+		return true;
+	}
+}
+
+function check_zip() {
+	if ($("#input-zip").val() == "") {
+		$("#ctrl-city").addClass("error");
+		$("#err-city").text("Please enter zip code.");
+		$("#err-city").show();
+		$("#input-zip").focus();
+		return false;
+	} else {
+		$("#ctrl-city").removeClass("error");
+		$("#err-city").hide();
+		return true;
+	}
+}
+
+function check_url() {
+	if ($("#input-url").val() == "") {
+		$("#ctrl-url").addClass("error");
+		$("#err-url").text("Please enter a URL address.");
+		$("#err-url").show();
+		$("#input-url").focus();
+		return false;
+	} else {
+		$("#ctrl-url").removeClass("error");
+		$("#err-url").hide();
+		return true;
+	}
 }
