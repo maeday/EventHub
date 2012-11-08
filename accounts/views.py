@@ -59,7 +59,7 @@ def parse_signed_request(signed_request, secret):
 @never_cache
 def register(request):
     '''Handle user registration request'''
-    template = 'register-1.html'
+    template = 'accounts/register-1.html'
     template_context = {'app_id': settings.FACEBOOK_APP_ID}
     if request.user.is_authenticated():
         # They already have an account; don't let them register again
@@ -67,7 +67,7 @@ def register(request):
         request_context = RequestContext(request, template_context);
         return render_to_response(template, request_context)
     if request.POST:
-        template = 'register-2.html'
+        template = 'accounts/register-2.html'
         template_context['post_request'] = True
         
         if request.POST.get('signed_request'):
@@ -101,7 +101,7 @@ def register(request):
             # What to do if fbid or email already in database?
             #template_context['facebook_request'] = True
             if not valid:
-                template = 'register-1.html'
+                template = 'accounts/register-1.html'
         else:
             # Post request received from second page
             form = EmailUserCreationForm(request.POST) # A form bound to the POST data
@@ -143,7 +143,7 @@ def register(request):
 
 def confirm(request, activation_key):
     '''Confirm user's activation key'''
-    template = 'confirm.html'
+    template = 'accounts/confirm.html'
     template_context = {}
     if request.user.is_authenticated():
         # User is already logged on and activated
@@ -165,7 +165,7 @@ def confirm(request, activation_key):
 
 def user_login(request):
     '''Allow user to log in'''
-    template = 'login.html'
+    template = 'accounts/login.html'
     template_context = {
         'logged_in' : False,
         'success'   : False,
@@ -260,4 +260,4 @@ def login_facebook(request):
             error = 'AUTH_DENIED'
 
     template_context = {'settings': settings, 'error': error}
-    return render_to_response('login.html', template_context, context_instance=RequestContext(request))
+    return render_to_response('accounts/login.html', template_context, context_instance=RequestContext(request))
