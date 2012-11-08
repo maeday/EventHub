@@ -1,6 +1,5 @@
 {% include 'header.html' %}
 
-
 <style type="text/css">
   body {
     background: url({{ STATIC_URL }}img/bg.jpg) repeat 0 0 #efefef;
@@ -32,27 +31,13 @@
 
 <div class="row-fluid align-center">
   <div class="span12">
-    <!---<fb:registration
-        redirect-uri="http://127.0.0.1:8000/register"
-        fields="[
-        {'name':'name','view':'prefilled'},
-        {'name':'first_name','view':'not_prefilled'},
-        {'name':'last_name','view':'not_prefilled'},
-        {'name':'gender'},
-        {'name':'birthday'},
-        {'name':'email'},
-        {'name':'phone','description':'Phone Number','type':'text'},
-        {'name':'location','description':'Location','type':'typeahead', 'categories':['city','country','state_province']}
-        ]"
-        width="650">
-    </fb:registration>-->
     <fb:registration
-        redirect-uri="http://127.0.0.1:8000/register"
+        redirect-uri="{{ web_root }}/register"
         fields="[
-        {'name':'name','view':'prefilled'},
-        {'name':'first_name','view':'not_prefilled'},
-        {'name':'last_name','view':'not_prefilled'},
-        {'name':'email'}
+          {'name':'name','view':'prefilled'},
+          {'name':'first_name','view':'not_prefilled'},
+          {'name':'last_name','view':'not_prefilled'},
+          {'name':'email'}
         ]"
         width="650">
     </fb:registration>

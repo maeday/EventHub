@@ -60,7 +60,10 @@ def parse_signed_request(signed_request, secret):
 def register(request):
     '''Handle user registration request'''
     template = 'accounts/register-1.html'
-    template_context = {'app_id': settings.FACEBOOK_APP_ID}
+    template_context = {
+        'app_id': settings.FACEBOOK_APP_ID,
+        'web_root': settings.WEB_ROOT
+    }
     if request.user.is_authenticated():
         # They already have an account; don't let them register again
         template_context['has_account'] = True
