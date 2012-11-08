@@ -180,7 +180,8 @@ def user_login(request):
         if request.POST:
             form = EmailAuthenticationForm(request.POST)
             if form.is_valid():
-                #user = form.get_user()
+                user = form.get_user()
+                login(request, user)
                 return redirect('/mypage', permanent=True)
 #            # Login request sent
 #            username = request.POST.get('email')
@@ -211,11 +212,12 @@ def user_logout(request):
     '''Allow user to log out'''
     # TODO: handle more cases (user not logged in, logout unsuccessful, etc.)
     logout(request)
-    form = LoginForm
-    state = "You have successfully logged out!"
-    return render_to_response('logout.html', 
-                              RequestContext(request, 
-                                             {'state': state, 'form': form}))
+#    form = LoginForm
+#    state = "You have successfully logged out!"
+    return redirect('/index', permanent=True)
+#    return render_to_response('logout.html', 
+#                              RequestContext(request, 
+#                                             {'state': state, 'form': form}))
     
 def login_facebook(request):
     error = None
