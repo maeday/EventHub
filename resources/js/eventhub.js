@@ -77,6 +77,7 @@ $(document).ready(function(){
 });
 
 function requestCreate() {
+ alert($("#input-title").val());
 	var input_title = $("#input-title").val();
 	var input_desc = $("#input-description").val();
 	var input_startdate = $("#input-startdate").val();
@@ -89,6 +90,7 @@ function requestCreate() {
 	var input_state = $("#input-state").val().toUpperCase();
 	var input_zip = $("#input-zip").val();
 	var input_url = $("#input-url").val();
+	var input_image =  document.getElementById('imageToUpload').files[0];
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -104,21 +106,25 @@ function requestCreate() {
 	var start_str = input_startdate + " " + input_starttime + " " + start_clock;
 	var end_str = input_enddate + " " + input_endtime + " " + end_clock;
 	
+	var fd = new FormData();
+	fd.append( 'image', input_image );
+	fd.append( 'title', input_title );
+	fd.append( 'description', input_desc );
+	fd.append( 'start', start_str );
+	fd.append( 'end', end_str );
+	fd.append( 'venue', input_venue );
+	fd.append( 'street', input_street );
+	fd.append( 'city', input_city );
+	fd.append( 'state', input_state );
+	fd.append( 'zip', input_zip );
+	fd.append( 'url', input_url ); 
 	var request = $.ajax({
 		url: "create_event",
 		type: "POST",
-		data: {
-			title : input_title,
-			description: input_desc,
-			start: start_str,
-			end: end_str,
-			venue: input_venue,
-			street: input_street,
-			city: input_city,
-			state: input_state,
-			zip: input_zip,
-			url: input_url
-		}
+		data: fd,
+		processData: false,
+    contentType: false,
+    cache: false 
 	});
 	
 	request.done(function(msg) {

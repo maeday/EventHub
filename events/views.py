@@ -43,6 +43,7 @@ def create_event(request):
           eState = request.POST.get('state')
           eZipcode = request.POST.get('zip')
           eUrl = request.POST.get('url')
+          eimage = request.FILES.get('image')
           
           startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
           endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -52,7 +53,7 @@ def create_event(request):
           e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                     poster=u, description=eDesc, free=False, neighborhood=n,
                     cost_max=10.0, cost_min=0.0, venue=eVenue, url=eUrl,
-                    street=eStreet, city=eCity, state=eState, zipcode=eZipcode)
+                    street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
           e.save()
           
           template = 'text.html'

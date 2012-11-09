@@ -108,7 +108,7 @@
 				<div class="span12">
 					<h2>Upcoming Events &nbsp;<small>Sports / Downtown</small>
 					  {% if user.is_authenticated %}
-					  <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Create Event</button>
+					  <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;" >Create Event</button>
 					  {% else %}
 					  <a href="login"><button class="btn btn-medium btn-primary pull-right" type="button" style="margin-top:8px;">Create Event</button></a>
 					  {% endif %}
@@ -260,8 +260,7 @@
 									<label class="control-label-custom" for="input11">Image</label>
 									<div class="controls-custom">
 										<div class="input-append">
-											<input class="input-large" id="appendedInputButton" type="text">
-											<button class="btn" type="button">Browse</button>
+											<input type="file" name="imageToUpload" id="imageToUpload"  />
 										</div>
 									</div>
 								</div>
