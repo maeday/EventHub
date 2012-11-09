@@ -173,6 +173,8 @@ def user_login(request):
         'success'   : False,
         'active'    : True,
         'invalid'   : False,
+        'app_id'    : settings.FACEBOOK_APP_ID,
+        'redir_uri' : settings.WEB_ROOT + '/loginfb'
     }
     if request.user.is_authenticated():
         # User is already logged in
@@ -207,6 +209,8 @@ def user_login(request):
                 # Username/password combo incorrect
                 template_context['extra'] = form.errors
                 template_context['invalid'] = True
+        elif request.GET:
+            template_context['error'] = 'AUTH_FAILED'
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
@@ -225,16 +229,18 @@ def login_facebook(request):
     error = None
 
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/yay/')
+        return HttpResponseRedirect('/mypage')
 
     if request.GET:
         if 'code' in request.GET:
             args = {
                 'client_id': settings.FACEBOOK_APP_ID,
-                'redirect_uri': settings.FACEBOOK_REDIRECT_URI,
-                'client_secret': settings.FACEBOOK_API_SECRET,
+                'redirect_uri': settings.WEB_ROOT + '/loginfb',
+                'client_secret': settings.FACEBOOK_APP_SECRET,
                 'code': request.GET['code'],
             }
+            
+#            csrf_token = request.GET['state']
 
             url = 'https://graph.facebook.com/oauth/access_token?' + \
                     urllib.urlencode(args)
@@ -253,7 +259,7 @@ def login_facebook(request):
             if user:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect('/yay/')
+                    return HttpResponseRedirect('/mypage')
                 else:
                     error = 'AUTH_DISABLED'
             else:
@@ -262,4 +268,5 @@ def login_facebook(request):
             error = 'AUTH_DENIED'
 
     template_context = {'settings': settings, 'error': error}
-    return render_to_response('accounts/login.html', template_context, context_instance=RequestContext(request))
+    return redirect('/login?error=invalidfb', permanent=True)
+    #return render_to_response('accounts/login.html', template_context, context_instance=RequestContext(request))

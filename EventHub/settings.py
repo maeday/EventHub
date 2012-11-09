@@ -29,6 +29,7 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.EmailBackend',
+    'accounts.backends.FacebookBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
