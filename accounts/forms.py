@@ -59,56 +59,7 @@ def isAlphaNumeric(field_data):
     if not alnum_re.search(field_data):
         raise validators.ValidationError("This value must contain only letters, \
         numbers and underscores.")
-    
-class RegistrationForm(forms.Form):
-    '''Form used for user registration'''
-#    username = forms.CharField(label='Username', max_length=30,
-#                            required=True, validators=[isAlphaNumeric,
-#                                                              isValidUsername])
-    firstname = forms.CharField( max_length=60 )
-    lastname = forms.CharField( max_length=60 )
-    password1 = forms.CharField( widget=forms.PasswordInput, 
-                                 max_length=60, label="Password")
-    password2 = forms.CharField( widget=forms.PasswordInput, 
-                                 max_length=60, label="Re-enter Password")
-    # Django automatically checks to see if the email address is valid
-    email = forms.EmailField( label='Email', max_length=30, required=True, validators=[isValidEmail] )
-    fbid = forms.IntegerField( label='Facebook ID')
-    
-    # Verify that repassword matches password
-    def clean_password2(self):
-        pw1 = self.cleaned_data['password1']
-        pw2 = self.cleaned_data['password2']
-        if pw1 != pw2:
-            raise forms.ValidationError("The entered passwords do not match!")
-        # Always return the cleaned data, whether you have changed it or not.
-        return pw2
-    
-    def save(self, new_data):
-        '''Creates a new user, saves it to the database, and returns it'''
-        #u = User.objects.create_user(new_data['username'],
-        # User email as username
-        u = User.objects.create_user(new_data['email'],
-                                     new_data['email'],
-                                     new_data['password1'])
-        u.is_active = False
-        u.first_name = new_data['firstname']
-        u.last_name = new_data['lastname']
-        u.save()
-        prof = u.get_profile()
-        prof.fbid = new_data['fbid']
-        prof.save()
-        return u
 
-class FbRegistrationForm(forms.Form):
-    '''The first form used for registration (using Facebook API'''
-    
-    
-class LoginForm(forms.Form):
-    '''Form used for user login'''
-    username = forms.CharField(label='Username', max_length=30)
-    password = forms.CharField( widget=forms.PasswordInput, 
-                                max_length=60, label="Password" )
     
 ###############################################################################
 # Following code taken and modified from 
@@ -136,6 +87,9 @@ class EmailAuthenticationForm(forms.Form):
 #        super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
 
     def clean(self):
+        if not self.cleaned_data.get('email') :
+            raise forms.ValidationError(_("Please enter a valid email address."))
+        
         email = self.cleaned_data.get('email').lower()
         password = self.cleaned_data.get('password')
 

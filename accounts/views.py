@@ -12,8 +12,7 @@ from django.template.context import RequestContext
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from accounts.forms import RegistrationForm, LoginForm, \
-    EmailAuthenticationForm, EmailUserCreationForm, \
+from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession
 
