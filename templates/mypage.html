@@ -9,17 +9,21 @@
 			<div>
 				<div class="row">
 					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
-						<img src="https://graph.facebook.com/wayne.yamamoto/picture?type=normal" class="img-polaroid"/>
+						{% if user.fbid != empty %}
+						<img src="https://graph.facebook.com/{{ user.fbid }}/picture?type=normal" class="img-polaroid"/>
+						{% else %}
+						<img src="http://placehold.it/100x100" alt="No profile pic chosen" class="img-polaroid"/>
+						{% endif %}
 					</div>
 					<div class="span3" style="margin-left: 0px;padding-left: 0px">
 						<p>
-							<strong>First name:</strong> Wayne
+							<strong>First name:</strong> {{ user.first_name }}
 						</p>
 						<p>
-							<strong>Last name: </strong>Yamamoto
+							<strong>Last name: </strong>{{ user.last_name }}
 						</p>
 						<p>
-							<strong>Email address:</strong> yamamoto@cs.washington.edu
+							<strong>Email address:</strong> {{ user.email }}
 						</p>
 						<button class="btn btn-medium btn-primary pull-right">Edit Profile</button>
 					</div>
@@ -31,7 +35,7 @@
 	<div class="span7">
 		<div class="well well-custom">
 			<div class="event-title" style="padding-top:0;padding-bottom:0;">
-				<h3>My Events</h3>
+				<h3>My Events <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Create Event</button></h3>
 			</div>
 			<table class="table table-hover">
 			<tbody>
