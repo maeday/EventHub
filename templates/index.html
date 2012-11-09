@@ -106,7 +106,13 @@
 		<div class="row-fluid">
 			<div class="well well-custom">
 				<div class="span12">
-					<h2>Upcoming Events &nbsp;<small>Sports / Downtown</small><button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Create Event</button></h2>
+					<h2>Upcoming Events &nbsp;<small>Sports / Downtown</small>
+					  {% if user.is_authenticated %}
+					  <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Create Event</button>
+					  {% else %}
+					  <a href="login"><button class="btn btn-medium btn-primary pull-right" type="button" style="margin-top:8px;">Create Event</button></a>
+					  {% endif %}
+					</h2>
 					<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
