@@ -9,8 +9,8 @@
 			<div>
 				<div class="row">
 					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
-						{% if user.fbid != empty %}
-						<img src="https://graph.facebook.com/{{ user.fbid }}/picture?type=normal" class="img-polaroid"/>
+						{% if user.get_profile.fbid != empty %}
+						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid"/>
 						{% else %}
 						<img src="http://placehold.it/100x100" alt="No profile pic chosen" class="img-polaroid"/>
 						{% endif %}
