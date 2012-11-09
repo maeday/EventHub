@@ -32,11 +32,23 @@
 	margin: 0 0 3px 0;
 }
 
+
+
 .sidebar-nav {
 	margin-top: 15px;
 	padding: 9px 0;
 }
 
+.well-custom {
+	margin-top: 15px;
+	margin-bottom: 5px;
+	padding-top: 0;
+	border-radius: 3px;
+
+}
+.sidebar-nav,.well-custom{
+	background-color: rgba(255, 255, 255, 0.5);
+}
 .title-custom {
 	font-size: 13px;
 }
@@ -139,13 +151,6 @@ hr.footer-diag {
 }
 .footer a:hover { border: none; }
 
-.well-custom {
-	margin-top: 15px;
-	margin-bottom: 5px;
-	padding-top: 0;
-	border-radius: 3px;
-
-}
 
 .fb-comments, .fb-comments span, .fb-comments iframe {
 	width: 100% !important;
