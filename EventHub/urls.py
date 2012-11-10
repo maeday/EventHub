@@ -26,6 +26,7 @@ urlpatterns += patterns('accounts.views',
     url(r'^login$', 'user_login'),
     url(r'^logout$', 'user_logout'),
     url(r'^loginfb$', 'login_facebook'),
+    url(r'^connect$', 'connect'),
 )
 
 urlpatterns += patterns('events.views',

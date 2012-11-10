@@ -9,7 +9,7 @@
 			<div>
 				<div class="row">
 					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
-						{% if user.get_profile.fbid != empty %}
+						{% if user.get_profile.fbid != -1 %}
 						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid"/>
 						{% else %}
 						<img src="http://placehold.it/100x100" alt="No profile pic chosen" class="img-polaroid"/>
@@ -25,6 +25,7 @@
 						<p>
 							<strong>Email address:</strong> {{ user.email }}
 						</p>
+						{% if user.get_profile.fbid == -1 %}<a href="/connect">Connect with Facebook</a>{% endif %}
 						<button class="btn btn-medium btn-primary pull-right">Edit Profile</button>
 					</div>
 				</div>

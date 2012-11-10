@@ -2,8 +2,6 @@ import base64, cgi, datetime, hashlib, hmac, json, random, urllib
 
 from EventHub import settings
 
-from django.views.decorators.cache import never_cache
-
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
@@ -11,6 +9,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.context import RequestContext
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     isUniqueEmail, isUniqueFbid
@@ -27,7 +26,7 @@ def base64_url_decode(inp):
     return base64.b64decode(b64str)
 
 def parse_signed_request(signed_request, secret):
-
+    '''Parse signed request returned from Facebook registration API'''
     l = signed_request.split('.', 2)
     encoded_sig = l[0]
     payload = l[1]
@@ -36,7 +35,7 @@ def parse_signed_request(signed_request, secret):
     data = json.loads(base64_url_decode(payload))
 
     if data.get('algorithm').upper() != 'HMAC-SHA256':
-#        log.error('Unknown algorithm')
+        #log.error('Unknown algorithm')
         return None
     else:
         expected_sig = hmac.new(secret, msg=payload, 
@@ -45,14 +44,11 @@ def parse_signed_request(signed_request, secret):
     if sig != expected_sig:
         return None
     else:
-#        log.debug('valid signed request received..')
+        #log.debug('valid signed request received..')
         return data
 
 # end code snippet
 ###############################################################################
-
-#FACEBOOK_APP_ID = "291967340913194"
-#FACEBOOK_APP_SECRET = "30e10b10ed1d58dabaee178d3a99ba99"
 
 @csrf_exempt
 @never_cache
@@ -64,21 +60,18 @@ def register(request):
         'web_root': settings.WEB_ROOT
     }
     if request.user.is_authenticated():
-        # They already have an account; don't let them register again
-        template_context['has_account'] = True
-        request_context = RequestContext(request, template_context);
-        return render_to_response(template, request_context)
+        # They are already logged on, don't let them register again
+        return redirect('/mypage')
     if request.POST:
         template = 'accounts/register-2.html'
         template_context['post_request'] = True
         
         if request.POST.get('signed_request'):
-            # Post request received from first page
+            # Post request received from first page (through Facebook API)
             signed_request = request.POST.get('signed_request')
             data = parse_signed_request(signed_request, settings.FACEBOOK_APP_SECRET)
             register_info = data['registration']
             if 'name' in register_info:
-#                name_parts = str.split(register_info['name'], ' ')
                 name_parts = register_info['name'].split(u' ')
                 template_context['firstname'] = name_parts[0]
                 template_context['lastname'] = name_parts[len(name_parts)-1]
@@ -95,31 +88,31 @@ def register(request):
             template_context['fbid'] = -1
             if 'user_id' in data:
                 template_context['has_fbid'] = True
+                template_context['redir_uri'] = settings.WEB_ROOT + '/connect'
                 template_context['fbid'] = data['user_id']
                 if not isUniqueFbid(template_context['fbid']):
                     valid = False
                     template_context['used_fbid'] = True
             
-            # What to do if fbid or email already in database?
-            #template_context['facebook_request'] = True
             if not valid:
                 template = 'accounts/register-1.html'
         else:
             # Post request received from second page
             form = EmailUserCreationForm(request.POST) # A form bound to the POST data
-            if form.is_valid(): # All validation rules pass
-                #form.save(request.POST.copy())
+            if form.is_valid(): 
+                # All validation rules pass
                 template_context['extra'] = 'SUCCESS'
                 
-                email = form.cleaned_data['email']
+                # Create new user
+                new_user = form.save(request.POST.copy())
                 
                 # Build activation key
+                username = new_user.username
                 salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
-                activation_key = hashlib.sha224(salt+email).hexdigest()
+                activation_key = hashlib.sha1(salt+username).hexdigest()
                 key_expires = datetime.datetime.today() + datetime.timedelta(2)
                 
                 # Create and save user and profile
-                new_user = form.save(request.POST.copy())
                 new_profile = new_user.get_profile()
                 new_profile.activation_key = activation_key
                 new_profile.key_expires = key_expires
@@ -136,7 +129,7 @@ def register(request):
 #                          [email])
                 
                 # Redirect to 'My Page' after successful registration
-                return redirect('/mypage', permanent=True)
+                return redirect('/mypage')
             else:
                 template_context['extra'] = form.errors
         
@@ -177,34 +170,15 @@ def user_login(request):
         'redir_uri' : settings.WEB_ROOT + '/loginfb'
     }
     if request.user.is_authenticated():
-        # User is already logged in
-        # TODO: Figure out how this should be handled
-        template_context['logged_in'] = True
+        # User is already logged in; redirect to 'My Page'
+        return redirect('/mypage')
     else:
         if request.POST:
             form = EmailAuthenticationForm(request.POST)
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)
-                return redirect('/mypage', permanent=True)
-#            # Login request sent
-#            username = request.POST.get('email')
-#            #username = request.POST.get('username')
-#            password = request.POST.get('password')
-#    
-#            template_context['username'] = username
-#            user = authenticate(username=username, password=password)
-#            if user is not None:
-#                template_context['success'] = True
-#                return redirect('/mypage', permanent=True)
-#                # Unable to authenticate
-#                if user.is_active:
-#                    # User has been activated
-#                    login(request, user)
-#                    template_context['success'] = True
-#                else:
-#                    # User has not yet been activated
-#                    template_context['active'] = False
+                return redirect('/mypage')
             else:
                 # Username/password combo incorrect
                 template_context['extra'] = form.errors
@@ -218,14 +192,10 @@ def user_logout(request):
     '''Allow user to log out'''
     # TODO: handle more cases (user not logged in, logout unsuccessful, etc.)
     logout(request)
-#    form = LoginForm
-#    state = "You have successfully logged out!"
     return redirect('/index', permanent=True)
-#    return render_to_response('logout.html', 
-#                              RequestContext(request, 
-#                                             {'state': state, 'form': form}))
     
 def login_facebook(request):
+    '''Allow user to log in through Facebook'''
     error = None
 
     if request.user.is_authenticated():
@@ -240,7 +210,7 @@ def login_facebook(request):
                 'code': request.GET['code'],
             }
             
-#            csrf_token = request.GET['state']
+            #csrf_token = request.GET['state']
 
             url = 'https://graph.facebook.com/oauth/access_token?' + \
                     urllib.urlencode(args)
@@ -270,3 +240,41 @@ def login_facebook(request):
     template_context = {'settings': settings, 'error': error}
     return redirect('/login?error=invalidfb', permanent=True)
     #return render_to_response('accounts/login.html', template_context, context_instance=RequestContext(request))
+
+@csrf_exempt
+def connect(request):
+    template = 'accounts/fbconnect.html'
+    template_context = {
+        'app_id': settings.FACEBOOK_APP_ID,
+        'web_root': settings.WEB_ROOT
+    }
+    if request.user.is_authenticated():
+        if request.user.get_profile().fbid != -1:
+            # They already have an account connected, shouldn't be here
+            return redirect('/mypage')
+        elif request.POST.get('signed_request'):
+            # Post request received from first page (through Facebook API)
+            signed_request = request.POST.get('signed_request')
+            data = parse_signed_request(signed_request, settings.FACEBOOK_APP_SECRET)
+            register_info = data['registration']
+            
+            # TODO: Should we check if email matches registered account?
+            
+            if 'user_id' in data:
+                template_context['has_fbid'] = True
+                template_context['redir_uri'] = settings.WEB_ROOT + '/connect'
+                template_context['fbid'] = data['user_id']
+                if not isUniqueFbid(template_context['fbid']):
+                    template_context['used_fbid'] = True
+                else:
+                    user = request.user
+                    profile = user.get_profile()
+                    profile.fbid = template_context['fbid']
+                    profile.save()
+                    template_context['success'] = True
+            else:
+                template_context['no_fbid'] = True
+        request_context = RequestContext(request, template_context)
+        return render_to_response(template, request_context)
+    else:
+        return redirect('/login')
