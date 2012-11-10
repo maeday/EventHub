@@ -36,7 +36,7 @@ class FacebookBackend:
             profile = models.UserProfile.objects.get(fbid=profile['id'])
             #user = User.objects.get(username=profile['id'])
             user = profile.user
-        except models.UserProfile.DoesNotExist, e:
+        except models.UserProfile.DoesNotExist:
             # User does not exist, so create a new user
             #user = User(username=profile['id'])
             return None

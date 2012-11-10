@@ -30,6 +30,13 @@ def eventlist(request):
      
      return render_to_response(template, request_context)
 
+def event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    template = 'event.html'
+    template_context = {'event': event}
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
+
 @csrf_exempt
 def create_event(request):
      if request.POST:
