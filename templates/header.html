@@ -8,6 +8,12 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
+    <script type="text/javascript">
+      if (window.location.hash == '#_=_') {
+        window.location.hash = '';
+      }
+    </script>
+
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/eventhub.css" rel="stylesheet">
     <script src="{{ STATIC_URL }}js/jquery.js"></script>
@@ -46,13 +52,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="index"><img src="{{ STATIC_URL }}img/logo.png" style="width:103px;" alt="EventHub"></a>
+          <a class="brand" href="/index"><img src="{{ STATIC_URL }}img/logo.png" style="width:103px;" alt="EventHub"></a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-left">
               
             </p>
             <p class="navbar-text pull-right">
-              <a href="login" class="navbar-link">LOG IN</a> &nbsp; | &nbsp; <a href="register" class="navbar-link">SIGN UP</a> &nbsp; | &nbsp; <a href="mypage" class="navbar-link">MY PAGE</a>
+              {% if user.is_authenticated %}
+              <a href="/mypage" class="navbar-link">{{ user.first_name }} {{ user.last_name }} </a> | <a href="/logout" class="navbar-link">LOG OUT</a> &nbsp; 
+              {% else %}
+              <a href="/login" class="navbar-link">LOG IN</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">REGISTER</a>
+              {% endif %}
             </p>
             <ul class="nav">
             <!--

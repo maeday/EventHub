@@ -1,6 +1,5 @@
 {% include 'header.html' %}
 
-
 <style type="text/css">
   body {
     background: url({{ STATIC_URL }}img/bg.jpg) repeat 0 0 #efefef;
@@ -18,10 +17,18 @@
       <strong>Oh snap!</strong> That Facebook account has already been registered with this app!		
     </div>
   {% elif used_email %}
+    {% if has_fbid %}
+    <div id="register-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <strong>Oh snap!</strong> That email address is already being used!
+      If you want to connect your Facebook account to an existing account, please <a href="login">log in</a> to do so.		
+    </div>
+    {% else %}
     <div id="register-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
       <button type="button" class="close" data-dismiss="alert">×</button>
       <strong>Oh snap!</strong> That email address is already being used! Are you trying to <a href="login">log in</a>?		
     </div>
+    {% endif %}
   {% endif %}
   
     <div class="registration-title">
@@ -32,29 +39,15 @@
 
 <div class="row-fluid align-center">
   <div class="span12">
-    <!---<fb:registration
-        redirect-uri="http://127.0.0.1:8000/register"
-        fields="[
-        {'name':'name','view':'prefilled'},
-        {'name':'first_name','view':'not_prefilled'},
-        {'name':'last_name','view':'not_prefilled'},
-        {'name':'gender'},
-        {'name':'birthday'},
-        {'name':'email'},
-        {'name':'phone','description':'Phone Number','type':'text'},
-        {'name':'location','description':'Location','type':'typeahead', 'categories':['city','country','state_province']}
-        ]"
-        width="940">
-    </fb:registration>-->
     <fb:registration
-        redirect-uri="http://127.0.0.1:8000/register"
+        redirect-uri="{{ web_root }}/register"
         fields="[
-        {'name':'name','view':'prefilled'},
-        {'name':'first_name','view':'not_prefilled'},
-        {'name':'last_name','view':'not_prefilled'},
-        {'name':'email'}
+          {'name':'name','view':'prefilled'},
+          {'name':'first_name','view':'not_prefilled'},
+          {'name':'last_name','view':'not_prefilled'},
+          {'name':'email'}
         ]"
-        width="940">
+        width="650">
     </fb:registration>
   </div>
 </div>

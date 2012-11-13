@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+import settings
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -24,6 +25,8 @@ urlpatterns += patterns('accounts.views',
     url(r'^register$', 'register'),
     url(r'^login$', 'user_login'),
     url(r'^logout$', 'user_logout'),
+    url(r'^loginfb$', 'login_facebook'),
+    url(r'^connect$', 'connect'),
 )
 
 urlpatterns += patterns('events.views',
@@ -31,4 +34,10 @@ urlpatterns += patterns('events.views',
     url(r'^index$', 'index'),
     url(r'^eventlist$', 'eventlist'),
     url(r'^create_event$', 'create_event'),
+    url(r'^event/(?P<event_id>.*)$', 'event'),
+)
+
+urlpatterns += patterns('',
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+                 {'document_root': settings.MEDIA_ROOT})
 )

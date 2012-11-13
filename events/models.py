@@ -29,7 +29,7 @@ class Event(models.Model):
     venue = models.CharField(max_length=100, default='')
     url=models.URLField()
     # need PIL installed for image fields to work
-    #image = models.ImageField()
+    image = models.ImageField(upload_to="images/", null=True)
 
     def __unicode__(self):
       return self.name
