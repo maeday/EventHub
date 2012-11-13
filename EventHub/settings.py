@@ -25,6 +25,12 @@ DATABASES = {
     }
 }
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '' # TODO: Determine EventHub email account and find a way to better hide info
+EMAIL_HOST_PASSWORD = ''
+
 FACEBOOK_APP_ID = '195774903890874'
 FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = '424d5e38585fcb4d1c7578ba48a76df6'
