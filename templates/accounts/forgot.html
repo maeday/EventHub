@@ -1,0 +1,25 @@
+{% include "header.html" %}
+
+<div class="well well-custom">
+    <form method="post">
+      <div class="row">
+        <div class="registration-title"">
+            <h2 class="registration-title-h2">Forgot your password?</h2>
+            <p>Please enter your email address and we will send you an email about how to reset your password.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="registration-title">
+          <label for="user_login">Email Address&nbsp;&nbsp;
+          <input class="span3" id="user_login" size="30" type="text" name="email" >&nbsp;&nbsp;
+          <button id="reset-btn" class="btn btn-primary" type="submit" name="reset" style="margin-bottom: 10px;">Reset Password</button> </label>
+        </div>
+      </div>
+      <div class="row registration-title"">
+        <div class="form-actions">
+            <a href="login">Return to Login</a>
+        </div>      
+      </div>
+    </form>
+</div>
+{% include "footer.html" %}
