@@ -1,4 +1,5 @@
-{% include 'header.html' %} 
+{% include 'header.html' %}
+{% include "createevent.html" %}
 
 <div class="row">
 	<!--My Profile-->
@@ -13,7 +14,7 @@
 						{% if user.get_profile.fbid != -1 %}
 						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid"/>
 						{% else %}
-						<img src="http://placehold.it/100x100" alt="No profile pic chosen" class="img-polaroid"/>
+						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid" width="100px"/>
 						{% endif %}
 					</div>
 					<div class="span3" style="margin-left: 0px;padding-left: 0px">
@@ -39,7 +40,7 @@
 	<div class="span7">
 		<div class="well well-custom">
 			<div class="event-title" style="padding-top:0;padding-bottom:0;">
-				<h3>My Events <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Create Event</button></h3>
+				<h3>My Events <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#createEvent" style="margin-top:8px;">Create Event</button></h3>
 			</div>
 			<table class="table table-hover">
 			<tbody>
@@ -122,7 +123,7 @@
 	</div>
 </div>
 
-<!-- Edit event button-->
+<!-- Edit Profile modal-->
 <div id="EditProfile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
