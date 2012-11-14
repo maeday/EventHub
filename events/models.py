@@ -4,8 +4,14 @@ from django.contrib.auth.models import User
 class Categories(models.Model):
     name=models.CharField(max_length=255)
     
+    def __unicode__(self):
+      return self.name
+    
 class Neighborhoods(models.Model):
-	name=models.CharField(max_length=255)
+    name=models.CharField(max_length=255)
+	
+    def __unicode__(self):
+      return self.name
 
 # Create your models here.
 class Event(models.Model):
