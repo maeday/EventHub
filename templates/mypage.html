@@ -1,6 +1,7 @@
 {% include 'header.html' %} 
-<!--My Profile-->
+
 <div class="row">
+	<!--My Profile-->
 	<div class="span5">
 		<div class="well well-custom">
 			<div class="event-title">
@@ -26,12 +27,14 @@
 							<strong>Email address:</strong> {{ user.email }}
 						</p>
 						{% if user.get_profile.fbid == -1 %}<a href="/connect">Connect with Facebook</a>{% endif %}
-						<button class="btn btn-medium btn-primary pull-right">Edit Profile</button>
+						<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top:8px;">Edit Profile</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	
 	<!--My events-->
 	<div class="span7">
 		<div class="well well-custom">
@@ -116,6 +119,79 @@
 				<a href="#">See all (7)...</a>
 			</p>
 		</div>
+	</div>
+</div>
+
+<!-- Edit event button-->
+<div id="EditProfile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 id="myModalLabel">Edit My Profile</h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">First name</label>
+				<div class="controls-custom">
+					<input type="text" class="input-medium" id="input01" name="title" value="{{ user.first_name }}"><span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Last name</label>
+				<div class="controls-custom">
+					<input type="text" class="input-medium" id="input01" name="title" value="{{ user.last_name }}"><span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Email&nbsp;address</label>
+				<div class="controls-custom">
+					<input type="text" class="input-large" id="input01" name="title" value="{{ user.email }}" disabled="disabled"><span class="help-inline"></span>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Old&nbsp;Password</label>
+				<div class="controls-custom">
+					<input type="password" class="input-medium" id="input01" name="title" value="{{ user.password }}"><span class="help-inline"></span>
+				</div>
+			</div>
+				
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">New&nbsp;Password</label>
+				<div class="controls-custom">
+					<input type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Again</label>
+				<div class="controls-custom">
+					<input type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+				</div>
+			</div>
+			
+			<div class="control-group" >
+				<label class="radio inline">
+					<input type="radio" name="picType" id="fbPic" value="fbPic" onChange="disablefield();">
+					Use Facebook Picture
+				</label>
+				<label class="radio inline">
+					<input type="radio" name="picType" id="noFbPic" value="pic" checked="checked" onChange="disablefield();" >
+					Upload picture
+				</label>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input11">Image</label>
+				<div class="controls-custom">
+					<div class="input-append">
+						<input type="file" name="uploadPic" id="uploadPic"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal">Cancel</button>
+		<button class="btn btn-primary">Edit Profile</button>
 	</div>
 </div>
 <!-- Edit event button-->
