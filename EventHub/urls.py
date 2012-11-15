@@ -12,6 +12,7 @@ urlpatterns = patterns('django.views.generic.simple',
     url(r'^events/', include('events.urls')),
     url(r'^event$', 'direct_to_template', {'template': 'event.html'}),
     url(r'^forgot$', 'direct_to_template', {'template': 'accounts/forgot.html'}),
+    url(r'^reset$', 'direct_to_template', {'template': 'accounts/resetpassword.html'}),
     url(r'^dummy$', 'direct_to_template', {'template': 'dummy.html'}),
     
     # Uncomment the admin/doc line below to enable admin documentation:

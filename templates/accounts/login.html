@@ -37,22 +37,22 @@
         <a href="forgot">Forgot your password?</a>
         <a href="register" class="pull-right" >Register</a>
       </p>
-      <p>
-        Or 
-        <a href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">
-          Log in with Facebook
-        </a>
-      </p>
+	    <label class="checkbox" for="user_remember_me">
+              <input id="user_remember_me" type="checkbox" value="1">
+	      Remember me
+	    </label>
     </div>
   </div>
   <div class="form-actions">
     <div class="row-fluid">
       <div class="span12">
         <button id="login-btn" class="btn btn-primary btn-large" type="submit" name="login" style="float:left;margin-left:15px;">Log in</button>
-        <label class="checkbox" for="user_remember_me" style="float:right;padding-top:8px;margin-right:20px;">
-        <input id="user_remember_me" type="checkbox" value="1">
-        Remember me
-        </label>
+          <div class="pull-right">
+	    Or
+	    <a href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">
+	      Log in with Facebook
+	    </a>
+	  </div>
       </div>
     </div>
   </div>
