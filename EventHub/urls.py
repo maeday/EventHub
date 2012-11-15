@@ -11,7 +11,6 @@ urlpatterns = patterns('django.views.generic.simple',
     # url(r'^EventHub/', include('EventHub.foo.urls')),
     url(r'^events/', include('events.urls')),
     url(r'^event$', 'direct_to_template', {'template': 'event.html'}),
-    url(r'^mypage$', 'direct_to_template', {'template': 'mypage.html'}),
     url(r'^forgot$', 'direct_to_template', {'template': 'accounts/forgot.html'}),
     url(r'^dummy$', 'direct_to_template', {'template': 'dummy.html'}),
     
@@ -27,7 +26,8 @@ urlpatterns += patterns('accounts.views',
     url(r'^login$', 'user_login'),
     url(r'^logout$', 'user_logout'),
     url(r'^loginfb$', 'login_facebook'),
-    url(r'^connect$', 'connect'),
+    #url(r'^connect$', 'connect'),
+    url(r'^mypage$', 'dashboard'),
 )
 
 urlpatterns += patterns('events.views',

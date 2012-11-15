@@ -215,25 +215,31 @@ def login_facebook(request):
             url = 'https://graph.facebook.com/oauth/access_token?' + \
                     urllib.urlencode(args)
             response = cgi.parse_qs(urllib.urlopen(url).read())
-            access_token = response['access_token'][0]
-            expires = response['expires'][0]
-
-            facebook_session = FacebookSession.objects.get_or_create(
-                access_token=access_token,
-            )[0]
-
-            facebook_session.expires = expires
-            facebook_session.save()
-
-            user = authenticate(token=access_token)
-            if user:
-                if user.is_active:
-                    login(request, user)
-                    return HttpResponseRedirect('/mypage')
-                else:
-                    error = 'AUTH_DISABLED'
+            
+            if not response:
+                # TODO: Handle this in template
+                error = 'AUTH_ERROR'
+            
             else:
-                error = 'AUTH_FAILED'
+                access_token = response['access_token'][0]
+                expires = response['expires'][0]
+    
+                facebook_session = FacebookSession.objects.get_or_create(
+                    access_token=access_token,
+                )[0]
+    
+                facebook_session.expires = expires
+                facebook_session.save()
+    
+                user = authenticate(token=access_token)
+                if user:
+                    if user.is_active:
+                        login(request, user)
+                        return HttpResponseRedirect('/mypage')
+                    else:
+                        error = 'AUTH_DISABLED'
+                else:
+                    error = 'AUTH_FAILED'
         elif 'error_reason' in request.GET:
             error = 'AUTH_DENIED'
 
@@ -252,29 +258,109 @@ def connect(request):
         if request.user.get_profile().fbid != -1:
             # They already have an account connected, shouldn't be here
             return redirect('/mypage')
-        elif request.POST.get('signed_request'):
-            # Post request received from first page (through Facebook API)
-            signed_request = request.POST.get('signed_request')
-            data = parse_signed_request(signed_request, settings.FACEBOOK_APP_SECRET)
-            register_info = data['registration']
-            
-            # TODO: Should we check if email matches registered account?
-            
-            if 'user_id' in data:
-                template_context['has_fbid'] = True
-                template_context['redir_uri'] = settings.WEB_ROOT + '/connect'
-                template_context['fbid'] = data['user_id']
-                if not isUniqueFbid(template_context['fbid']):
-                    template_context['used_fbid'] = True
+#        elif request.POST.get('signed_request'):
+#            # Post request received from first page (through Facebook API)
+#            signed_request = request.POST.get('signed_request')
+#            data = parse_signed_request(signed_request, settings.FACEBOOK_APP_SECRET)
+#            register_info = data['registration']
+#            
+#            # TODO: Should we check if email matches registered account?
+#            
+#            if 'user_id' in data:
+#                template_context['has_fbid'] = True
+#                template_context['redir_uri'] = settings.WEB_ROOT + '/connect'
+#                template_context['fbid'] = data['user_id']
+#                if not isUniqueFbid(template_context['fbid']):
+#                    template_context['used_fbid'] = True
+#                else:
+#                    user = request.user
+#                    profile = user.get_profile()
+#                    profile.fbid = template_context['fbid']
+#                    profile.save()
+#                    template_context['success'] = True
+#            else:
+#                template_context['no_fbid'] = True
+#        request_context = RequestContext(request, template_context)
+#        return render_to_response(template, request_context)
+    
+        if request.GET:
+            if 'code' in request.GET:
+                args = {
+                    'client_id': settings.FACEBOOK_APP_ID,
+                    'redirect_uri': settings.WEB_ROOT + '/mypage',
+                    'client_secret': settings.FACEBOOK_APP_SECRET,
+                    'code': request.GET['code'],
+                }
+                
+                #csrf_token = request.GET['state']
+    
+                url = 'https://graph.facebook.com/oauth/access_token?' + \
+                        urllib.urlencode(args)
+                response = cgi.parse_qs(urllib.urlopen(url).read())
+                
+                if not response:
+                    # TODO: Handle this in template
+                    error = 'AUTH_ERROR_EXPIRED'
+                
                 else:
-                    user = request.user
-                    profile = user.get_profile()
-                    profile.fbid = template_context['fbid']
-                    profile.save()
-                    template_context['success'] = True
-            else:
-                template_context['no_fbid'] = True
-        request_context = RequestContext(request, template_context)
-        return render_to_response(template, request_context)
+                    access_token = response['access_token'][0]
+                    expires = response['expires'][0]
+        
+                    facebook_session = FacebookSession.objects.get_or_create(
+                        access_token=access_token,
+                    )[0]
+        
+                    facebook_session.expires = expires
+                    facebook_session.save()
+                    
+                    profile = facebook_session.query('me')
+                    fbid = profile['id']
+                    if (isUniqueFbid(fbid)):
+                        user = request.user
+                        profile = user.get_profile()
+                        profile.fbid = fbid
+                        profile.save()
+                        error = 'SUCCESS'
+                    else:
+                        error = 'ALREADY_EXISTS'
+                    
+                    
+        
+#                    user = authenticate(token=access_token)
+#                    if user:
+#                        if user.is_active:
+#                            login(request, user)
+#                            return HttpResponseRedirect('/mypage')
+#                        else:
+#                            error = 'AUTH_DISABLED'
+#                    else:
+#                        error = 'AUTH_FAILED'
+            elif 'error_reason' in request.GET:
+                error = 'AUTH_DENIED'
+    
+        template_context = {'settings': settings, 'error': error}
+        return redirect('/mypage?error='+error, permanent=True)
     else:
         return redirect('/login')
+    
+def dashboard(request):
+    template = 'mypage.html'
+    template_context = {
+        'success'   : False,
+        'active'    : True,
+        'invalid'   : False,
+        'app_id'    : settings.FACEBOOK_APP_ID,
+        'redir_uri' : settings.WEB_ROOT + '/mypage'
+    }
+    
+    if not request.user.is_authenticated():
+        return redirect('/login')
+    if request.GET:
+        if 'code' in request.GET:
+            return connect(request)
+        elif 'error' in request.GET:
+            template_context['error'] = request.GET['error']
+            
+    
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
