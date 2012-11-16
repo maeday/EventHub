@@ -10,6 +10,8 @@ class UserProfile(models.Model):
     activation_key = models.CharField(max_length=40)
     key_expires = models.DateTimeField()
     fbid = models.IntegerField(default=-1)
+    pic = models.ImageField(upload_to="pics/", null=True)
+    use_fb_pic = models.BooleanField(default=True)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
