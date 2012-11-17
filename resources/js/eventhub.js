@@ -93,3 +93,13 @@ function refreshEventList() {
 		$("#refresher").fadeIn(2000);
 	});
 }
+
+function disablefield() { 
+    if (document.getElementById('fbPic').checked == 1){ 
+	document.getElementById('uploadPic').disabled='disabled'; 
+	document.getElementById('uploadPic').value='disabled';
+    } else { 
+	document.getElementById('uploadPic').disabled=''; 
+	document.getElementById('uploadPic').value='Allowed'; 
+    } 
+}

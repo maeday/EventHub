@@ -103,7 +103,7 @@
 					<span id="err-url" class="help-block" style="display:none;padding-top:10px;"></span>
 				</div>
 			</div>
-			<div class="control-group">
+			<div id="ctrl-categories" class="control-group">
 				<label class="control-label-custom" for="input12">Categories</label>
 				<div class="controls-custom controls-row">
 					<label class="checkbox">
@@ -141,14 +141,14 @@
 					Charities </label>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input11">Image</label>
+			<div id="ctrl-image" class="control-group">
+				<label class="control-label-custom" for="input-photo">Event Photo</label>
 				<div class="controls-custom">
-					<div class="input-append">
-						<input type="file" name="imageToUpload" id="imageToUpload"/>
-					</div>
+					<input type="file" id="input-photo" accept="image/*">
+					<span id="err-image" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
+			
 		</div>
 		<!-- form-->
 	</div>

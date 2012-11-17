@@ -87,7 +87,7 @@ function requestCreate() {
 	var input_state = $("#input-state").val().toUpperCase();
 	var input_zip = $("#input-zip").val();
 	var input_url = $("#input-url").val();
-	var input_image =  document.getElementById('imageToUpload').files[0];
+	var input_image =  document.getElementById('input-photo').files[0];
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -423,14 +423,4 @@ function check_url() {
 		$("#err-url").hide();
 		return true;
 	}
-}
-
-function disablefield() { 
-    if (document.getElementById('fbPic').checked == 1){ 
-	document.getElementById('uploadPic').disabled='disabled'; 
-	document.getElementById('uploadPic').value='disabled';
-    } else { 
-	document.getElementById('uploadPic').disabled=''; 
-	document.getElementById('uploadPic').value='Allowed'; 
-    } 
 }

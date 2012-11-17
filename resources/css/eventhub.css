@@ -8,10 +8,24 @@ a:active {
 	margin-bottom: 5px;
 	padding-top:0;
 	padding-bottom:0;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .event-title h3 {
 	margin-top:5px;
 	margin-bottom:0;
+}
+.event-title a {
+  color: #0080c0;
+}
+
+.event-title a:hover {
+  color: #005580;
+}
+
+p.event-description {
+
 }
 
 .event-time {
@@ -67,12 +81,13 @@ a:active {
   float: left;
   width: 90px;
   padding-top: 5px;
+  padding-left: 40px;
   text-align: right;
 }
 .form-horizontal .controls-custom {
   *display: inline-block;
   *padding-left: 20px;
-  margin-left: 110px;
+  margin-left: 150px;
   *margin-left: 0;
 }
 

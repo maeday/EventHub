@@ -9,15 +9,15 @@
 	</td>
 	<td style="border-left:none;">
 		<div class="event-title">
-			<h3>{{ event.name }} <small><a href="/event/{{ event.id }}">&raquo; more</a></small></h3>
+			<h3><a href="/event/{{ event.id }}">{{ event.name|truncatechars:35 }}</a></h3>
 		</div>
-		<p>
-			{{ event.description }}
+		<p class="event-description">
+			{{ event.description|truncatechars:300 }}
 		</p>
 		<p>
 			<strong>{{ event.venue }}</strong><br>
 			 {{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
-			<a href="{{ event.url }}">{{ event.url }}</a>
+			<a href="{{ event.url }}">{{ event.url|truncatechars:55 }}</a>
 		</p>
 		<p>
 			<strong>Cost/Fees</strong><br>
