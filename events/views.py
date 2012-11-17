@@ -14,9 +14,13 @@ from datetime import datetime
 
 def index(request):
      latest_event_list = Event.objects.all().order_by('start_date')
+     categories_list = Categories.objects.all()
+     neighborhoods_list = Neighborhoods.objects.all()     
      
      template = 'index.html'
-     template_context = {'latest_event_list': latest_event_list}
+     template_context = {'latest_event_list': latest_event_list,
+                         'categories_list': categories_list,
+                         'neighborhoods_list': neighborhoods_list}
      request_context = RequestContext(request, template_context)
      
      return render_to_response(template, request_context)
