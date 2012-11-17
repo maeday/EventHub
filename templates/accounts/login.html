@@ -11,10 +11,20 @@
 			{# This may need to be rephrased #}
 			Please check your email for your activation link so you can start using our site.		
 		</div>
+	{% elif problem %}
+		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Oh snap!</strong> {% for error in form.non_field_errors %}{{ error|escape }}{% endfor %}	
+		</div>
 	{% elif invalid %}
 		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
 			<button type="button" class="close" data-dismiss="alert">×</button>
 			<strong>Oh snap!</strong> Please check your email address or password and try again.		
+		</div>
+	{% elif error == "AUTH_DISABLED" %}
+		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Oh snap!</strong> This account is inactive. Please check your email for the activation link. 		
 		</div>
 	{% elif error == "AUTH_FAILED" %}
 		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">

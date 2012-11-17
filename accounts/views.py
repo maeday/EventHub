@@ -123,7 +123,7 @@ def register(request):
                 email_subject = 'Your new EventHub account confirmation'
                 email_body = "Hello, %s, and thanks for signing up for an \
 EventHub account!\n\nTo activate your account, click this link within 48 \
-hours:\n\n%s/register/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
+hours:\n\n%s/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
                 send_mail(email_subject,
                           email_body,
                           'accounts-noreply@theeventhub.com',
@@ -157,7 +157,8 @@ def confirm(request, activation_key):
             user_account.is_active = True
             user_account.save()
             template_context = {'success': True}
-    return render_to_response(template, template_context)
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
 
 def user_login(request):
     '''Allow user to log in'''
@@ -182,13 +183,15 @@ def user_login(request):
                 return redirect('/mypage')
             else:
                 # Username/password combo incorrect
-                template_context['extra'] = form.errors
+#                template_context['extra'] = form.errors
+                template_context['form'] = form
+                template_context['problem'] = form.non_field_errors
                 template_context['invalid'] = True
         elif request.GET:
             if 'register' in request.GET:
                 template_context['register'] = request.GET['register']
-            else:
-                template_context['error'] = 'AUTH_FAILED'
+            elif 'error' in request.GET:
+                template_context['error'] = request.GET['error']
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
@@ -248,7 +251,7 @@ def login_facebook(request):
             error = 'AUTH_DENIED'
 
     template_context = {'settings': settings, 'error': error}
-    return redirect('/login?error=invalidfb', permanent=True)
+    return redirect('/login?error='+error, permanent=True)
     #return render_to_response('accounts/login.html', template_context, context_instance=RequestContext(request))
 
 @csrf_exempt

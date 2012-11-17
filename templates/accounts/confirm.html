@@ -1,10 +1,22 @@
-{% if has_account %}
-	Your account is already activated!
-{% elif expired %}
-	Your activation key has expired!
-{% elif success %}
-	Your account has been activated!
-{% else %}
-	This is not a valid key!
-{% endif %}
+{% include 'header.html' %}
 
+<div class="well well-custom">
+  <div class="row">
+    <div class="registration-title">
+    {% if has_account %}
+        Your account is already activated!
+    {% elif expired %}
+      Your activation key has expired!
+    {% elif success %}
+      <h2 class="registration-title-h2">
+        Congratulations! Your account has been activated!
+      </h2>
+      <p>You can now <a href="/login">log in</a> and use our site!</p>
+    {% else %}
+      This is not a valid key!
+    {% endif %}
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}

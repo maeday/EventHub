@@ -28,6 +28,7 @@ urlpatterns += patterns('accounts.views',
     url(r'^logout$', 'user_logout'),
     url(r'^loginfb$', 'login_facebook'),
     #url(r'^connect$', 'connect'),
+    url(r'^confirm/(?P<activation_key>.*)$', 'confirm'),
     url(r'^mypage$', 'dashboard'),
 )
 

@@ -99,8 +99,8 @@ class EmailAuthenticationForm(forms.Form):
                 raise forms.ValidationError(_("Please enter a correct email address and password."))
             elif not self.user_cache.is_active:
                 # User hasn't been activated; allow login for now
-                pass
-                #raise forms.ValidationError(_("This account is inactive."))
+                #pass
+                raise forms.ValidationError(_("This account is inactive. Please check your email for the activation link."))
 #        self.check_for_test_cookie()
         return self.cleaned_data
 
@@ -173,6 +173,7 @@ class EmailUserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
+        user.is_active = False
         if commit:
             user.save()
             profile = user.get_profile()
