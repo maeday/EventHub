@@ -13,8 +13,28 @@
           <div class="row">
               <div class="span7">
                 <p>
-                  <h4>{{ event.start_date|date:"l, F j, Y" }}
-                  <strong class="pull-right">{{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</strong></h4>
+                  {% if event.start_date.date == event.end_date.date %}
+                  <h4>
+                    {{ event.start_date|date:"l, F j, Y" }}
+                    <strong class="pull-right">
+                      {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}
+                    </strong>
+                  </h4>
+                  {% else %}
+                  {# I know this looks ugly, so someone please fix it #}
+                  <h4>
+                    From: {{ event.start_date|date:"l, F j, Y" }}
+                    <strong class="pull-right">
+                      {{ event.start_date|date:"g:i A" }}
+                    </strong>
+                  </h4>
+                  <h4>
+                    To: {{ event.end_date|date:"l, F j, Y" }}
+                    <strong class="pull-right">
+                      {{ event.end_date|date:"g:i A" }}
+                    </strong>
+                  </h4>
+                  {% endif %}
                 </p>
                 <p>
                   {{ event.description }}
