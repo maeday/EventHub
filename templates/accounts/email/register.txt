@@ -1,0 +1,5 @@
+Hello, {{ email }}. Thanks for signing up for an EventHub account!
+
+To activate your newly created account, please click this link within 48 hours:
+
+{{ web_root }}/confirm/{{ activation_key }}

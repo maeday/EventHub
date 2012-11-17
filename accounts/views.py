@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.template import Context
 from django.template.context import RequestContext
+from django.template.loader import get_template
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
@@ -121,9 +123,13 @@ def register(request):
                 # Send an email with the confirmation link (disabled for now)
                 email = new_user.email                                                                                                                    
                 email_subject = 'Your new EventHub account confirmation'
-                email_body = "Hello, %s, and thanks for signing up for an \
-EventHub account!\n\nTo activate your account, click this link within 48 \
-hours:\n\n%s/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
+                email_template = get_template('accounts/email/register.txt')
+                context = Context({
+                    'email'          : email,
+                    'web_root'       : settings.WEB_ROOT,
+                    'activation_key' : activation_key
+                })
+                email_body = email_template.render(context)
                 send_mail(email_subject,
                           email_body,
                           'accounts-noreply@theeventhub.com',
@@ -402,9 +408,13 @@ def forgot_password(request):
             # Send an email with the confirmation link (disabled for now)
             email = user.email                                                                                                                    
             email_subject = 'Resetting your EventHub account password'
-            email_body = "Hello, %s. The following is the link to reset your password. \
-\nPlease click this link within 48 hours, or else it will expire: \
-\n\n%s/reset/%s" % (email, settings.WEB_ROOT, activation_key)
+            email_template = get_template('accounts/email/reset.txt')
+            context = Context({
+                'email'    : email,
+                'web_root' : settings.WEB_ROOT,
+                'key'      : activation_key
+            })
+            email_body = email_template.render(context)
             send_mail(email_subject,
                       email_body,
                       'accounts-noreply@theeventhub.com',

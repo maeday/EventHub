@@ -1,0 +1,5 @@
+Hello, {{ email }}. You have recently requested to reset your password. If you did not do so, please ignore this message.
+
+If you did, please click the following link within 48 hours:
+
+{{ web_root }}/reset/{{ key }}
