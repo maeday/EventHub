@@ -73,7 +73,7 @@ $(document).ready(function(){
     });
 
 	// Initialize the "Last Search" area to nothing (just started)
-	$("#lastSearch").val("");
+	$("#lastSearch").text("");
 
 	// Function to initiate filtered searches of events (initiate from left sidebar)
 	$('#inputText').keypress(function(event) {

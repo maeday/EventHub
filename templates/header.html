@@ -59,9 +59,9 @@
             </p>
             <p class="navbar-text pull-right">
               {% if user.is_authenticated %}
-              <a href="/mypage" class="navbar-link">{{ user.first_name }} {{ user.last_name }} </a> | <a href="/logout" class="navbar-link">LOG OUT</a> &nbsp; 
+              <a href="/mypage" class="navbar-link">{{ user.first_name }} {{ user.last_name }}</a> &nbsp; | &nbsp; <a href="/logout" class="navbar-link">Sign Out</a> &nbsp; 
               {% else %}
-              <a href="/login" class="navbar-link">LOG IN</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">REGISTER</a>
+              <a href="/login" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
               {% endif %}
             </p>
             <ul class="nav">
