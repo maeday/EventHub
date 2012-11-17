@@ -3,14 +3,20 @@
 <div class="row-fluid">
   <div class="span6 offset3">
   
-	{% if success %}SUCCESS!{% endif %}
-	{% if invalid %}
+	{% if success %}SUCCESS!
+	{% elif register == 'success' %}
+		<div id="login-error" class="alert alert-success" style="display:none;margin-top:10px;margin-bottom:0;">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Congratulations!</strong> You have successfully registered for an EventHub account!
+			{# This may need to be rephrased #}
+			Please check your email for your activation link so you can start using our site.		
+		</div>
+	{% elif invalid %}
 		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
 			<button type="button" class="close" data-dismiss="alert">×</button>
 			<strong>Oh snap!</strong> Please check your email address or password and try again.		
 		</div>
-	{% endif %}
-	{% if error == "AUTH_FAILED" %}
+	{% elif error == "AUTH_FAILED" %}
 		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
 			<button type="button" class="close" data-dismiss="alert">×</button>
 			<strong>Oh snap!</strong> That Facebook account is not linked to any existing user account. 

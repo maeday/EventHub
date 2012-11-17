@@ -202,3 +202,16 @@ class EmailUserChangeForm(forms.ModelForm):
 
 # end code snippet
 ###############################################################################
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(label="Email address")
+    
+    def clean_email(self):
+        """ Validates that the email address exists in the database."""
+        email = self.cleaned_data["email"].lower()
+        try:
+            User.objects.get(email__iexact=email)
+            return email
+        except User.DoesNotExist:
+            raise forms.ValidationError(_("No user exists with that email address."))

@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
-    isUniqueEmail, isUniqueFbid
+    ForgotPasswordForm, isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession
 
 ###############################################################################
@@ -118,18 +118,19 @@ def register(request):
                 new_profile.key_expires = key_expires
                 new_profile.save()
     
-                # Send an email with the confirmation link (disabled for now)                                                                                                                    
-#                email_subject = 'Your new example.com account confirmation'
-#                email_body = "Hello, %s, and thanks for signing up for an \
-#EventHub account!\n\nTo activate your account, click this link within 48 \
-#hours:\n\n%s/register/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
-#                send_mail(email_subject,
-#                          email_body,
-#                          'accounts-noreply@theeventhub.com',
-#                          [email])
+                # Send an email with the confirmation link (disabled for now)
+                email = new_user.email                                                                                                                    
+                email_subject = 'Your new EventHub account confirmation'
+                email_body = "Hello, %s, and thanks for signing up for an \
+EventHub account!\n\nTo activate your account, click this link within 48 \
+hours:\n\n%s/register/confirm/%s" % (email, settings.WEB_ROOT, activation_key)
+                send_mail(email_subject,
+                          email_body,
+                          'accounts-noreply@theeventhub.com',
+                          [email])
                 
                 # Redirect to 'My Page' after successful registration
-                return redirect('/mypage')
+                return redirect('/login?register=success')
             else:
                 template_context['extra'] = form.errors
         
@@ -184,7 +185,10 @@ def user_login(request):
                 template_context['extra'] = form.errors
                 template_context['invalid'] = True
         elif request.GET:
-            template_context['error'] = 'AUTH_FAILED'
+            if 'register' in request.GET:
+                template_context['register'] = request.GET['register']
+            else:
+                template_context['error'] = 'AUTH_FAILED'
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
@@ -361,6 +365,30 @@ def dashboard(request):
         elif 'error' in request.GET:
             template_context['error'] = request.GET['error']
             
+    
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
+
+def forgot_password(request):
+    template = 'accounts/forgot.html'
+    message = ''
+    success = False
+    
+    if request.user.is_authenticated():
+        # User is already logged in. Should we let them reset it?
+        return redirect('/index')
+    
+    form = ForgotPasswordForm(request.POST)
+    if form.is_valid():
+        # Email exists, send email to user
+        success = True
+    else:
+        message = form.email.errors
+    
+    template_context = {
+        'message' : message,
+        'success' : success
+    }
     
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
