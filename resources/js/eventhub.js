@@ -137,7 +137,6 @@ function eventSearch() {
 }
 
 function requestCreate() {
- alert($("#input-title").val());
 	var input_title = $("#input-title").val();
 	var input_desc = $("#input-description").val();
 	var input_startdate = $("#input-startdate").val();
@@ -232,7 +231,7 @@ function refreshEventList() {
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_zip() && check_url();
+	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_url();
 }
 
 function check_title() {
