@@ -90,36 +90,28 @@ def change_event_name(request):
           return index(request)
 """
 
-def search_date(request):
-     month = request.POST.get('month')
-     day = request.POST.get('day')
-     year = request.POST.get('year')
-     date = month+' '+day+' '+year
-     date_field = datetime.strptime(date, '%b %d %Y') 
-     event_list_date = Event.objects.filter(start_date__lte=date, end_date__gte=date)
-
-     template = 'eventlist.html'
-     template_context = {'event_list_date': event_list_date}
-     request_context = RequestContext(request, template_context)
-
-     return render_to_response(template, request_context)
-    
-def search_location(request):
-     neighborhood = request.POST.get('neighborhood')
-     event_list_location = Event.objects.filter(neighborhood__name__exact=neighborhood)
+def filter_events(request):
+	month = request.POST.get('month')
+	day = request.POST.get('day')
+	year = request.POST.get('year')
+	date = month+' '+day+' '+year
+	neighborhood = request.POST.get('neighborhood')
+	category = request.POST.get('category')
+	event_name = request.POST.get('search')
+	event_list = Event.objects.all()
+	if date!=null:
+		date_field = datetime.strptime(date, '%b %d %Y') 
+		event_list = event_list.filter(start_date__lte=date_field,
+	end_date__gte=date_field)
+	if neighborhood!=null:
+		event_list = event_list.filter(neighborhood__name__exact=neighborhood)
+	if category !=null:
+		event_list = event_list.filter(categories__name=category)
+	if search !=null:
+		event_list = event_list.filter(name__icontains=event_name)
 	
-     template = 'eventlist.html'
-     template_context = {'event_list_location': event_list_location}
-     request_context = RequestContext(request, template_context)
-	
-     return render_to_response(template, request_context)
-	
-def search_category(request):
-     category = request.POST.get('category')
-     event_list_category = Event.objects.filter(categories__name=category)
-
-     template = 'eventlist.html'
-     template_context = {'event_list_category': event_list_category}
-     request_context = RequestContext(request, template_context)
-	
-     return render_to_response(template, request_context)
+	template = 'eventlist.html'
+	template_context = {'event_list': event_list}
+	request_context = RequestContext(request, template_context)
+     
+    return render_to_response(template, request_context)
