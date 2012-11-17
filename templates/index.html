@@ -51,19 +51,17 @@
 					  <a href="login"><button class="btn btn-medium btn-primary pull-right" type="button" style="margin-top:8px;">Create Event</button></a>
 					  {% endif %}
 					</h2>
-					<div id="refresher">
-						 {% include "eventlist.html" %}
+					<table class="table table-hover table-bordered table-striped" style="margin-bottom:0;">
+						<tbody id="refresher">
+								 {% include "eventlist.html" %}
+						</tbody>
+					</table>
+					<div id="contentLoader">
+						<img src="{{ STATIC_URL }}img/loader.gif">
 					</div>
 				</div>
 				<!--/span-->
-				<ul class="pager" style="margin-bottom:0;">
-					<li class="previous">
-					<a href="#">&larr; Previous</a>
-					</li>
-					<li class="next">
-					<a href="#">Next &rarr;</a>
-					</li>
-				</ul>
+				<p id="contentFiller">&nbsp;</p>
 			</div>
 			<!-- well-->
 		</div>

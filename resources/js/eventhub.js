@@ -15,9 +15,31 @@ $(document).ready(function(){
 	});
     
 	$("#login-error").fadeIn("slow"); 
-    	
+	
+    // triggers infinite scroll
+    $(window).scroll(function() {
+        var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
+        var scrolltrigger = 0.95;
+
+        if ((wintop/(docheight-winheight)) > scrolltrigger) {
+			infinite_scroll();
+        }
+    });
+
 });
 
+function infinite_scroll() {
+	$('#contentLoader').show();
+	
+	$.get("eventlist", function(data){
+		if (data != "") {
+			$("#refresher").append(data);
+		} else {
+			$('#contentLoader').empty();
+		}
+		$('#contentLoader').hide();
+	});
+}
 
 // Function that will extract the locations, the categories, and the keywords that will
 // be used to filter the events displayed on the front page.

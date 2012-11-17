@@ -1,3 +1,8 @@
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
 .event-title {
 	border-bottom: 1px solid #eeeeee;
 	margin-bottom: 5px;
@@ -46,7 +51,7 @@
 	border-radius: 3px;
 
 }
-.sidebar-nav,.well-custom{
+.sidebar-nav, .well-custom {
 	background-color: rgba(255, 255, 255, 0.7);
 }
 .title-custom {
@@ -286,4 +291,13 @@ body {
 
 .modal-profile{
    width: 400px;
+}
+
+#refresher {
+	background-color: rgba(255, 255, 255, 1.0);
+}
+#contentLoader {
+	display: none;
+	text-align: center;
+	margin-top: 20px;
 }
