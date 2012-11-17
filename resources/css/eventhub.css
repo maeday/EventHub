@@ -5,7 +5,7 @@
 	padding-bottom:0;
 }
 .event-title h3 {
-	margin-top:0;
+	margin-top:5px;
 	margin-bottom:0;
 }
 
@@ -47,7 +47,7 @@
 
 }
 .sidebar-nav,.well-custom{
-	background-color: rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.7);
 }
 .title-custom {
 	font-size: 13px;
@@ -83,6 +83,10 @@
 	line-height: 1.1;
 	color: #555;
 	font-weight: bold;
+}
+
+.location-title{
+		padding:15px 0px;	
 }
 
 .login {
@@ -272,5 +276,14 @@ body {
   margin-top:7px;
   margin-left:5px;
 }
+.form-bottom {
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-bottom: -12px;
+    margin-top: 3px;
+    padding: 13px 19px 0;
+}
 
-
+.modal-profile{
+   width: 400px;
+}

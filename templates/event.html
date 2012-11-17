@@ -9,39 +9,36 @@
           <div class="event-title">
             <h2>{{ event.name }}</h2>
           </div>
+
           <div class="row">
-	          <div class="span2">
-	            <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}/photos/no-image-big.png{% endif %}" class="img-polaroid">
-	          </div>
-          </div>
-          <div class="row">
-              <div class="span5">
-                <p style="padding-top:5px;">
-                  <h3>{{ event.start_date|date:"l, F j, Y" }}</h3>
-                  <h4>{{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</h4>
+              <div class="span7">
+                <p>
+                  <h4>{{ event.start_date|date:"l, F j, Y" }}
+                  <strong class="pull-right">{{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</strong></h4>
                 </p>
                 <p>
                   {{ event.description }}
                 </p>
               </div>
           </div>
-          <div class="row">
-	          <div class="span2" style="padding-top:15px;">
-	            <img src="http://maps.googleapis.com/maps/api/staticmap?center=47.595146,-122.331601&zoom=13&size=300x200&sensor=false">
-	          </div>
-	          <div class="span7" style="padding-top:15px;">
-	            <p>
-	              <strong>{{ event.venue }}</strong><br>
-	               {{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
-	              <a href="{{ event.url }}">{{ event.url }}</a>
-	            </p>
-	            <p>
-	              <strong>Cost/Fees</strong><br>
+	<div class="row">
+	          <div class="span7">
+				<p>
+					<strong>Cost/Fees</strong><br>
 	               $20 for UW students; $50 for general public
+				   <small class="pull-right"><a href="/index">&raquo; Back to Results</a></small>
 	            </p>
 	          </div>
-          </div>
-          <small><a href="/index">&raquo; Back to Results</a></small>
+  
+		<div class="row">
+	          <div class="span7" style="padding-left: 19px;">
+	            <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}/photos/no-image-big.png{% endif %}" class="img-polaroid">
+	          </div>
+        </div>
+		  
+    </div>
+
+          
         </div>
       </div>
     </div>
@@ -69,7 +66,7 @@
         <h3>Similar Events</h3>
       </div>
       <div class="list-title">
-        Saturday, October 13
+        <strong>Saturday, October 13</strong>
       </div>
       <div class="list-item">
         <div class="pull-left">
@@ -90,7 +87,7 @@
         </div>
       </div>
       <div class="list-title">
-        Sunday, October 14
+        <strong>Sunday, October 14</strong>
       </div>
 	  <div class="list-item">
         <div class="pull-left">
@@ -106,8 +103,24 @@
       </p>
     </div>
     <!-- /well-->
+  </div><!-- /span-->
+
+  <div class="span4">
+		<div class="well well-custom">
+				<div class="row">
+				  		<div class="span4 location-title">
+						        <strong>{{ event.venue }}</strong><br>
+								{{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
+								<a href="{{ event.url }}">{{ event.url }}</a>
+						</div>
+				</div>
+				<div class="row">
+						<div class="span3">
+								<img src="http://maps.googleapis.com/maps/api/staticmap?center=47.595146,-122.331601&zoom=13&size=1110x1110&sensor=false" class="img-polaroid">
+						</div>
+				</div>
+		</div>
   </div>
-  <!-- /span-->
 
 </div>
 {% include "footer.html" %}

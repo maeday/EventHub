@@ -132,7 +132,7 @@
 </div>
 
 <!-- Edit Profile modal-->
-<div id="EditProfile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="EditProfile" class="modal modal-profile hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3 id="myModalLabel">Edit My Profile</h3>
@@ -142,13 +142,13 @@
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">First name</label>
 				<div class="controls-custom">
-					<input type="text" class="input-medium" id="input01" name="title" value="{{ user.first_name }}"><span class="help-inline"></span>
+					<input type="text" class="input-large" id="input01" name="title" value="{{ user.first_name }}"><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Last name</label>
 				<div class="controls-custom">
-					<input type="text" class="input-medium" id="input01" name="title" value="{{ user.last_name }}"><span class="help-inline"></span>
+					<input type="text" class="input-large" id="input01" name="title" value="{{ user.last_name }}"><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
@@ -161,24 +161,24 @@
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Old&nbsp;Password</label>
 				<div class="controls-custom">
-					<input type="password" class="input-medium" id="input01" name="title" value="{{ user.password }}"><span class="help-inline"></span>
+					<input type="password" class="input-large" id="input01" name="title" value="{{ user.password }}"><span class="help-inline"></span>
 				</div>
 			</div>
 				
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">New&nbsp;Password</label>
 				<div class="controls-custom">
-					<input type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+					<input type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Again</label>
 				<div class="controls-custom">
-					<input type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+					<input type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
 				</div>
 			</div>
 			
-			<div class="control-group" >
+			<div class="control-group">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<label class="radio inline">
 					<input type="radio" name="picType" id="fbPic" value="fbPic" onChange="disablefield();">
 					Use Facebook Picture
