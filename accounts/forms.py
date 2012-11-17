@@ -204,7 +204,6 @@ class EmailUserChangeForm(forms.ModelForm):
 # end code snippet
 ###############################################################################
 
-
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField(label="Email address")
     
@@ -216,3 +215,18 @@ class ForgotPasswordForm(forms.Form):
             return email
         except User.DoesNotExist:
             raise forms.ValidationError(_("No user exists with that email address."))
+        
+    def get_user(self):
+        email = self.cleaned_data["email"].lower()
+        return User.objects.get(email__iexact=email)
+
+class ResetPasswordForm(forms.Form):
+    password1 = forms.CharField(label="New Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="New Password (again)", widget=forms.PasswordInput)
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1", "")
+        password2 = self.cleaned_data["password2"]
+        if password1 != password2:
+            raise forms.ValidationError(_("The two password fields didn't match."))
+        return password2

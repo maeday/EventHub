@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
-    ForgotPasswordForm, isUniqueEmail, isUniqueFbid
+    ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession
 
 ###############################################################################
@@ -374,24 +374,77 @@ def dashboard(request):
 
 def forgot_password(request):
     template = 'accounts/forgot.html'
-    message = ''
+    template_context = {}
     success = False
     
     if request.user.is_authenticated():
         # User is already logged in. Should we let them reset it?
         return redirect('/index')
     
-    form = ForgotPasswordForm(request.POST)
-    if form.is_valid():
-        # Email exists, send email to user
-        success = True
+    if request.POST:
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            # Email exists, send email to user
+            success = True
+            # Build activation key
+            user = form.get_user()
+            username = user.username
+            salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
+            activation_key = hashlib.sha1(salt+username).hexdigest()
+            key_expires = datetime.datetime.today() + datetime.timedelta(2)
+            
+            # Create and save user and profile
+            new_profile = user.get_profile()
+            new_profile.activation_key = activation_key
+            new_profile.key_expires = key_expires
+            new_profile.save()
+    
+            # Send an email with the confirmation link (disabled for now)
+            email = user.email                                                                                                                    
+            email_subject = 'Resetting your EventHub account password'
+            email_body = "Hello, %s. The following is the link to reset your password. \
+\nPlease click this link within 48 hours, or else it will expire: \
+\n\n%s/reset/%s" % (email, settings.WEB_ROOT, activation_key)
+            send_mail(email_subject,
+                      email_body,
+                      'accounts-noreply@theeventhub.com',
+                      [email])
+            
+        template_context = {
+            'form' : form,
+            'success' : success
+        }
+            
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
+
+def reset_password(request, key):
+    '''Confirm user's activation key'''
+    template = 'accounts/resetpassword.html'
+    template_context = {'key': key,
+                        'success': False}
+    # Trigger 404 if reset key is not valid
+    user_profile = get_object_or_404(UserProfile,
+                                     activation_key=key)
+    if user_profile.key_expires < timezone.now():
+        # User's reset password key has expired
+        template_context['expired'] = True
     else:
-        message = form.email.errors
-    
-    template_context = {
-        'message' : message,
-        'success' : success
-    }
-    
+        if request.POST:
+            # User sent request to reset password
+            form = ResetPasswordForm(request.POST)
+            if form.is_valid():
+                # Passwords matched, change user's password
+                new_password = form.cleaned_data['password1']
+                user = user_profile.user
+                user.set_password(new_password)
+                user.save()
+                
+                # Set key to expired state so user cannot use same link to 
+                # resetpassword
+                user_profile.key_expires = timezone.now()
+                template_context['success'] = True
+            template_context['form'] = form
+            
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
