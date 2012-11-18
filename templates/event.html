@@ -130,13 +130,13 @@
 				<div class="row">
 				  		<div class="span4 location-title">
 						        <strong>{{ event.venue }}</strong><br>
-								{{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
+								{{ address }}<br>
 								<a href="{{ event.url }}">{{ event.url }}</a>
 						</div>
 				</div>
 				<div class="row">
 						<div class="span3">
-								<img src="http://maps.googleapis.com/maps/api/staticmap?center=47.595146,-122.331601&zoom=13&size=1110x1110&sensor=false" class="img-polaroid">
+								<img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid">
 						</div>
 				</div>
 		</div>

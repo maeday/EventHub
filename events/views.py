@@ -37,7 +37,9 @@ def eventlist(request):
 def event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     template = 'event.html'
-    template_context = {'event': event}
+    address = "%s, %s, %s %s" % (event.street, event.city, event.state, event.zipcode)
+    template_context = {'event': event,
+                        'address': address}
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
