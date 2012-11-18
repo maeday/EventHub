@@ -23,21 +23,21 @@
                   {% else %}
                   {# I know this looks ugly, so someone please fix it #}
                   <h4>
-                    From: {{ event.start_date|date:"l, F j, Y" }}
+                    Start: {{ event.start_date|date:"l, F j, Y" }}
                     <strong class="pull-right">
-                      {{ event.start_date|date:"g:i A" }}
+                    {{ event.start_date|date:"g:i A" }}
                     </strong>
                   </h4>
                   <h4>
-                    To: {{ event.end_date|date:"l, F j, Y" }}
+                    End: {{ event.end_date|date:"l, F j, Y" }}
                     <strong class="pull-right">
-                      {{ event.end_date|date:"g:i A" }}
+                      {{ event.end_date|date:"g:i A " }}
                     </strong>
                   </h4>
                   {% endif %}
                 </p>
                 <p>
-                  {{ event.description }}
+			{{ event.description|linebreaksbr }}
                 </p>
               </div>
           </div>

@@ -12,7 +12,7 @@
 			<h3><a href="/event/{{ event.id }}">{{ event.name|truncatechars:35 }}</a></h3>
 		</div>
 		<p class="event-description">
-			{{ event.description|truncatechars:300 }}
+			{{ event.description|linebreaksbr|truncatechars:300 }}
 		</p>
 		<p>
 			<strong>{{ event.venue }}</strong><br>

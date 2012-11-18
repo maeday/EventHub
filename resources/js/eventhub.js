@@ -3,13 +3,21 @@ $(document).ready(function(){
 	// Initialize the "Last Search" area to nothing (just started)
 	$("#lastSearch").text("");
 
+	$('.cat').change(function(event){
+		eventSearch(false);
+	});
+
+	$('.loc').change(function(event){
+		eventSearch(false);
+	});
+
 	// Function to initiate filtered searches of events (initiate from left sidebar)
 	$('#inputText').keypress(function(event) {
 		// Determine the button that was pressed in the input text area
 		var keycode = (event.keyCode ? event.keyCode : event.which);
 
 		if(keycode == 13) { // Check for the 'Enter' keycode
-			eventSearch();
+			eventSearch(true);
 		}
 
 	});
@@ -43,7 +51,7 @@ function infinite_scroll() {
 
 // Function that will extract the locations, the categories, and the keywords that will
 // be used to filter the events displayed on the front page.
-function eventSearch() {
+function eventSearch(useKeyword) {
 	// Create arrays for the locations, the neighborhoods, and the keywords (as we will
 	// be passing them to the functions directly).
 	var category_values = $('.cat:checked').map(function() {
@@ -54,10 +62,13 @@ function eventSearch() {
 		return $(this).val();
 	}).get();
 
-	var keyword_values = $('#inputText').val().split(" ");
+	var keyword_values = new Array();
 
 	// Last checks with the keyword values (make sure empty string is not given)
-	keyword_values = keyword_values.filter(String);
+	if(useKeyword){
+		keyword_values = $('#inputText').val().split(" ");
+		keyword_values = keyword_values.filter(String);
+	} 
 
 	// Now prepare the extracted data to send in the POST request to the event controller.
 	var fd = new FormData();
@@ -83,7 +94,11 @@ function eventSearch() {
 	//       search_event (for example, see create_event return values)
 
 	// Now just update the values at the top of the main page (next to the Upcoming Events)
-	$("#lastSearch").text(category_values.toString() + " / " + location_values.toString() + " / " + keyword_values.toString() );
+	if(useKeyword && keyword_values.length != 0){
+		$("#lastSearch").text(category_values.toString() + " / " + location_values.toString() + " / " + keyword_values.toString() );
+	} else {
+		$("#lastSearch").text(category_values.toString() + " / " + location_values.toString() );		
+	}
 }
 
 function refreshEventList() {
