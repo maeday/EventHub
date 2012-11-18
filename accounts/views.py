@@ -405,7 +405,7 @@ def forgot_password(request):
             new_profile.key_expires = key_expires
             new_profile.save()
     
-            # Send an email with the confirmation link (disabled for now)
+            # Send an email with the confirmation link
             email = user.email                                                                                                                    
             email_subject = 'Resetting your EventHub account password'
             email_template = get_template('accounts/email/reset.txt')
@@ -455,6 +455,56 @@ def reset_password(request, key):
                 user_profile.key_expires = timezone.now()
                 template_context['success'] = True
             template_context['form'] = form
+            
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
+
+def resend_key(request):
+    template = 'accounts/resend.html'
+    template_context = {}
+    success = False
+    
+    if request.user.is_authenticated():
+        # User is already logged in. Shouldn't be here
+        return redirect('/index')
+    
+    if request.POST:
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            # Email exists, send email to user
+            success = True
+            
+            # Build activation key
+            user = form.get_user()
+            username = user.username
+            salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
+            activation_key = hashlib.sha1(salt+username).hexdigest()
+            key_expires = datetime.datetime.today() + datetime.timedelta(2)
+            
+            # Modify and save user profile
+            profile = user.get_profile()
+            profile.activation_key = activation_key
+            profile.key_expires = key_expires
+            profile.save()
+            
+            email = user.email                                                                                                                    
+            email_subject = 'Your EventHub activation link'
+            email_template = get_template('accounts/email/register.txt')
+            context = Context({
+                'email'          : email,
+                'web_root'       : settings.WEB_ROOT,
+                'activation_key' : activation_key
+            })
+            email_body = email_template.render(context)
+            send_mail(email_subject,
+                      email_body,
+                      'accounts-noreply@theeventhub.com',
+                      [email])
+            
+        template_context = {
+            'form' : form,
+            'success' : success
+        }
             
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)

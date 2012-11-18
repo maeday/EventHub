@@ -22,6 +22,7 @@ urlpatterns = patterns('django.views.generic.simple',
 
 urlpatterns += patterns('accounts.views',
     url(r'^register$', 'register'),
+    url(r'^resend$', 'resend_key'),
     url(r'^login$', 'user_login'),
     url(r'^logout$', 'user_logout'),
     url(r'^loginfb$', 'login_facebook'),

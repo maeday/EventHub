@@ -1,0 +1,37 @@
+{% include "header.html" %}
+
+<div class="well well-custom">
+    <form method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="registration-title"">
+            <h2 class="registration-title-h2">Lost your activation key? An existing key has expired?</h2>
+            <p>Please enter your email address and we will email you a new activation link.</p>
+        </div>
+      </div>
+      {% if success %}
+      <div id="login-error" class="alert alert-success" style="display:none;margin-top:10px;margin-bottom:0;">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		A new activation link has been sent to your email.		
+	  </div>
+      {% elif form.errors %}
+      <div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+	    <strong>Oh snap!</strong> {% for error in form.email.errors %}{{ error|escape }} {% endfor %}	
+	  </div>
+      {% endif %}
+      <div class="row">
+        <div class="registration-title">
+          <label for="user_login">Email Address&nbsp;&nbsp;
+          <input class="span3" id="user_login" size="30" type="text" name="email" >&nbsp;&nbsp;
+          <button id="reset-btn" class="btn btn-primary" type="submit" name="reset" style="margin-bottom: 10px;">Send New Key</button> </label>
+        </div>
+      </div>
+      <div class="row registration-title"">
+        <div class="form-actions">
+            <a href="login">Return to Login</a>
+        </div>      
+      </div>
+    </form>
+</div>
+{% include "footer.html" %}

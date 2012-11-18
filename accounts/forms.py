@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 import base64
 import hashlib
@@ -100,7 +101,7 @@ class EmailAuthenticationForm(forms.Form):
             elif not self.user_cache.is_active:
                 # User hasn't been activated; allow login for now
                 #pass
-                raise forms.ValidationError(_("This account is inactive. Please check your email for the activation link."))
+                raise forms.ValidationError(mark_safe('This account is inactive. Please check your email for the activation link. If you have lost it, or it has expired, please go <a href="/resend">here</a> to get a new link sent to your email.'))
 #        self.check_for_test_cookie()
         return self.cleaned_data
 
