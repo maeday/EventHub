@@ -10,10 +10,11 @@ from events.models import Event, Categories, Neighborhoods
 from django.contrib.auth.models import User
 from django.db.models.fields import DateTimeField
 
-from datetime import datetime
+import datetime
 
 def index(request):
-     latest_event_list = Event.objects.all().order_by('start_date')
+     latest_event_list = Event.objects.all().order_by('start_date').exclude(
+                         start_date__lt=datetime.datetime.now())
      categories_list = Categories.objects.all()
      neighborhoods_list = Neighborhoods.objects.all()     
      
@@ -26,7 +27,8 @@ def index(request):
      return render_to_response(template, request_context)
      
 def eventlist(request):
-     latest_event_list = Event.objects.all().order_by('start_date')
+     latest_event_list = Event.objects.all().order_by('start_date').exclude(
+                         start_date__lt=datetime.datetime.now())
      
      template = 'eventlist.html'
      template_context = {'latest_event_list': latest_event_list}
@@ -98,28 +100,29 @@ def change_event_name(request):
 
 """
 def filter_events(request):
-	#month = request.POST.get('month')
-	#day = request.POST.get('day')
-	#year = request.POST.get('year')
-	#date = month+' '+day+' '+year
-	neighborhood = request.POST.get('neighborhood')
-	category = request.POST.get('category')
-	event_name = request.POST.get('search')
-	event_list = Event.objects.all()
-	if date!=null:
-		date_field = datetime.strptime(date, '%b %d %Y') 
-		event_list = event_list.filter(start_date__lte=date_field,
-	end_date__gte=date_field)
-	if neighborhood!=null:
-		event_list = event_list.filter(neighborhood__name__exact=neighborhood)
-	if category !=null:
-		event_list = event_list.filter(categories__name=category)
-	if search !=null:
-		event_list = event_list.filter(name__icontains=event_name)
-	
-	template = 'eventlist.html'
-	template_context = {'event_list': event_list}
-	request_context = RequestContext(request, template_context)
+    #month = request.POST.get('month')
+    #day = request.POST.get('day')
+    #year = request.POST.get('year')
+    #date = month+' '+day+' '+year
+    neighborhoods = request.POST.get('locations')
+    categories = request.POST.get('categories')
+    keywords = request.POST.get('keywords')
+    event_list = Event.objects.all()
+    #if date!=null:
+    #	date_field = datetime.strptime(date, '%b %d %Y') 
+    #	event_list = event_list.filter(start_date__lte=date_field,
+    #end_date__gte=date_field)
+    if neighborhood!=null:
+        for neighborhood in neighborhoods:
+            event_list = event_list.filter(neighborhood__name__exact=neighborhood)
+    if category !=null:
+    	event_list = event_list.filter(categories__name=categories)
+    if search !=null:
+    	event_list = event_list.filter(name__icontains=keywords)
+    	
+    template = 'eventlist.html'
+    template_context = {'event_list': event_list}
+    request_context = RequestContext(request, template_context)
      
     return render_to_response(template, request_context)
 """
