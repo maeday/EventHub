@@ -50,11 +50,9 @@
 				<div class="controls-custom">
 					<select>
 						<option>Select a Neighborhoood</option>
-						<option>Downtown</option>
-						<option>University District</option>
-						<option>Ballard</option>
-						<option>Green Lake</option>
-						<option>Northgate</option>
+						{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
+						<option>{{ neighborhood }}</option>
+						{% endfor %} {% endif %}
 					</select>
 					<span class="help-inline"></span>
 				</div>
@@ -106,39 +104,11 @@
 			<div id="ctrl-categories" class="control-group">
 				<label class="control-label-custom" for="input12">Categories</label>
 				<div class="controls-custom controls-row">
+					{% if categories_list %} {% for category in categories_list %}
 					<label class="checkbox">
-					<input type="checkbox" value="">
-					Music </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Arts </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Sports & Activities </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Festivals & Fairs </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Food </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Film </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Lectures </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Fashion </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Nightlife </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Kids & Family </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Charities </label>
+					<input type="checkbox" value={{ category.id }}>
+					{{ category.name }} </label>
+					{% endfor %} {% endif %}
 				</div>
 			</div>
 			<div id="ctrl-image" class="control-group">

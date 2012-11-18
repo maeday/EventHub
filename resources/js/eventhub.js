@@ -77,21 +77,21 @@ function eventSearch(useKeyword) {
 	fd.append('keywords', keyword_values);
 
 	// Now send the POST request.
-/*
-	// TODO: Make the search_event function (!!!) in events/views.py that
+
+	// TODO: Make the filter_events function (!!!) in events/views.py that
 	// can extract the data that is stored as 'categories', 'locations', and 'keywords',
 	// use the search functions, and then return the data.
 	var request = $.ajax({
-		url: "search_event",
+		url: "filter_events",
 		type: "POST",
 		data: fd,
 		processData: false,
 		contentType: false,
 		cache: false 
 	});
-*/
+
 	// TODO: Determine the values that are returned from the event controller function
-	//       search_event (for example, see create_event return values)
+	//       filter_events (for example, see create_event return values)
 
 	// Now just update the values at the top of the main page (next to the Upcoming Events)
 	if(useKeyword && keyword_values.length != 0){
