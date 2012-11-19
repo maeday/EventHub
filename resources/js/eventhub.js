@@ -172,9 +172,12 @@ function eventSearch(useKeyword) {
 
 	// Now prepare the extracted data to send in the POST request to the event controller.
 	var fd = new FormData();
-	fd.append('categories', category_values);
-	fd.append('locations', location_values);
-	fd.append('keywords', keyword_values);
+	var keyword_string = keyword_values.join();
+	var locations_string = location_values.join();
+	var categories_string = category_values.join();
+	fd.append('categories', categories_string);
+	fd.append('locations', locations_string);
+	fd.append('keywords', keyword_string);
 
 	// Now send the POST request.
 
@@ -182,7 +185,7 @@ function eventSearch(useKeyword) {
 	// can extract the data that is stored as 'categories', 'locations', and 'keywords',
 	// use the search functions, and then return the data.
 	var request = $.ajax({
-		url: "search_event",
+		url: "filterlist",
 		type: "POST",
 		data: fd,
 		processData: false,
@@ -193,9 +196,12 @@ function eventSearch(useKeyword) {
 	// TODO: Determine the values that are returned from the event controller function
 	//       search_event (for example, see create_event return values)
 	
-	request.done(function(msg) {
-		if (msg == "1") {
-			filterEventList();
+	request.success(function(msg) {
+		if (msg) {
+			$("#refresher").hide();
+			$("#refresher").html(msg);
+			$("#refresher").fadeIn(2000);
+			//filterEventList();
 		} else {
 			alert("Could not filter");
 		}
@@ -203,6 +209,7 @@ function eventSearch(useKeyword) {
 	
 	request.fail(function(jqXHR, textStatus) {
 		alert("Ajax request failed: " + textStatus);
+		filterEventList();
 	});
 
 	// Now just update the values at the top of the main page (next to the Upcoming Events)
@@ -211,6 +218,7 @@ function eventSearch(useKeyword) {
 	} else {
 		$("#search-title").html("Upcoming Events");		
 	}
+	window.scroll(0,0);
 }
 
 function refreshEventList() {
@@ -220,15 +228,6 @@ function refreshEventList() {
 		$("#refresher").fadeIn(2000);
 	});
 }
-
-function filterEventList() {
-	$.get("filterlist", function(data) {
-		$("#refresher").hide();
-		$("#refresher").html(data);
-		$("#refresher").fadeIn(2000);
-	});
-}
-
 
 function disablefield() { 
     if (document.getElementById('fbPic').checked == 1){ 
