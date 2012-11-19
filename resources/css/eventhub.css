@@ -317,3 +317,8 @@ body {
 	text-align: center;
 	margin-top: 20px;
 }
+
+.profile-mini {
+	width: 25px;
+	padding: 3px;
+}

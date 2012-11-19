@@ -59,7 +59,21 @@
             </p>
             <p class="navbar-text pull-right">
               {% if user.is_authenticated %}
-              <a href="/mypage" class="navbar-link">{{ user.first_name }} {{ user.last_name }}</a> &nbsp; | &nbsp; <a href="/logout" class="navbar-link">Sign Out</a> &nbsp; 
+              <a href="/mypage" class="navbar-link">
+				{% if user.get_profile.use_fb_pic == 1 %}
+					{% if user.get_profile.fbid != -1 %}
+					<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="profile-mini" name="{{user.get_profile.use_fb_pic}}">
+					{% else %}
+					<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid" width="100px"/>
+					{% endif %}
+				{% else %}
+					{% if user.get_profile.pic %}
+					<img src="{{user.get_profile.pic.url}}" class="img-polaroid" name = "{{user.get_profile.use_fb_pic}}" />
+					{% else %}
+					<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid" width="100px"/>
+					{% endif %}
+				{% endif %}
+              {{ user.first_name }} {{ user.last_name }}</a> &nbsp; | &nbsp; <a href="/logout" class="navbar-link">Sign Out</a> &nbsp; 
               {% else %}
               <a href="/login" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
               {% endif %}
