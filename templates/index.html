@@ -10,7 +10,7 @@
 				All Categories </label>
 				{% if categories_list %} {% for category in categories_list %}
 				<label class="checkbox">
-				<input class="cat" id="cat-music" type="checkbox" value={{ category.id }}>
+				<input class="cat" id="cat-{{ category.name }}" type="checkbox" value={{ category.id }}>
 				{{ category.name }} </label>
 				{% endfor %} {% else %}
 				<p>
@@ -24,7 +24,7 @@
 				All Locations </label>
 				{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
 				<label class="checkbox">
-				<input class="loc" id="loc-ball" type="checkbox" value={{ neighborhood.id }}>
+				<input class="loc" id="loc-{{ neighborhood.name }}" type="checkbox" value={{ neighborhood.id }}>
 				{{ neighborhood.name }} </label>
 				{% endfor %} {% else %}
 				<p>
