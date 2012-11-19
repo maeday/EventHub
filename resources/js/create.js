@@ -88,6 +88,8 @@ function requestCreate() {
 	var input_zip = $("#input-zip").val();
 	var input_url = $("#input-url").val();
 	var input_image =  document.getElementById('input-photo').files[0];
+	var input_cost_min = $("#input-cost-min").val();
+	var input_cost_max = $("#input-cost-max").val();
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -114,14 +116,16 @@ function requestCreate() {
 	fd.append( 'city', input_city );
 	fd.append( 'state', input_state );
 	fd.append( 'zip', input_zip );
-	fd.append( 'url', input_url ); 
+	fd.append( 'url', input_url );
+	fd.append( 'cost-min', input_cost_min );
+	fd.append( 'cost-max', input_cost_max );
 	var request = $.ajax({
 		url: "create_event",
 		type: "POST",
 		data: fd,
 		processData: false,
-    contentType: false,
-    cache: false 
+	    contentType: false,
+	    cache: false
 	});
 	
 	request.done(function(msg) {
