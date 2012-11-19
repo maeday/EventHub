@@ -15,25 +15,15 @@
                 <p>
                   {% if event.start_date.date == event.end_date.date %}
                   <h5>
-                    {{ event.start_date|date:"l, F j, Y" }}
+                    {{ event.start_date|date:"l, F j" }}
                     <strong class="pull-right">
                       {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}
                     </strong>
                   </h5>
                   {% else %}
-                  {# I know this looks ugly, so someone please fix it #}
-                  <h4>
-                    Start: {{ event.start_date|date:"l, F j, Y" }}
-                    <strong class="pull-right">
-                    {{ event.start_date|date:"g:i A" }}
-                    </strong>
-                  </h4>
-                  <h4>
-                    End: {{ event.end_date|date:"l, F j, Y" }}
-                    <strong class="pull-right">
-                      {{ event.end_date|date:"g:i A " }}
-                    </strong>
-                  </h4>
+                  <h5>
+                    {{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"l, F j" }}, {{ event.end_date|date:"g:i A " }}
+                  </h5>
                   {% endif %}
                 </p>
                 <p>
@@ -128,14 +118,14 @@
   <div class="span4">
 		<div class="well well-custom">
 				<div class="row">
-				  		<div class="span4 location-title">
+				  		<div class="location-title" style="width:250px; margin-left: 19px;">
 						        <strong>{{ event.venue }}</strong><br>
 								{{ address }}<br>
-								<a href="{{ event.url }}">{{ event.url }}</a>
+								<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
 						</div>
 				</div>
 				<div class="row">
-						<div class="span3">
+						<div style="width:250px; margin-left: 19px;">
 								<a href="http://maps.google.com/maps?q={{address}}" target="blank" ><img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid"></a>
 						</div>
 				</div>
