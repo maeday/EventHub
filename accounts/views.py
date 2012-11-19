@@ -1,4 +1,7 @@
-import base64, cgi, datetime, hashlib, hmac, json, random, urllib
+import base64, cgi, datetime, hashlib, hmac, random, urllib
+
+try: import simplejson as json
+except ImportError: import json
 
 from EventHub import settings
 
