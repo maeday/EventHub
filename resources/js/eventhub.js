@@ -4,11 +4,48 @@ $(document).ready(function(){
 	$("#lastSearch").text("");
 
 	$('.cat').change(function(event){
+		if ($(this).is(':checked'))
+		{
+			$('#cat-all').removeAttr("disabled");
+			$('#cat-all').attr("checked", false);
+		} else {
+			if (countChecked('.cat') == 0) {
+				$('#cat-all').attr("disabled", true);
+				$('#cat-all').attr("checked", true);
+			}
+		}
 		eventSearch(false);
 	});
 
 	$('.loc').change(function(event){
+		if ($(this).is(':checked'))
+		{
+			$('#loc-all').removeAttr("disabled");
+			$('#loc-all').attr("checked", false);
+		} else {
+			if (countChecked('.loc') == 0) {
+				$('#loc-all').attr("disabled", true);
+				$('#loc-all').attr("checked", true);
+			}
+		}
 		eventSearch(false);
+	});
+	
+	$('#cat-all').click(function(){
+		if ($(this).is(':checked'))
+		{
+			$(this).attr("disabled", true);
+			$('.cat').attr("checked", false);
+			
+		}
+	});
+	
+	$('#loc-all').click(function(){
+		if ($(this).is(':checked'))
+		{
+			$(this).attr("disabled", true);
+			$('.loc').attr("checked", false);
+		}
 	});
 
 	// Function to initiate filtered searches of events (initiate from left sidebar)
@@ -39,6 +76,11 @@ $(document).ready(function(){
     });
 
 });
+
+function countChecked(identifier) {
+    return $(identifier+":checked").length;
+}
+
 
 function editProfile(){
 	var firstName = $.trim(document.getElementById("first-name").value);

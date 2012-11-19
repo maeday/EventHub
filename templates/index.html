@@ -6,7 +6,7 @@
 			<ul class="nav nav-list">
 				<li class="nav-header side-title-custom">Categories</li>
 				<label class="checkbox">
-				<input id="cat-all" type="checkbox" value="all" checked="checked">
+				<input id="cat-all" type="checkbox" value="all" checked="checked" disabled>
 				All Categories </label>
 				{% if categories_list %} {% for category in categories_list %}
 				<label class="checkbox">
@@ -20,7 +20,7 @@
 				
 				<li class="nav-header side-title-custom">Locations</li>
 				<label class="checkbox">
-				<input id="loc-all" type="checkbox" value="all" checked="checked">
+				<input id="loc-all" type="checkbox" value="all" checked="checked" disabled>
 				All Locations </label>
 				{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
 				<label class="checkbox">
