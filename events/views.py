@@ -113,14 +113,12 @@ def filter_events(request):
     #	event_list = event_list.filter(start_date__lte=date_field,
     #end_date__gte=date_field)
     if neighborhood!=null:
-        #for neighborhood in neighborhoods:
-            event_list = event_list.filter(neighborhood__id=neighborhood[0])
-    #if category !=null:
-    #	for category in categories:
-    #	    event_list = event_list.filter(categories__id=categories[0])
-    #if search !=null:
-    #    for keyword in keywords:
-    #	    event_list = event_list.filter(name__icontains=keywords[0])
+        for neighborhood in neighborhoods:
+            event_list = event_list.filter(neighborhood__name__exact=neighborhood)
+    if category !=null:
+    	event_list = event_list.filter(categories__name=categories)
+    if search !=null:
+    	event_list = event_list.filter(name__icontains=keywords)
     	
     template = 'eventlist.html'
     template_context = {'event_list': event_list}
