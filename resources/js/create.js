@@ -123,8 +123,9 @@ function requestCreate() {
 	fd.append( 'url', input_url );
 	fd.append( 'cost-min', input_cost_min );
 	fd.append( 'cost-max', input_cost_max );
-	fb.append( 'location', input_location );
-	fb.append( 'categories', input_categories );
+	//fb.append( 'location', input_location );
+	//fb.append( 'categories', input_categories );
+	
 	var request = $.ajax({
 		url: "create_event",
 		type: "POST",
