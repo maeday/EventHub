@@ -28,7 +28,7 @@ def index(request):
      
 def eventlist(request):
      latest_event_list = Event.objects.all().order_by('start_date').exclude(
-                         start_date__lt=datetime.now())
+                         end_date__lt=datetime.now())
      
      template = 'eventlist.html'
      template_context = {'latest_event_list': latest_event_list}
