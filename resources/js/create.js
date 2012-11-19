@@ -96,6 +96,14 @@ function requestCreate() {
 	}).get();
 	var input_categories_string = input_categories.join();
 	
+	if(input_cost_min=="" || input_cost_max==""){
+		alert("Please specify cost.");
+		return;
+	}
+	if(input_categories_string==""){
+		alert("Please choose at least 1 category.");
+		return;
+	}
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
 		start_clock = "pm";
