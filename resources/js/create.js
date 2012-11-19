@@ -94,6 +94,7 @@ function requestCreate() {
 	var input_categories = $(".c-cat:checked").map(function() {
 		return $(this).val();
 	}).get();
+	var input_categories_string = input_categories.join();
 	
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
@@ -124,7 +125,7 @@ function requestCreate() {
 	fd.append( 'cost-min', input_cost_min );
 	fd.append( 'cost-max', input_cost_max );
 	fd.append( 'location', input_location );
-	fd.append( 'categories', input_categories );
+	fd.append( 'categories', input_categories_string );
 	
 	var request = $.ajax({
 		url: "create_event",

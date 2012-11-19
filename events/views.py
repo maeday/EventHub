@@ -14,7 +14,7 @@ from datetime import datetime
 
 def index(request):
      latest_event_list = Event.objects.all().order_by('start_date').exclude(
-                         start_date__lt=datetime.now())
+                         end_date__lt=datetime.now())
      categories_list = Categories.objects.all()
      neighborhoods_list = Neighborhoods.objects.all()     
      
@@ -47,44 +47,54 @@ def event(request, event_id):
 
 @csrf_exempt
 def create_event(request):
-     if request.POST:
-          eName = request.POST.get('title')
-          eDesc = request.POST.get('description')
-          eStartDateTimeString = request.POST.get('start')
-          eEndDateTimeString = request.POST.get('end')
-          eVenue = request.POST.get('venue')
-          eStreet = request.POST.get('street')
-          eCity = request.POST.get('city')
-          eState = request.POST.get('state')
-          eZipcode = request.POST.get('zip')
-          eUrl = request.POST.get('url')
-          eMinCost = request.POST.get('cost-min')
-          eMaxCost = request.POST.get('cost-max')
-          eNeighborhood = request.POST.get('location')
-          eimage = request.FILES.get('image')
-          
-          startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
-          endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
-          
-          u = User(id=1)
-          n = Neighborhoods(id=eNeighborhood)
-          e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
-                    poster=u, description=eDesc, free=False, neighborhood=n,
-                    cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
-                    street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
-          e.save()
-          
-          template = 'text.html'
-          template_context = {'text': "1"}
-          request_context = RequestContext(request, template_context)
-     
-          return render_to_response(template, request_context)
-     else:
-          template = 'text.html'
-          template_context = {}
-          request_context = RequestContext(request, template_context)
-     
-          return render_to_response(template, request_context)
+     if request.user.is_authenticated():
+         if request.POST:
+              eName = request.POST.get('title')
+              eDesc = request.POST.get('description')
+              eStartDateTimeString = request.POST.get('start')
+              eEndDateTimeString = request.POST.get('end')
+              eVenue = request.POST.get('venue')
+              eStreet = request.POST.get('street')
+              eCity = request.POST.get('city')
+              eState = request.POST.get('state')
+              eZipcode = request.POST.get('zip')
+              eUrl = request.POST.get('url')
+              eMinCost = request.POST.get('cost-min')
+              eMaxCost = request.POST.get('cost-max')
+              eNeighborhood = request.POST.get('location')
+              eCategoriesString = request.POST.get('categories')
+              eimage = request.FILES.get('image')
+              
+              startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
+              endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
+              
+              eCategories = eCategoriesString.split(',')
+              
+              u = request.user
+              n = Neighborhoods(id=eNeighborhood)
+              e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
+                        poster=u, description=eDesc, free=False, neighborhood=n,
+                        cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
+                        street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
+              
+              e.save()
+              
+              if eCategories:
+                  for categoryNum in eCategories:
+                      category = Categories.objects.get(id=categoryNum)
+                      e.categories.add(category)
+              
+              template = 'text.html'
+              template_context = {'text': "1"}
+              request_context = RequestContext(request, template_context)
+         
+              return render_to_response(template, request_context)
+         else:
+              template = 'text.html'
+              template_context = {}
+              request_context = RequestContext(request, template_context)
+         
+              return render_to_response(template, request_context)
 
 """
 @csrf_exempt
