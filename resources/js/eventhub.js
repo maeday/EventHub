@@ -49,15 +49,16 @@ function editProfile(){
 	var userEmail = $.trim(document.getElementById("user-email").value);
 	var useFbPic = document.getElementById("fbPic").checked;
 	var userPic = document.getElementById('uploadPic').files[0]
-	//var input_image =  document.getElementById('input-photo').files[0];
-	/*if(newPassword1.length<6){
-	 alert("password too short");
-	 return;
-	}
-	if(newPassword1!=newPassword2){
-		alert("passwords do not match.");
-		return;
-	}*/
+	if(newPassword1.length>0){
+		if(newPassword1.length<6){
+		 alert("Password should be at least 6 characters!");
+		 return;
+		}
+		if(newPassword1!=newPassword2){
+			alert("Passwords do not match.");
+			return;
+		}
+  }
 	
 	var fd = new FormData();
 	fd.append( 'firstName', firstName );
