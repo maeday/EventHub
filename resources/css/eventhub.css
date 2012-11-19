@@ -24,6 +24,14 @@ a:active {
   color: #005580;
 }
 
+.title {
+	border-bottom: 1px solid #eeeeee;
+	margin-bottom: 5px;
+	padding-top:0;
+	padding-bottom:0;
+
+}
+
 p.event-description {
 
 }
@@ -329,6 +337,12 @@ body {
 
 .profile-mini {
 	width: 25px;
+	margin:0 2px 4px 0;
+	border: 1px solid #f2f2f2;
+}
+
+.profile-medium {
+	width: 100px;
 	margin:0 2px 4px 0;
 	border: 1px solid #f2f2f2;
 }
