@@ -35,9 +35,9 @@ $(document).ready(function(){
 		if ($(this).is(':checked'))
 		{
 			$(this).attr("disabled", true);
-			$('.cat').attr("checked", false);
-			
+			$('.cat').attr("checked", false);	
 		}
+		eventSearch(false);
 	});
 	
 	$('#loc-all').click(function(){
@@ -46,6 +46,7 @@ $(document).ready(function(){
 			$(this).attr("disabled", true);
 			$('.loc').attr("checked", false);
 		}
+		eventSearch(false);
 	});
 
 	// Function to initiate filtered searches of events (initiate from left sidebar)
