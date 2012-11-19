@@ -7,19 +7,19 @@
       <div class="span8">
         <div class="well well-custom">
           <div class="event-title">
-            <h2>{{ event.name }}</h2>
+            <h3>{{ event.name }}</h3>
           </div>
 
           <div class="row">
               <div class="span7">
                 <p>
                   {% if event.start_date.date == event.end_date.date %}
-                  <h4>
+                  <h5>
                     {{ event.start_date|date:"l, F j, Y" }}
                     <strong class="pull-right">
                       {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}
                     </strong>
-                  </h4>
+                  </h5>
                   {% else %}
                   {# I know this looks ugly, so someone please fix it #}
                   <h4>
