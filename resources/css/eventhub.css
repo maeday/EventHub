@@ -29,8 +29,12 @@ p.event-description {
 }
 
 .event-time {
-	padding-top:5px;
+	padding-top:7px;
 	padding-left:10px;
+	line-height: 23px;
+}
+.event-time strong {
+	font-size: 16px;
 }
 .event-author {
 	padding: 21px 10px 0 0;
