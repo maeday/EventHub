@@ -90,6 +90,7 @@ function requestCreate() {
 	var input_image =  document.getElementById('input-photo').files[0];
 	var input_cost_min = $("#input-cost-min").val();
 	var input_cost_max = $("#input-cost-max").val();
+	var input_location = $("#input-location").val();
 	var input_categories = $(".c-cat:checked").map(function() {
 		return $(this).val();
 	}).get();
@@ -122,6 +123,7 @@ function requestCreate() {
 	fd.append( 'url', input_url );
 	fd.append( 'cost-min', input_cost_min );
 	fd.append( 'cost-max', input_cost_max );
+	fb.append( 'location', input_location );
 	fb.append( 'categories', input_categories );
 	var request = $.ajax({
 		url: "create_event",
