@@ -320,5 +320,6 @@ body {
 
 .profile-mini {
 	width: 25px;
-	padding: 3px;
+	margin:0 2px 4px 0;
+	border: 1px solid #f2f2f2;
 }
