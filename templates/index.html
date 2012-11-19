@@ -24,7 +24,7 @@
 				All Locations </label>
 				{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
 				<label class="checkbox">
-				<input class="loc" id="loc-{{ neighborhood.name }}" type="checkbox" value="{{ neighborhood.id }}">
+				<input class="loc" id="loc-{{ neighborhood.name }}" type="checkbox" value={{ neighborhood.id }}>
 				{{ neighborhood.name }} </label>
 				{% endfor %} {% else %}
 				<p>

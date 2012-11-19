@@ -50,7 +50,7 @@
 				<div class="controls-custom">
 					<select id="input-location">
 					{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
-					<option value="{{ neighborhood.id }}">{{ neighborhood.name }}</option>
+					<option value={{ neighborhood.id }}>{{ neighborhood.name }}</option>
 					{% endfor %} {% endif %}
 					</select>
 					<span class="help-inline"></span>
