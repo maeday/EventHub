@@ -11,6 +11,9 @@
 		<div class="event-title">
 			<h3><a href="/event/{{ event.id }}">{{ event.name|truncatechars:35 }}</a></h3>
 		</div>
+		<p>
+		    Created by: {{ event.poster.first_name }} {{ event.poster.last_name }}
+		</p>
 		<p class="event-description">
 			{{ event.description|linebreaksbr|truncatechars:300 }}
 		</p>
