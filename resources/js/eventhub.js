@@ -75,6 +75,10 @@ $(document).ready(function(){
     $("#editProfile_btn").click(function() {
     	editProfile();
     });
+    
+    $("#search-btn").click(function() {
+	    eventSearch(true); 
+    });
 
 });
 
@@ -219,7 +223,7 @@ function eventSearch(useKeyword) {
 	} else {
 		$("#search-title").html("Upcoming Events");		
 	}
-	window.scroll(0,0);
+	window.scrollTo(0,0);
 }
 
 function refreshEventList() {
