@@ -58,16 +58,19 @@ def create_event(request):
           eState = request.POST.get('state')
           eZipcode = request.POST.get('zip')
           eUrl = request.POST.get('url')
+          eMinCost = request.POST.get('cost-min')
+          eMaxCost = request.POST.get('cost-max')
+          eNeighborhood = request.POST.get('location')
           eimage = request.FILES.get('image')
           
           startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
           endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
           
           u = User(id=1)
-          n = Neighborhoods(id=1)
+          n = Neighborhoods(id=eNeighborhood)
           e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                     poster=u, description=eDesc, free=False, neighborhood=n,
-                    cost_max=10.0, cost_min=0.0, venue=eVenue, url=eUrl,
+                    cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
                     street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
           e.save()
           
