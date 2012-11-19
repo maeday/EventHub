@@ -15,7 +15,7 @@ from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
-from accounts.models import UserProfile, FacebookSession
+from accounts.models import UserProfile, FacebookSession, User
 
 ###############################################################################
 # Facebook signed request parser taken from:
@@ -508,3 +508,42 @@ def resend_key(request):
             
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
+
+@csrf_exempt 
+def edit_profile(request):
+    if request.POST:
+        firstName = request.POST.get('firstName')
+        lastName = request.POST.get('lastName')
+        oldPassword = request.POST.get('oldPassword')
+        newPassword = request.POST.get('newPassword')
+        userEmail = request.POST.get('userEmail')
+        useFbPic = request.POST.get('useFbPic')
+        userPic = request.FILES.get('userPic')
+        user = authenticate(email=userEmail, password=oldPassword)
+        template_context = {'text': "1"}
+        if user is not None:
+            if user.is_active:
+            		user.first_name=firstName
+            		user.last_name=lastName
+            		if len(newPassword)>0:
+            		    user.set_password(newPassword)
+            		userProfile = user.get_profile()
+            		if useFbPic=='1':
+            		    userProfile.use_fb_pic=True
+            		else:
+            		    userProfile.use_fb_pic=False
+            		    userProfile.pic = userPic
+            		userProfile.save()
+            		user.save()
+                #login(request, user)
+            else:
+                template_context = {'text': "3"}
+                #state = "Your account is not active."
+        else:
+            template_context = {'text': "2"}
+            #state = "Your username and/or password were incorrect."
+
+        template = 'text.html'
+        request_context = RequestContext(request, template_context)
+        return render_to_response(template, request_context)
+    

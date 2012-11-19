@@ -33,8 +33,65 @@ $(document).ready(function(){
 			infinite_scroll();
         }
     });
+    
+    $("#editProfile_btn").click(function() {
+    	editProfile();
+    });
 
 });
+
+function editProfile(){
+	var firstName = $.trim(document.getElementById("first-name").value);
+	var lastName = $.trim(document.getElementById("last-name").value);
+	var oldPassword = $.trim(document.getElementById("old-password").value);
+	var newPassword1 = $.trim(document.getElementById("new-password-1").value);
+	var newPassword2 = $.trim(document.getElementById("new-password-2").value);
+	var userEmail = $.trim(document.getElementById("user-email").value);
+	var useFbPic = document.getElementById("fbPic").checked;
+	var userPic = document.getElementById('uploadPic').files[0]
+	//var input_image =  document.getElementById('input-photo').files[0];
+	/*if(newPassword1.length<6){
+	 alert("password too short");
+	 return;
+	}
+	if(newPassword1!=newPassword2){
+		alert("passwords do not match.");
+		return;
+	}*/
+	
+	var fd = new FormData();
+	fd.append( 'firstName', firstName );
+	fd.append( 'lastName', lastName );
+	fd.append( 'oldPassword', oldPassword );
+	fd.append( 'newPassword', newPassword1 );
+	fd.append( 'userEmail', userEmail );
+	fd.append( 'useFbPic', useFbPic );
+	fd.append( 'userPic', userPic );
+	var request = $.ajax({
+		url: "edit_profile",
+		type: "POST",
+		data: fd,
+		processData: false,
+    contentType: false,
+    cache: false 
+	});
+	
+	request.done(function(msg) {
+		if (msg == "1") {
+			document.location.href = '/mypage';
+		} else if(msg == "2"){
+			alert("Your username and/or password were incorrect.");
+		}else if(msg == "3"){
+			alert("Your account is inactive.");
+		}else {
+			alert("Failing ");
+		}
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Ajax request failed: " + textStatus);
+	});
+}
 
 function infinite_scroll() {
 	$('#contentLoader').show();

@@ -31,6 +31,7 @@ urlpatterns += patterns('accounts.views',
     url(r'^mypage$', 'dashboard'),
     url(r'^forgot$', 'forgot_password'),
     url(r'^reset/(?P<key>.*)$', 'reset_password'),
+    url(r'^edit_profile$', 'edit_profile'),
 )
 
 urlpatterns += patterns('events.views',
@@ -45,3 +46,5 @@ urlpatterns += patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
                  {'document_root': settings.MEDIA_ROOT})
 )
+
+

@@ -19,10 +19,18 @@
 			<div>
 				<div class="row">
 					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
+					{% if user.get_profile.use_fb_pic == 1 %}
 						{% if user.get_profile.fbid != -1 %}
-						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid"/>
+						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid" name = "{{user.get_profile.use_fb_pic}}" />
 						{% else %}
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid" width="100px"/>
+						{% endif %}
+					{% else %}
+						{% if user.get_profile.pic %}
+						<img src="{{user.get_profile.pic.url}}" class="img-polaroid" name = "{{user.get_profile.use_fb_pic}}" />
+						{% else %}
+						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid" width="100px"/>
+						{% endif %}
 						{% endif %}
 					</div>
 					<div class="span3" style="margin-left: 0px;padding-left: 0px">
@@ -142,39 +150,39 @@
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">First name</label>
 				<div class="controls-custom">
-					<input type="text" class="input-large" id="input01" name="title" value="{{ user.first_name }}"><span class="help-inline"></span>
+					<input id="first-name" type="text" class="input-large" id="input01" name="title" value="{{ user.first_name }}" ><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Last name</label>
 				<div class="controls-custom">
-					<input type="text" class="input-large" id="input01" name="title" value="{{ user.last_name }}"><span class="help-inline"></span>
+					<input id="last-name" type="text" class="input-large" id="input01" name="title" value="{{ user.last_name }}" ><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Email&nbsp;address</label>
 				<div class="controls-custom">
-					<input type="text" class="input-large" id="input01" name="title" value="{{ user.email }}" disabled="disabled"><span class="help-inline"></span>
+					<input id="user-email" type="text" class="input-large" id="input01" name="title" value="{{ user.email }}" disabled="disabled"><span class="help-inline"></span>
 				</div>
 			</div>
 			
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Old&nbsp;Password</label>
 				<div class="controls-custom">
-					<input type="password" class="input-large" id="input01" name="title" value="{{ user.password }}"><span class="help-inline"></span>
+					<input id="old-password" type="password" class="input-large" id="input01" name="title"  ><span class="help-inline"></span>
 				</div>
 			</div>
 				
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">New&nbsp;Password</label>
 				<div class="controls-custom">
-					<input type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
+					<input id="new-password-1" type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label-custom" for="input01">Again</label>
 				<div class="controls-custom">
-					<input type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
+					<input id="new-password-2" type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
 				</div>
 			</div>
 			
@@ -200,9 +208,11 @@
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal">Cancel</button>
-		<button class="btn btn-primary">Edit Profile</button>
+		<button id = "editProfile_btn" class="btn btn-primary">Edit Profile</button>
 	</div>
 </div>
+
+
 <!-- Edit event button-->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
