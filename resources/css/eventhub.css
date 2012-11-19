@@ -229,9 +229,10 @@ hr.footer-diag {
   background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
   background-image: -o-linear-gradient(top, #0088cc, #0044cc);
   background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0088cc', endColorstr='#0044cc',GradientType=0 );/*IE */
+
   background-repeat: repeat-x;
   border-color: #252525;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff222222', endColorstr='#ff111111', GradientType=0);
 }
 
 .navbar-inverse .brand,
