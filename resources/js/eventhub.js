@@ -195,9 +195,9 @@ function eventSearch(useKeyword) {
 
 	// Now just update the values at the top of the main page (next to the Upcoming Events)
 	if(useKeyword && keyword_values.length != 0){
-		$("#lastSearch").text(category_values.toString() + " / " + location_values.toString() + " / " + keyword_values.toString() );
+		$("#search-title").html("14 events found &nbsp;<small>\"" + keyword_values.toString() + "\"</small>");
 	} else {
-		$("#lastSearch").text(category_values.toString() + " / " + location_values.toString() );		
+		$("#search-title").html("Upcoming Events");		
 	}
 }
 

@@ -32,6 +32,11 @@ p.event-description {
 	padding-top:5px;
 	padding-left:10px;
 }
+.event-author {
+	padding: 21px 10px 0 0;
+	color: #989898;
+	font-size: 12px;
+}
 
 .list-title{
 	/*border-bottom: 1px solid #DDDDDD;*/

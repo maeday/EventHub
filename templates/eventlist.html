@@ -11,9 +11,6 @@
 		<div class="event-title">
 			<h3><a href="/event/{{ event.id }}">{{ event.name|truncatechars:35 }}</a></h3>
 		</div>
-		<p>
-		    Created by: {{ event.poster.first_name }} {{ event.poster.last_name }}
-		</p>
 		<p class="event-description">
 			{{ event.description|linebreaksbr|truncatechars:300 }}
 		</p>
@@ -22,9 +19,12 @@
 			 {{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
 			<a href="{{ event.url }}">{{ event.url|truncatechars:55 }}</a>
 		</p>
-		<p>
+		<p class="pull-left">
 			<strong>Cost/Fees</strong><br>
 			${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
+		</p>
+		<p class="pull-right event-author">
+		    Posted by <a href="#">{{ event.poster.first_name }} {{ event.poster.last_name }}</a>
 		</p>
 	</td>
 </tr>
