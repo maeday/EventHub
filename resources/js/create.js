@@ -77,6 +77,7 @@ $(document).ready(function(){
 function requestCreate() {
 	var input_title = $("#input-title").val();
 	var input_desc = $("#input-description").val();
+	var input_poster = $("#user-id").val();
 	var input_startdate = $("#input-startdate").val();
 	var input_starttime = $("#input-starttime").val();
 	var input_enddate = $("#input-enddate").val();
@@ -121,6 +122,7 @@ function requestCreate() {
 	var fd = new FormData();
 	fd.append( 'image', input_image );
 	fd.append( 'title', input_title );
+	fd.append( 'poster', input_poster );
 	fd.append( 'description', input_desc );
 	fd.append( 'start', start_str );
 	fd.append( 'end', end_str );

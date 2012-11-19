@@ -60,76 +60,26 @@
 			</div>
 			<table class="table table-hover">
 			<tbody>
+			{% if user_events %} {% for event in user_events %}
 			<tr>
 				<td>
-					<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:140px;height:90px">
+					<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:140px;height:90px">
 				</td>
 				<td>
 					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Football Game<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
+						<h4>{{ event.name }}<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
 					</div>
-					<strong>Saturday, October 13 </strong>
+					<strong>{{ event.start_date|date:"l, F j" }} </strong>
 					<p>
-						4:00 PM - 7:30 PM
+						{{ event.start_date|date:"g:i A" }}
 					</p>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Volleyball Game <button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						4:00 PM - 7:30 PM
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Volleyball Game<button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						4:00 PM - 7:30 PM
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Football Game<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						 4:00 PM - 7:30 PM<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Edit Event</button>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Volleyball Game <button class="close" rel="popover" title="Delete Event">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						 4:00 PM - 7:30 PM<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Edit Event</button>
-					</p>
-				</td>
-			</tr>
+			{% endfor %} {% else %}
+			<p>
+					No events are available.
+			</p>
+ 			{% endif %}
 			</tbody>
 			</table>
 			<p>
