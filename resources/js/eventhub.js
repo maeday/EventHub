@@ -74,6 +74,10 @@ $(document).ready(function(){
     $("#editProfile_btn").click(function() {
     	editProfile();
     });
+    
+    $("#search-btn").click(function() {
+	    eventSearch(true); 
+    });
 
 });
 
@@ -218,11 +222,7 @@ function eventSearch(useKeyword) {
 	} else {
 		$("#search-title").html("Upcoming Events");		
 	}
-<<<<<<< HEAD
-	window.scroll(0,0);
-=======
 	window.scrollTo(0,0);
->>>>>>> Added scroll effect upon search, made the search icon a button
 }
 
 function refreshEventList() {
