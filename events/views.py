@@ -35,6 +35,42 @@ def eventlist(request):
      request_context = RequestContext(request, template_context)
      
      return render_to_response(template, request_context)
+     
+def filterlist(request):
+    #month = request.POST.get('month')
+    #day = request.POST.get('day')
+    #year = request.POST.get('year')
+    #date = month+' '+day+' '+year
+    #neighborhoods = request.POST.get('locations')
+    #categories = request.POST.get('categories')
+    keywords = request.POST.get('keywords')
+    event_list = Event.objects.all()
+    #if date!=null:
+    #     date_field = datetime.strptime(date, '%b %d %Y') 
+    #	event_list = event_list.filter(start_date__lte=date_field,
+    #end_date__gte=date_field)
+    #if neighborhoods:
+    #    q = Q(neighborhood__name__exact=neighborhoods[0]) 
+    #    for neighborhood in neighborhoods[1:]:
+    #        q.add(Q(neighborhood__name__exact=neighborhood),Q.OR)
+    #    event_list = event_list.filter(q)
+    #if categories:
+    #    q = Q(categories__name=categories[0]) 
+    #    for category in categories[1:]:
+    #        q.add(Q(categories__name=category),Q.OR)
+    #    event_list = event_list.filter(q).distinct()
+    if keywords:
+        #q = Q(name__icontains=keywords[0]) 
+        for keyword in keywords:
+        #    q.add(Q(name__icontains=keyword),Q.OR)
+        #event_list = event_list.filter(q).distinct()
+            event_list = event_list.filter(name__icontains=keyword)
+        
+    template = 'eventlist.html'
+    template_context = {'latest_event_list': event_list}
+    request_context = RequestContext(request, template_context)
+    
+    return render_to_response(template, request_context)
 
 def event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
@@ -110,38 +146,17 @@ def change_event_name(request):
      else:
           return index(request)
 """
-
-def filter_events(request):
-    #month = request.POST.get('month')
-    #day = request.POST.get('day')
-    #year = request.POST.get('year')
-    #date = month+' '+day+' '+year
-    neighborhoods = request.POST.get('locations')
-    categories = request.POST.get('categories')
-    keywords = request.POST.get('keywords')
-    event_list = Event.objects.all()
-    #if date!=null:
-    #     date_field = datetime.strptime(date, '%b %d %Y') 
-    #	event_list = event_list.filter(start_date__lte=date_field,
-    #end_date__gte=date_field)
-    if neighborhoods:
-        q = Q(neighborhood__name__exact=neighborhoods[0]) 
-        for neighborhood in neighborhoods[1:]:
-            q.add(Q(neighborhood__name__exact=neighborhood),Q.OR)
-        event_list = event_list.filter(q)
-    if categories:
-        q = Q(categories__name=categories[0]) 
-        for category in categories[1:]:
-            q.add(Q(categories__name=category),Q.OR)
-        event_list = event_list.filter(q).distinct()
-    if keywords:
-        q = Q(name__icontains=keywords[0]) 
-        for keyword in keywords[1:]:
-            q.add(Q(name__icontains=keyword),Q.OR)
-        event_list = event_list.filter(q).distinct()
-    	
-    template = 'eventlist.html'
-    template_context = {'event_list': event_list}
-    request_context = RequestContext(request, template_context)
-     
-    return render_to_response(template, request_context)
+@csrf_exempt
+def search_event(request):
+    if request.POST:
+        template = 'text.html'
+        template_context = {'text': "1"}
+        request_context = RequestContext(request, template_context)
+    
+        return render_to_response(template, request_context)
+    else:
+        template = 'text.html'
+        template_context = {}
+        request_context = RequestContext(request, template_context)
+         
+        return render_to_response(template, request_context)

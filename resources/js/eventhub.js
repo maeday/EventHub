@@ -177,7 +177,7 @@ function eventSearch(useKeyword) {
 	fd.append('keywords', keyword_values);
 
 	// Now send the POST request.
-/*
+
 	// TODO: Make the search_event function (!!!) in events/views.py that
 	// can extract the data that is stored as 'categories', 'locations', and 'keywords',
 	// use the search functions, and then return the data.
@@ -187,11 +187,23 @@ function eventSearch(useKeyword) {
 		data: fd,
 		processData: false,
 		contentType: false,
-		cache: false 
+		cache: false
 	});
-*/
+
 	// TODO: Determine the values that are returned from the event controller function
 	//       search_event (for example, see create_event return values)
+	
+	request.done(function(msg) {
+		if (msg == "1") {
+			filterEventList();
+		} else {
+			alert("Could not filter");
+		}
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Ajax request failed: " + textStatus);
+	});
 
 	// Now just update the values at the top of the main page (next to the Upcoming Events)
 	if(useKeyword && keyword_values.length != 0){
@@ -208,6 +220,15 @@ function refreshEventList() {
 		$("#refresher").fadeIn(2000);
 	});
 }
+
+function filterEventList() {
+	$.get("filterlist", function(data) {
+		$("#refresher").hide();
+		$("#refresher").html(data);
+		$("#refresher").fadeIn(2000);
+	});
+}
+
 
 function disablefield() { 
     if (document.getElementById('fbPic').checked == 1){ 
