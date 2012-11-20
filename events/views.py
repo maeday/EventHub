@@ -70,6 +70,9 @@ def filterlist(request):
         for keyword in keywords_array:
             q.add(Q(name__icontains=keyword),Q.OR)
         event_list = event_list.filter(q).distinct()
+    
+    event_list = event_list.order_by('start_date').exclude(
+                 end_date__lt=datetime.now())
         
     template = 'eventlist.html'
     template_context = {'latest_event_list': event_list}
