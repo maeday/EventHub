@@ -16,6 +16,8 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 
+from events.models import Event, Categories, Neighborhoods
+
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession, User
@@ -363,12 +365,18 @@ def connect(request):
     
 def dashboard(request):
     template = 'mypage.html'
+
+    categories_list = Categories.objects.all()
+    neighborhoods_list = Neighborhoods.objects.all()     
+
     template_context = {
         'success'   : False,
         'active'    : True,
         'invalid'   : False,
         'app_id'    : settings.FACEBOOK_APP_ID,
-        'redir_uri' : settings.WEB_ROOT + '/mypage'
+        'redir_uri' : settings.WEB_ROOT + '/mypage',
+        'categories_list': categories_list,
+        'neighborhoods_list': neighborhoods_list
     }
     
     if not request.user.is_authenticated():
