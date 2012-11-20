@@ -16,8 +16,6 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 
-from events.models import Event, Categories, Neighborhoods
-
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession, User
