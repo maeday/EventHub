@@ -20,7 +20,7 @@ from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
 from accounts.models import UserProfile, FacebookSession, User
 from events.models import Event, Categories, Neighborhoods
-from datetime import datetime
+#from datetime import datetime
 
 ###############################################################################
 # Facebook signed request parser taken from:
@@ -379,7 +379,7 @@ def dashboard(request):
         elif 'error' in request.GET:
             template_context['error'] = request.GET['error']
             
-    template_context['user_events'] = Event.objects.filter(poster=request.user.id).order_by('start_date').exclude(end_date__lt=datetime.now())
+    template_context['user_events'] = Event.objects.filter(poster=request.user.id).order_by('start_date').exclude(end_date__lt=datetime.datetime.now())
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
