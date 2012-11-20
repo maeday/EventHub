@@ -1,3 +1,7 @@
+// Global variables (this is probably bad style)
+var prevSearched = false;
+var prevSearchKeywords = "";
+
 $(document).ready(function(){
 
 	// Initialize the "Last Search" area to nothing (just started)
@@ -55,6 +59,7 @@ $(document).ready(function(){
 		var keycode = (event.keyCode ? event.keyCode : event.which);
 
 		if(keycode == 13) { // Check for the 'Enter' keycode
+			prevSearched = true;
 			eventSearch(true);
 		}
 
@@ -173,7 +178,10 @@ function eventSearch(useKeyword) {
 	if(useKeyword){
 		keyword_values = $('#inputText').val().split(" ");
 		keyword_values = keyword_values.filter(String);
-	} 
+		prevSearchKeywords = keyword_values;
+	} else if (prevSearched) {
+		keyword_values = prevSearchKeywords;
+	}
 
 	// Now prepare the extracted data to send in the POST request to the event controller.
 	var fd = new FormData();
@@ -218,7 +226,7 @@ function eventSearch(useKeyword) {
 	});
 
 	// Now just update the values at the top of the main page (next to the Upcoming Events)
-	if(useKeyword && keyword_values.length != 0){
+	if((useKeyword || prevSearched) && keyword_values.length != 0){
 		$("#search-title").html("14 events found &nbsp;<small>\"" + keyword_values.toString() + "\"</small>");
 	} else {
 		$("#search-title").html("Upcoming Events");		
