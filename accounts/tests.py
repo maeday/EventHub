@@ -6,7 +6,7 @@ You can run these by running "./manage.py test accounts".
 
 from django.contrib.auth.models import User
 
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
 from django.test.client import Client
 from django.test.utils import override_settings
 
@@ -181,3 +181,63 @@ class UserRegistrationFlowTest(TestCase):
         """
         user.is_active = True
         user.save()
+
+
+
+#try:
+#    from selenium.webdriver.firefox.webdriver import WebDriver
+#except:
+#    print "You need to install Selenium WebDriver!!!"
+#
+#@override_settings(
+#   EMAIL_HOST = 'localhost',
+#   EMAIL_PORT = 1025,
+#   EMAIL_HOST_USER = '',
+#   EMAIL_HOST_PASSWORD = '',
+#   WEB_ROOT = 'http://localhost:8081',
+#   FACEBOOK_REDIRECT_URI = "http://localhost:8081/"
+#)
+#class MySeleniumTests(LiveServerTestCase):
+#    fixtures = ['user-data.json']
+#
+#    @classmethod
+#    def setUpClass(cls): 
+#        cls.selenium = WebDriver()
+#        super(MySeleniumTests, cls).setUpClass()
+#
+#    @classmethod
+#    def tearDownClass(cls):
+#        cls.selenium.quit()
+#        super(MySeleniumTests, cls).tearDownClass()
+#
+#    def test_login(self):
+#        from selenium.webdriver.support.wait import WebDriverWait
+#        import time
+#        
+#        driver = self.selenium
+#        
+#        with self.settings(WEB_ROOT='http://localhost:8081'):
+#            driver.get('%s%s' % (self.live_server_url, '/register'))
+#        
+#        timeout = 10        
+#        WebDriverWait(driver, timeout).until(
+#            lambda driver: driver.find_element_by_class_name("fb_ltr"))
+#        
+#        frame = driver.find_element_by_class_name("fb_ltr")
+#        driver.switch_to_frame(frame)
+#        
+#        firstname_input = driver.find_element_by_name("first_name")
+#        firstname_input.send_keys('Test')
+#        lastname_input = driver.find_element_by_name("last_name")
+#        lastname_input.send_keys('User')
+#        email_input = driver.find_element_by_name("email")
+#        email_input.send_keys('test@test.com')
+#        
+#        driver.find_element_by_class_name('fbRegistrationRegisterButton').click()
+#    
+#        time.sleep(4)
+#        
+#        alert = driver.switch_to_alert()
+#        alert.accept()
+#        
+#        time.sleep(5)
