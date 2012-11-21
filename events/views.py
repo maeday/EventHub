@@ -95,7 +95,6 @@ def create_event(request):
          if request.POST:
               eName = request.POST.get('title')
               eDesc = request.POST.get('description')
-              ePoster = request.POST.get('poster')
               eStartDateTimeString = request.POST.get('start')
               eEndDateTimeString = request.POST.get('end')
               eVenue = request.POST.get('venue')
@@ -115,10 +114,10 @@ def create_event(request):
               
               eCategories = eCategoriesString.split(',')
               
-              #u = request.user
+              u = request.user
               n = Neighborhoods(id=eNeighborhood)
               e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
-                        poster_id=ePoster, description=eDesc, free=False, neighborhood=n,
+                        poster=u, description=eDesc, free=False, neighborhood=n,
                         cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
                         street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
               
