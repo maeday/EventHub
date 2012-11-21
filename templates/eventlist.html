@@ -1,9 +1,7 @@
-<table class="table table-hover table-striped table-bordered">
-<tbody>
  {% if latest_event_list %} {% for event in latest_event_list %}
 <tr>
 	<td width="205">
-		<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid event-image">
+		<a href="/event/{{ event.id }}"><img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-polaroid event-image"></a>
 		<p class="event-time">
 			<strong>{{ event.start_date|date:"l, F j" }}</strong><br>
 			Starts at {{ event.start_date|date:"g:i A" }}
@@ -11,19 +9,22 @@
 	</td>
 	<td style="border-left:none;">
 		<div class="event-title">
-			<h3>{{ event.name }} <small><a href="event">&raquo; more</a></small></h3>
+			<h3><a href="/event/{{ event.id }}">{{ event.name|truncatechars:35 }}</a></h3>
 		</div>
-		<p>
-			{{ event.description }}
+		<p class="event-description">
+			{{ event.description|truncatechars:300 }}
 		</p>
 		<p>
 			<strong>{{ event.venue }}</strong><br>
 			 {{ event.street }}, {{ event.city }}, {{ event.state }} {{ event.zipcode }}<br>
-			<a href="{{ event.url }}">{{ event.url }}</a>
+			<a href="{{ event.url }}">{{ event.url|truncatechars:55 }}</a>
 		</p>
-		<p>
+		<p class="pull-left">
 			<strong>Cost/Fees</strong><br>
-			 $20 for UW students; $50 for general public
+			${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
+		</p>
+		<p class="pull-right event-author">
+		    Posted by <a href="#">{{ event.poster.first_name }} {{ event.poster.last_name }}</a>
 		</p>
 	</td>
 </tr>
@@ -32,5 +33,3 @@
 	No events are available.
 </p>
  {% endif %}
-</tbody>
-</table>

@@ -1,120 +1,136 @@
 {% include 'header.html' %}
 
 <div class="row">
-        <!-- Event Full view-->
-        <div class="span8">
-                <div class="row">
-                        <div class="span8">
-                                <div class="well well-custom">
-                                        <div class="event-title">
-                                                <h2>Washington vs. USC Football Game </h2>
-                                        </div>
-                                        <div class="row">
-                                               
-                                                        <div class="span2">
-                                                                <img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid">
-                                                        </div>
-										</div>
-										<div class="row">
-                                                        <div class="span5">
-                                                                <p style="padding-top:5px;">
-                                                                        <h3>Saturday, October 13, 2012</h3>
-                                                                        <h4>4:00 PM - 7:30 PM</h4>
-                                                                </p>
-                                                                <p>
-                                                                        Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-                                                                </p>
-                                                        </div>
-                                          
-                                        </div>
-                                        <div class="row">
-                                            
-                                                        <div class="span2" style="padding-top:15px;">
-                                                                <img src="http://maps.googleapis.com/maps/api/staticmap?center=47.595146,-122.331601&zoom=13&size=300x200&sensor=false">
-                                                        </div>
-                                                        <div class="span7" style="padding-top:15px;">
-                                                                <p>
-                                                                        <strong>CenturyLink Field</strong><br>
-                                                                         800 Occidental Avenue South, Seattle, WA<br>
-                                                                        <a href="http://www.centurylinkfield.com/">http://www.centurylinkfield.com/</a>
-                                                                </p>
-                                                                <p>
-                                                                        <strong>Cost/Fees</strong><br>
-                                                                         $20 for UW students; $50 for general public
-                                                                </p>
-                                                        </div>
-                                             
-                                        </div>
-                                        
-                                        <small><a href="index">&raquo; Back to Results</a></small>
-                                </div>
-                        </div>
-                </div>
-                <div class="row">
-                        <!--Social Stuff-->
-                        <div class="span8">
-                                <div class="well well-custom">
-                                        <div class="event-title">
-                                                <h2>Social stuff</h2>
-                                        </div>
-                                        <div class="fb-comments" data-href="http://127.0.0.1:8000/event" data-num-posts="5"></div>
-                                </div>
-                                <!-- /well-->
-                        </div>
-                        <!-- /span-->
-                </div>
+  <!-- Event Full view-->
+  <div class="span8">
+    <div class="row">
+      <div class="span8">
+        <div class="well well-custom">
+          <div class="event-title">
+            <h3>{{ event.name }}</h3>
+          </div>
+
+          <div class="row">
+              <div class="span7">
+                <p>
+                  {% if event.start_date.date == event.end_date.date %}
+                  <h5>
+                    {{ event.start_date|date:"l, F j" }}
+                    <strong class="pull-right">
+                      {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}
+                    </strong>
+                  </h5>
+                  {% else %}
+                  <h5>
+                    {{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"l, F j" }}, {{ event.end_date|date:"g:i A " }}
+                  </h5>
+                  {% endif %}
+                </p>
+                <p>
+			{{ event.description|linebreaksbr }}
+                </p>
+              </div>
+          </div>
+	<div class="row">
+	          <div class="span7">
+				<p>
+					<strong>Cost/Fees</strong><br>
+	               $20 for UW students; $50 for general public
+				   <small class="pull-right"><a href="/index">&raquo; Back to Results</a></small>
+	            </p>
+	          </div>
+  
+		<div class="row">
+	          <div class="span7" style="padding-left: 19px;">
+	            <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-polaroid">
+	          </div>
         </div>
-        <!--/span-->
-        <!--list of similar events-->
-        <div class="span4">
-                <div class="well well-custom">
-                        <div class="event-title">
-                                <h3>Similar Events</h3>
-                        </div>
-						<div class="list-title">
-                                Saturday, October 13
-                        </div>
-						<div class="list-item">
-								<div class="pull-left">
-										<img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
-								</div>
-								<div class="span2">
-										<a href="#">Washington vs. USC Football Game</a><br>
-										<small>4:00 PM - 7:30 PM</small>
-								</div>
-						</div>
-						<div class="list-item">
-								<div class="pull-left">
-										<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-list" >
-								</div>
-								<div class="span2">
-										<a href="#">Washington vs. USC Volleyball Game</a><br>
-										<small>4:00 PM - 7:30 PM</small>
-								</div>
-						</div>
-						<div class="list-title">
-                                Sunday, October 14
-                        </div>
-						
-						<div class="list-item">
-								<div class="pull-left">
-										<img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
-								</div>
-								<div class="span2">
-										<a href="#">Washington vs. USC Football Game</a><br>
-										<small>4:00 PM - 7:30 PM</small>
-								</div>
-						</div>
-				
-				
-	
-                        <p>
-                                <a href="index">More...</a>
-                        </p>
-                </div>
-                <!-- /well-->
+		  
+    </div>
+
+          
         </div>
-        <!-- /span-->
+      </div>
+    </div>
+    
+    <div class="row">
+      <!--Social Stuff-->
+      <div class="span8">
+        <div class="well well-custom">
+          <div class="event-title">
+            <h2>Social stuff</h2>
+          </div>
+          <div class="fb-comments" data-href="http://127.0.0.1:8000/event/{{ event.id }}" data-num-posts="5"></div>
+        </div>
+        <!-- /well-->
+      </div>
+      <!-- /span-->
+    </div>
+  </div>
+  <!--/span-->
+
+  <!--list of similar events-->
+  <div class="span4">
+    <div class="well well-custom">
+      <div class="event-title">
+        <h3>Similar Events</h3>
+      </div>
+      <div class="list-title">
+        <strong>Saturday, October 13</strong>
+      </div>
+      <div class="list-item">
+        <div class="pull-left">
+            <img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
+        </div>
+        <div class="span2">
+            <a href="#">Washington vs. USC Football Game</a><br>
+            <small>4:00 PM - 7:30 PM</small>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="pull-left">
+            <img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-list" >
+        </div>
+        <div class="span2">
+            <a href="#">Washington vs. USC Volleyball Game</a><br>
+            <small>4:00 PM - 7:30 PM</small>
+        </div>
+      </div>
+      <div class="list-title">
+        <strong>Sunday, October 14</strong>
+      </div>
+	  <div class="list-item">
+        <div class="pull-left">
+            <img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
+        </div>
+        <div class="span2">
+            <a href="#">Washington vs. USC Football Game</a><br>
+            <small>4:00 PM - 7:30 PM</small>
+        </div>
+	  </div>
+      <p>
+        <a href="index">More...</a>
+      </p>
+    </div>
+    <!-- /well-->
+  </div><!-- /span-->
+
+  <div class="span4">
+		<div class="well well-custom">
+				<div class="row">
+				  		<div class="location-title" style="width:250px; margin-left: 19px;">
+						        <strong>{{ event.venue }}</strong><br>
+								{{ address }}<br>
+								<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
+						</div>
+				</div>
+				<div class="row">
+						<div style="width:250px; margin-left: 19px;">
+								<a href="http://maps.google.com/maps?q={{address}}" target="blank" ><img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid"></a>
+						</div>
+				</div>
+		</div>
+  </div>
 
 </div>
 {% include "footer.html" %}

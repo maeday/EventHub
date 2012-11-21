@@ -14,16 +14,17 @@ MANAGERS = ADMINS
 PROJECT_ROOT = path.dirname(path.dirname(path.abspath(__file__)))
 WEB_ROOT = 'http://theeventhub.herokuapp.com'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+try:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+except ImportError, e:
+    pass
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '' # TODO: Determine EventHub email account and find a way to better hide info
+EMAIL_HOST_PASSWORD = ''
 
 FACEBOOK_APP_ID = '195774903890874'
 FACEBOOK_API_KEY = ''
@@ -34,6 +35,7 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.EmailBackend',
+    'accounts.backends.FacebookBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -58,7 +60,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
+USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"

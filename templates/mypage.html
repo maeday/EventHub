@@ -1,110 +1,85 @@
-{% include 'header.html' %} 
-<!--My Profile-->
+{% include 'header.html' %}
+{% include "create.html" %}
+
 <div class="row">
+	{% if error == "ALREADY_EXISTS" %}
+		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Oh snap!</strong> That Facebook account is already connected to an existing EventHub account.
+			If you would like to connect a different Facebook account, please log out of Facebook and try again.		
+		</div>
+	{% endif %}
+
+	<!--My Profile-->
 	<div class="span5">
 		<div class="well well-custom">
-			<div class="event-title">
-				<h3>My Profile</h3>
+			<div class="title">
+				<h3>My Profile<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top: 3px;" >Edit Profile</button></h3>
 			</div>
 			<div>
 				<div class="row">
 					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
-						<img src="https://graph.facebook.com/wayne.yamamoto/picture?type=normal" class="img-polaroid"/>
+					{% if user.get_profile.use_fb_pic == 1 %}
+						{% if user.get_profile.fbid != -1 %}
+						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+						{% else %}
+						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
+						{% endif %}
+					{% else %}
+						{% if user.get_profile.pic %}
+						<img src="{{user.get_profile.pic.url}}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+						{% else %}
+						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
+						{% endif %}
+					{% endif %}
 					</div>
 					<div class="span3" style="margin-left: 0px;padding-left: 0px">
 						<p>
-							<strong>First name:</strong> Wayne
+							<strong>First name:</strong> {{ user.first_name }}
 						</p>
 						<p>
-							<strong>Last name: </strong>Yamamoto
+							<strong>Last name: </strong>{{ user.last_name }}
 						</p>
 						<p>
-							<strong>Email address:</strong> yamamoto@cs.washington.edu
+							<strong>Email address:</strong> {{ user.email }}
 						</p>
-						<button class="btn btn-medium btn-primary pull-right">Edit Profile</button>
+						{% if user.get_profile.fbid == -1 %}<a href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">Connect with Facebook</a>{% endif %}
+						
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	
 	<!--My events-->
 	<div class="span7">
 		<div class="well well-custom">
-			<div class="event-title" style="padding-top:0;padding-bottom:0;">
-				<h3>My Events</h3>
+			<div>
+				<h3>My Events <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#createEvent" style="margin-top:5px;">Create Event</button></h3>
 			</div>
 			<table class="table table-hover">
 			<tbody>
+			{% if user_events %} {% for event in user_events %}
 			<tr>
 				<td>
-					<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:140px;height:90px">
+					<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:140px;height:90px">
 				</td>
 				<td>
 					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Football Game<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
+						<h4>{{ event.name }}<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
 					</div>
-					<strong>Saturday, October 13 </strong>
+					<strong>{{ event.start_date|date:"l, F j" }} </strong>
 					<p>
-						4:00 PM - 7:30 PM
+						{{ event.start_date|date:"g:i A" }}
 					</p>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Volleyball Game <button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						4:00 PM - 7:30 PM
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Volleyball Game<button class="close" rel="popover" title="Remove from My Events">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						4:00 PM - 7:30 PM
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/football.png" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Football Game<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						 4:00 PM - 7:30 PM<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Edit Event</button>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-polaroid" style="width:140px;height:90px">
-				</td>
-				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>Washington vs. USC Volleyball Game <button class="close" rel="popover" title="Delete Event">&times;</button></h4>
-					</div>
-					<strong>Saturday, October 13 </strong>
-					<p>
-						 4:00 PM - 7:30 PM<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#myModal" style="margin-top:8px;">Edit Event</button>
-					</p>
-				</td>
-			</tr>
+			{% endfor %} {% else %}
+			<p>
+					No events are available.
+			</p>
+ 			{% endif %}
 			</tbody>
 			</table>
 			<p>
@@ -113,125 +88,80 @@
 		</div>
 	</div>
 </div>
-<!-- Edit event button-->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+<!-- Edit Profile modal-->
+<div id="EditProfile" class="modal modal-profile hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3 id="myModalLabel">Edit event</h3>
+		<h3 id="myModalLabel">Edit My Profile</h3>
 	</div>
 	<div class="modal-body">
 		<div class="form-horizontal">
 			<div class="control-group">
-				<label class="control-label-custom" for="input01">Event Title</label>
+				<label class="control-label-custom" for="input01">First name</label>
 				<div class="controls-custom">
-					<input type="text" class="span5" id="input01" name="title" value="Washington vs. USC Football Game"><span class="help-inline"></span>
+					<input id="first-name" type="text" class="input-large" id="input01" name="title" value="{{ user.first_name }}" ><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label-custom" for="input02">Start</label>
-				<div class="controls-custom controls-row">
+				<label class="control-label-custom" for="input01">Last name</label>
+				<div class="controls-custom">
+					<input id="last-name" type="text" class="input-large" id="input01" name="title" value="{{ user.last_name }}" ><span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Email&nbsp;address</label>
+				<div class="controls-custom">
+					<input id="user-email" type="text" class="input-large" id="input01" name="title" value="{{ user.email }}" disabled="disabled"><span class="help-inline"></span>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Old&nbsp;Password</label>
+				<div class="controls-custom">
+					<input id="old-password" type="password" class="input-large" id="input01" name="title"  ><span class="help-inline"></span>
+				</div>
+			</div>
+				
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">New&nbsp;Password</label>
+				<div class="controls-custom">
+					<input id="new-password-1" type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input01">Again</label>
+				<div class="controls-custom">
+					<input id="new-password-2" type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
+				</div>
+			</div>
+			
+			<div class="control-group">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<label class="radio inline">
+					<input type="radio" name="picType" id="fbPic" value="fbPic" onChange="disablefield();">
+					Use Facebook Picture
+				</label>
+				<label class="radio inline">
+					<input type="radio" name="picType" id="noFbPic" value="pic" checked="checked" onChange="disablefield();" >
+					Upload picture
+				</label>
+			</div>
+			<div class="control-group">
+				<label class="control-label-custom" for="input11">Image</label>
+				<div class="controls-custom">
 					<div class="input-append">
-						<input type="text" class="input-small datepicker" id="input02" name="startdate" style="text-align:center;" autocomplete="off" value="10/13/2012"><span id="picker-1" class="add-on btn"><i class="icon-calendar"></i></span>
+						<input type="file" name="uploadPic" id="uploadPic"/>
 					</div>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<div class="input-append">
-						<input type="text" class="input-mini" id="starttime" name="starttime" style="text-align:center;" autocomplete="off" value="4:00"><span id="clockswitch-1" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
-					</div>
-					<span class="help-inline"></span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input03">Finish</label>
-				<div class="controls-custom controls-row">
-					<div class="input-append">
-						<input type="text" class="input-small datepicker" id="input03" name="enddate" style="text-align:center;" autocomplete="off" value="10/13/2012" ?>"><span id="picker-2" class="add-on btn"><i class="icon-calendar"></i></span>
-					</div>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<div class="input-append">
-						<input type="text" class="input-mini" id="endtime" name="endtime" style="text-align:center;" autocomplete="off" value="7:30"><span id="clockswitch-2" class="add-on btn" type="button">&nbsp;PM&nbsp;</span>
-					</div>
-					<span class="help-inline"></span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input04">Description</label>
-				<div class="controls-custom">
-					<textarea class="span5" id="input04" rows="5" name="description">Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula. </textarea>
-					<span class="help-inline"></span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input05">Location</label>
-				<div class="controls-custom">
-					<select>
-						<option>Downtown</option>
-						<option>Select a location</option>
-						<option>University District</option>
-						<option>Ballard</option>
-						<option>Green Lake</option>
-						<option>Northgate</option>
-					</select>
-					<span class="help-inline"></span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input06">Cost</label>
-				<div class="controls-custom">
-					<div class="input-prepend">
-						<span class="add-on">$</span><input type="text" value="$20 for UW students; $50 for general public" class="input-small" id="input06" name="cost" placeholder="0.00">
-					</div>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input07">Web URL</label>
-				<div class="controls-custom">
-					<div class="input-prepend">
-						<span class="add-on"><i class="icon-globe"></i></span><input type="text" class="input-xlarge" id="input07" name="url" value="http://www.centurylinkfield.com/">
-					</div>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input08">Categories</label>
-				<div class="controls-custom controls-row">
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Music </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Arts </label>
-					<label class="checkbox">
-					<input type="checkbox" value="" checked="checked">
-					Sports & Activities </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Festivals & Fairs </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Food </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Film </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Lectures </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Fashion </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Nightlife </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Kids & Family </label>
-					<label class="checkbox">
-					<input type="checkbox" value="">
-					Charities </label>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal">Cancel</button>
-		<button class="btn btn-primary">Edit Event</button>
+		<button id = "editProfile_btn" class="btn btn-primary">Edit Profile</button>
 	</div>
+</div>
+
+
+
 {% include "footer.html" %}

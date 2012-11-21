@@ -3,13 +3,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+try: import simplejson as json
+except ImportError: import json
+
 class UserProfile(models.Model):
     '''Class to store additional user information'''
     # Feel free to add any other fields we need
     user = models.OneToOneField(User)
     activation_key = models.CharField(max_length=40)
     key_expires = models.DateTimeField()
-    fbid = models.IntegerField(default=-1)
+    fbid = models.BigIntegerField(default=-1)
+    pic = models.ImageField(upload_to="pics/", null=True)
+    use_fb_pic = models.BooleanField(default=True)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -34,7 +39,7 @@ class FacebookSessionError(Exception):
         
 class FacebookSession(models.Model):
 
-    access_token = models.CharField(max_length=103, unique=True)
+    access_token = models.CharField(max_length=300, unique=True)
     expires = models.IntegerField(null=True)
         
     user = models.ForeignKey(User, null=True)
@@ -45,7 +50,6 @@ class FacebookSession(models.Model):
         
     def query(self, object_id, connection_type=None, metadata=False):
         import urllib
-        import simplejson
         
         url = 'https://graph.facebook.com/%s' % (object_id)
         if connection_type:
@@ -56,7 +60,7 @@ class FacebookSession(models.Model):
             params['metadata'] = 1
          
         url += '?' + urllib.urlencode(params)
-        response = simplejson.load(urllib.urlopen(url))
+        response = json.load(urllib.urlopen(url))
         if 'error' in response:
             error = response['error']
             raise FacebookSessionError(error['type'], error['message'])

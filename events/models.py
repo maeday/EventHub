@@ -4,8 +4,14 @@ from django.contrib.auth.models import User
 class Categories(models.Model):
     name=models.CharField(max_length=255)
     
+    def __unicode__(self):
+      return self.name
+    
 class Neighborhoods(models.Model):
-	name=models.CharField(max_length=255)
+    name=models.CharField(max_length=255)
+	
+    def __unicode__(self):
+      return self.name
 
 # Create your models here.
 class Event(models.Model):
@@ -29,7 +35,7 @@ class Event(models.Model):
     venue = models.CharField(max_length=100, default='')
     url=models.URLField()
     # need PIL installed for image fields to work
-    #image = models.ImageField()
+    image = models.ImageField(upload_to="images/", null=True)
 
     def __unicode__(self):
       return self.name

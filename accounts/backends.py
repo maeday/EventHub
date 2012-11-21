@@ -33,26 +33,29 @@ class FacebookBackend:
    
         try:
             # Try to get user from DB
-            user = User.objects.get(username=profile['id'])
-        except User.DoesNotExist, e:
+            profile = models.UserProfile.objects.get(fbid=profile['id'])
+            #user = User.objects.get(username=profile['id'])
+            user = profile.user
+        except models.UserProfile.DoesNotExist:
             # User does not exist, so create a new user
-            user = User(username=profile['id'])
+            #user = User(username=profile['id'])
+            return None
     
-        # Update user info (is this necessary?)
-        user.set_unusable_password()
-        user.email = profile['email']
-        user.first_name = profile['first_name']
-        user.last_name = profile['last_name']
-        user.save()
-
-        try:
-            models.FacebookSession.objects.get(uid=profile['id']).delete()
-        except models.FacebookSession.DoesNotExist, e:
-            pass
-
-        facebook_session.uid = profile['id']
-        facebook_session.user = user
-        facebook_session.save()
+#        # Update user info (is this necessary?)
+#        user.set_unusable_password()
+#        user.email = profile['email']
+#        user.first_name = profile['first_name']
+#        user.last_name = profile['last_name']
+#        user.save()
+#
+#        try:
+#            models.FacebookSession.objects.get(uid=profile['id']).delete()
+#        except models.FacebookSession.DoesNotExist, e:
+#            pass
+#
+#        facebook_session.uid = profile['id']
+#        facebook_session.user = user
+#        facebook_session.save()
    
         return user
    

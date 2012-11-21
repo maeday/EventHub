@@ -8,6 +8,12 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
+    <script type="text/javascript">
+      if (window.location.hash == '#_=_') {
+        window.location.hash = '';
+      }
+    </script>
+
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/eventhub.css" rel="stylesheet">
     <script src="{{ STATIC_URL }}js/jquery.js"></script>
@@ -46,19 +52,35 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="index"><img src="{{ STATIC_URL }}img/logo.png" style="width:103px;" alt="EventHub"></a>
+          <a class="brand" href="/index"><img src="{{ STATIC_URL }}img/logo.png" style="width:103px;" alt="EventHub"></a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-left">
               
             </p>
             <p class="navbar-text pull-right">
-              <a href="login" class="navbar-link">LOG IN</a> &nbsp; | &nbsp; <a href="register" class="navbar-link">SIGN UP</a> &nbsp; | &nbsp; <a href="mypage" class="navbar-link">MY PAGE</a>
+              {% if user.is_authenticated %}
+              <a href="/mypage" class="navbar-link">
+				{% if user.get_profile.use_fb_pic == 1 %}
+					{% if user.get_profile.fbid != -1 %}
+					<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="profile-mini" name="{{user.get_profile.use_fb_pic}}">
+					{% else %}
+					<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="profile-mini">
+					{% endif %}
+				{% else %}
+					{% if user.get_profile.pic %}
+					<img src="{{user.get_profile.pic.url}}" class="profile-mini" name="{{user.get_profile.use_fb_pic}}">
+					{% else %}
+					<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="profile-mini">
+					{% endif %}
+				{% endif %}
+              {{ user.first_name }} {{ user.last_name }}</a> &nbsp; | &nbsp; <a href="/logout" class="navbar-link">Sign Out</a> &nbsp; 
+              {% else %}
+              <a href="/login" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
+              {% endif %}
             </p>
             <ul class="nav">
             <!--
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">Menu 2</a></li>
-              <li><a href="#contact">Menu 3</a></li>
+              extra menu
             -->
             </ul>
           </div><!--/.nav-collapse -->

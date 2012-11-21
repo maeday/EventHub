@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 import base64
 import hashlib
@@ -59,56 +60,7 @@ def isAlphaNumeric(field_data):
     if not alnum_re.search(field_data):
         raise validators.ValidationError("This value must contain only letters, \
         numbers and underscores.")
-    
-class RegistrationForm(forms.Form):
-    '''Form used for user registration'''
-#    username = forms.CharField(label='Username', max_length=30,
-#                            required=True, validators=[isAlphaNumeric,
-#                                                              isValidUsername])
-    firstname = forms.CharField( max_length=60 )
-    lastname = forms.CharField( max_length=60 )
-    password1 = forms.CharField( widget=forms.PasswordInput, 
-                                 max_length=60, label="Password")
-    password2 = forms.CharField( widget=forms.PasswordInput, 
-                                 max_length=60, label="Re-enter Password")
-    # Django automatically checks to see if the email address is valid
-    email = forms.EmailField( label='Email', max_length=30, required=True, validators=[isValidEmail] )
-    fbid = forms.IntegerField( label='Facebook ID')
-    
-    # Verify that repassword matches password
-    def clean_password2(self):
-        pw1 = self.cleaned_data['password1']
-        pw2 = self.cleaned_data['password2']
-        if pw1 != pw2:
-            raise forms.ValidationError("The entered passwords do not match!")
-        # Always return the cleaned data, whether you have changed it or not.
-        return pw2
-    
-    def save(self, new_data):
-        '''Creates a new user, saves it to the database, and returns it'''
-        #u = User.objects.create_user(new_data['username'],
-        # User email as username
-        u = User.objects.create_user(new_data['email'],
-                                     new_data['email'],
-                                     new_data['password1'])
-        u.is_active = False
-        u.first_name = new_data['firstname']
-        u.last_name = new_data['lastname']
-        u.save()
-        prof = u.get_profile()
-        prof.fbid = new_data['fbid']
-        prof.save()
-        return u
 
-class FbRegistrationForm(forms.Form):
-    '''The first form used for registration (using Facebook API'''
-    
-    
-class LoginForm(forms.Form):
-    '''Form used for user login'''
-    username = forms.CharField(label='Username', max_length=30)
-    password = forms.CharField( widget=forms.PasswordInput, 
-                                max_length=60, label="Password" )
     
 ###############################################################################
 # Following code taken and modified from 
@@ -136,6 +88,9 @@ class EmailAuthenticationForm(forms.Form):
 #        super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
 
     def clean(self):
+        if not self.cleaned_data.get('email') :
+            raise forms.ValidationError(_("Please enter a valid email address."))
+        
         email = self.cleaned_data.get('email').lower()
         password = self.cleaned_data.get('password')
 
@@ -145,8 +100,8 @@ class EmailAuthenticationForm(forms.Form):
                 raise forms.ValidationError(_("Please enter a correct email address and password."))
             elif not self.user_cache.is_active:
                 # User hasn't been activated; allow login for now
-                pass
-                #raise forms.ValidationError(_("This account is inactive."))
+                #pass
+                raise forms.ValidationError(mark_safe('This account is inactive. Please check your email for the activation link. If you have lost it, or it has expired, please go <a href="/resend">here</a> to get a new link sent to your email.'))
 #        self.check_for_test_cookie()
         return self.cleaned_data
 
@@ -219,6 +174,7 @@ class EmailUserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
+        user.is_active = False
         if commit:
             user.save()
             profile = user.get_profile()
@@ -248,3 +204,30 @@ class EmailUserChangeForm(forms.ModelForm):
 
 # end code snippet
 ###############################################################################
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(label="Email address")
+    
+    def clean_email(self):
+        """ Validates that the email address exists in the database."""
+        email = self.cleaned_data["email"].lower()
+        try:
+            User.objects.get(email__iexact=email)
+            return email
+        except User.DoesNotExist:
+            raise forms.ValidationError(_("No user exists with that email address."))
+        
+    def get_user(self):
+        email = self.cleaned_data["email"].lower()
+        return User.objects.get(email__iexact=email)
+
+class ResetPasswordForm(forms.Form):
+    password1 = forms.CharField(label="New Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="New Password (again)", widget=forms.PasswordInput)
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1", "")
+        password2 = self.cleaned_data["password2"]
+        if password1 != password2:
+            raise forms.ValidationError(_("The two password fields didn't match."))
+        return password2
