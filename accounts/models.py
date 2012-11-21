@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     activation_key = models.CharField(max_length=40)
     key_expires = models.DateTimeField()
-    fbid = models.IntegerField(default=-1)
+    fbid = models.BigIntegerField(default=-1)
     pic = models.ImageField(upload_to="pics/", null=True)
     use_fb_pic = models.BooleanField(default=True)
 
@@ -39,7 +39,7 @@ class FacebookSessionError(Exception):
         
 class FacebookSession(models.Model):
 
-    access_token = models.CharField(max_length=103, unique=True)
+    access_token = models.CharField(max_length=300, unique=True)
     expires = models.IntegerField(null=True)
         
     user = models.ForeignKey(User, null=True)
