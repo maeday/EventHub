@@ -36,9 +36,16 @@ class Event(models.Model):
     url=models.URLField()
     # need PIL installed for image fields to work
     image = models.ImageField(upload_to="images/", null=True)
+    followers = models.ManyToManyField(User, related_name='fol+')
 
     def __unicode__(self):
-      return self.name
+        return self.name
+    
+    def add_follower(self, user):
+        self.followers.add(user)
+    
+    def remove_follower(self, user):
+        self.followers.remove(user)
 
 
 
