@@ -163,7 +163,11 @@ function infinite_scroll() {
 	$('#contentLoader').show();
 	if (pickle_str != "") {
 		// Get next [increment] events from filter result
-		$.post("getevents", {pickle_str: pickle_str, last_index: last_index, next_index: (last_index+increment)}, function(data){
+		var next_index = last_index+increment;
+		if (next_index > max_res) {
+			next_index = max_res;
+		}
+		$.post("getevents", {pickle_str: pickle_str, last_index: last_index, next_index: next_index}, function(data){
 			if (data != "" && data.length > 40) {
 				last_index += increment;
 				$("#refresher").append(data);
@@ -257,7 +261,11 @@ function eventSearch(useKeyword) {
 			}
 			
 			// Get first [increment] events from filter result
-			$.post("getevents", {pickle_str: pickle_str, last_index: last_index, next_index: (last_index+increment)}, function(data){
+			var next_index = last_index+increment;
+			if (next_index > max_res) {
+				next_index = max_res;
+			}
+			$.post("getevents", {pickle_str: pickle_str, last_index: last_index, next_index: next_index}, function(data){
 				if (data != "") {
 //					$("#refresher").append(data);
 					$("#refresher").html(data);

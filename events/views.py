@@ -1,4 +1,4 @@
-import cPickle
+import random
 
 from django.core.cache import cache
 
@@ -296,7 +296,11 @@ def testfilter(request):
 #        pickle_str = cPickle.dumps(event_list)
 #        event_list = SmartCachingQuerySet(event_list)
         key = "filter-" + str(datetime.now())
-        cache.set(key, event_list)
+        old_key = key
+        while not cache.add(key, event_list):
+            # Cache collision, add a random number to key
+            key = old_key + str(random.randrange(0, 10000000))
+        
         template_context = {'text': str(event_list.count()) + "," + key}
     else:
         template_context = {'text': ''}
