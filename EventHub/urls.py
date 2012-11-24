@@ -12,7 +12,7 @@ urlpatterns = patterns('django.views.generic.simple',
     url(r'^events/', include('events.urls')),
     url(r'^event$', 'direct_to_template', {'template': 'event.html'}),
     url(r'^dummy$', 'direct_to_template', {'template': 'dummy.html'}),
-    
+    url(r'^dummyfilter$', 'direct_to_template', {'template': 'events/filter-dummy.html'}),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -43,6 +43,8 @@ urlpatterns += patterns('events.views',
     url(r'^create_event$', 'create_event'),
     url(r'^event/(?P<event_id>.*)$', 'event'),
     url(r'^follow/(?P<event_id>.*)$', 'follow_event'),
+    url(r'^testfilter$', 'testfilter'),
+    url(r'^getevents$', 'get_events'),
 )
 
 urlpatterns += patterns('',

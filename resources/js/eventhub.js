@@ -1,6 +1,13 @@
+// TODO: A lot of refactoring needs to be done.
+
 // Global variables (this is probably bad style)
 var prevSearched = false;
 var prevSearchKeywords = "";
+var pickle_str = "";
+var last_index = 0;
+var max_res = 0;
+var increment = 5;
+var waitingForScroll = false;
 
 $(document).ready(function(){
 
@@ -73,7 +80,11 @@ $(document).ready(function(){
         var scrolltrigger = 0.95;
 
         if ((wintop/(docheight-winheight)) > scrolltrigger) {
-			infinite_scroll();
+			if (!waitingForScroll && last_index < max_res) {
+				waitingForScroll = true;
+				infinite_scroll();
+			}
+			
         }
     });
     
@@ -84,7 +95,9 @@ $(document).ready(function(){
     $("#search-btn").click(function() {
 	    eventSearch(true); 
     });
-
+    
+    prevSearched = true;
+	eventSearch(true);
 });
 
 function countChecked(identifier) {
@@ -148,15 +161,29 @@ function editProfile(){
 
 function infinite_scroll() {
 	$('#contentLoader').show();
-	
-	$.get("eventlist", function(data){
-		if (data != "") {
-			$("#refresher").append(data);
-		} else {
-			$('#contentLoader').empty();
-		}
-		$('#contentLoader').hide();
-	});
+	if (pickle_str != "") {
+		// Get next [increment] events from filter result
+		$.post("getevents", {pickle_str: pickle_str, last_index: last_index, next_index: (last_index+increment)}, function(data){
+			if (data != "" && data.length > 40) {
+				last_index += increment;
+				$("#refresher").append(data);
+			} else {
+				$('#contentLoader').empty();
+			}
+			$('#contentLoader').hide();
+		});
+	} else {
+		// Default behavior (load everything). Should never reach here.
+		$.get("eventlist", function(data){
+			if (data != "") {
+				$("#refresher").append(data);
+			} else {
+				$('#contentLoader').empty();
+			}
+			$('#contentLoader').hide();
+		});
+	}
+	waitingForScroll = false;
 }
 
 // Function that will extract the locations, the categories, and the keywords that will
@@ -198,7 +225,8 @@ function eventSearch(useKeyword) {
 	// can extract the data that is stored as 'categories', 'locations', and 'keywords',
 	// use the search functions, and then return the data.
 	var request = $.ajax({
-		url: "filterlist",
+		//url: "filterlist",
+		url: "testfilter",
 		type: "POST",
 		data: fd,
 		processData: false,
@@ -212,7 +240,35 @@ function eventSearch(useKeyword) {
 	request.success(function(msg) {
 		if (msg) {
 			$("#refresher").hide();
-			$("#refresher").html(msg);
+			
+			// Reply should be "[# results],[cache key]"
+			var parts = msg.split(',', 2);
+			
+			max_res = parts[0];
+			pickle_str = parts[1];
+			
+			last_index = 0;
+			
+			// Now just update the values at the top of the main page (next to the Upcoming Events)
+			if((useKeyword || prevSearched) && keyword_values.length != 0){
+				$("#search-title").html(max_res + " events found &nbsp;<small>\"" + keyword_values.toString() + "\"</small>");
+			} else {
+				$("#search-title").html("Upcoming Events");		
+			}
+			
+			// Get first [increment] events from filter result
+			$.post("getevents", {pickle_str: pickle_str, last_index: last_index, next_index: (last_index+increment)}, function(data){
+				if (data != "") {
+//					$("#refresher").append(data);
+					$("#refresher").html(data);
+					last_index += increment;
+				} else {
+//					$('#contentLoader').empty();
+				}
+//				$('#contentLoader').hide();
+			});
+			
+			//$("#refresher").html(msg);
 			$("#refresher").fadeIn(2000);
 			//filterEventList();
 		} else {
@@ -225,12 +281,7 @@ function eventSearch(useKeyword) {
 		filterEventList();
 	});
 
-	// Now just update the values at the top of the main page (next to the Upcoming Events)
-	if((useKeyword || prevSearched) && keyword_values.length != 0){
-		$("#search-title").html("14 events found &nbsp;<small>\"" + keyword_values.toString() + "\"</small>");
-	} else {
-		$("#search-title").html("Upcoming Events");		
-	}
+	// Scroll to top of page
 	window.scrollTo(0,0);
 }
 
@@ -244,10 +295,10 @@ function refreshEventList() {
 
 function disablefield() { 
     if (document.getElementById('fbPic').checked == 1){ 
-	document.getElementById('uploadPic').disabled='disabled'; 
-	document.getElementById('uploadPic').value='disabled';
+        document.getElementById('uploadPic').disabled='disabled'; 
+        document.getElementById('uploadPic').value='disabled';
     } else { 
-	document.getElementById('uploadPic').disabled=''; 
-	document.getElementById('uploadPic').value='Allowed'; 
+        document.getElementById('uploadPic').disabled=''; 
+        document.getElementById('uploadPic').value='Allowed'; 
     } 
 }
