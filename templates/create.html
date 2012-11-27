@@ -49,6 +49,7 @@
 				<label class="control-label-custom" for="input-location">Location</label>
 				<div class="controls-custom">
 					<select id="input-location">
+					<option value=-1>-- Select a Neighborhood --</option>
 					{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
 					<option value={{ neighborhood.id }}>{{ neighborhood.name }}</option>
 					{% endfor %} {% endif %}

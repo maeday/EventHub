@@ -314,6 +314,14 @@ body {
   margin-top:7px;
   margin-left:5px;
 }
+
+.sidebar-img{
+    width:250px;
+	margin-left: 19px;
+	margin-right: auto;
+	margin-top: 15px;
+}
+
 .form-bottom {
     background-color: #F5F5F5;
     border-top: 1px solid #E5E5E5;
