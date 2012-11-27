@@ -152,22 +152,24 @@ def confirm(request, activation_key):
     '''Confirm user's activation key'''
     template = 'accounts/confirm.html'
     template_context = {}
-    if request.user.is_authenticated():
-        # User is already logged on and activated
-        template_context = {'has_account': True}
+    # if request.user.is_authenticated():
+        # # User is already logged on and activated
+        # template_context = {'has_account': True}
+    # else:
+    # Trigger 404 if activation key is not valid
+    user_profile = get_object_or_404(UserProfile,
+                                     activation_key=activation_key)
+    if user_profile.key_expires < timezone.now():
+        # User's activation key has expired
+        template_context = {'expired': True}
     else:
-        # Trigger 404 if activation key is not valid
-        user_profile = get_object_or_404(UserProfile,
-                                         activation_key=activation_key)
-        if user_profile.key_expires < timezone.now():
-            # User's activation key has expired
-            template_context = {'expired': True}
-        else:
-            # Activate user
-            user_account = user_profile.user
-            user_account.is_active = True
-            user_account.save()
-            template_context = {'success': True}
+        # Activate user
+        user_account = user_profile.user
+        user_account.is_active = True
+        user_account.save()
+        user_profile.key_expires = timezone.now()
+        user_profile.save()
+        template_context = {'success': True}
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
@@ -462,8 +464,9 @@ def reset_password(request, key):
                 user.save()
                 
                 # Set key to expired state so user cannot use same link to 
-                # resetpassword
+                # reset password
                 user_profile.key_expires = timezone.now()
+                user_profile.save()
                 template_context['success'] = True
             template_context['form'] = form
             
