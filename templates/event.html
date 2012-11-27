@@ -35,7 +35,13 @@
 	          <div class="span7">
 				<p>
 				   <strong>Cost/Fees</strong><br>
-				   ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
+				   {% if event.free %}
+			       <strong>FREE EVENT</strong>
+			       {% elif event.cost_min == event.cost_max %}
+			       ${{ event.cost_min|floatformat:2 }} for all
+			       {% else %}
+			       ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
+			       {% endif %}
 				   <small class="pull-right"><a href="/index">&raquo; Back to Results</a></small>
 	            </p>
 	          </div>
