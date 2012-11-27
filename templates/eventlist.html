@@ -26,6 +26,8 @@
 			<strong>Cost/Fees</strong><br>
 			{% if event.free %}
 			<strong>FREE EVENT</strong>
+			{% elif event.cost_min == event.cost_max %}
+			${{ event.cost_min|floatformat:2 }} for all
 			{% else %}
 			${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
 			{% endif %}

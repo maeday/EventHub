@@ -107,11 +107,6 @@ function requestCreate() {
 	    return;
 	}
 	
-	if((input_cost_min=="" || input_cost_max=="") && !input_free_checked){
-		alert("Please specify cost or check 'Free'.");
-		return;
-	}
-	
 	if(input_categories_string==""){
 		alert("Please choose at least 1 category.");
 		return;
@@ -184,7 +179,7 @@ function requestCreate() {
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_url();
+	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_url();
 }
 
 function check_title() {
@@ -467,6 +462,33 @@ function check_url() {
 		$("#err-url").hide();
 		return true;
 	}
+}
+
+function check_costs() {
+    if(($("#input-cost-min").val()=="" || $("#input-cost-max").val()=="") && !$("#input-free").is(':checked')) {
+        $("#ctrl-cost").addClass("error");
+		$("#err-cost").text("Please specify cost or check 'Free'.");
+		$("#err-cost").show();
+		$("#input-cost-min").focus();
+		return false;
+	} else if((isNaN($("#input-cost-min").val()) || isNaN($("#input-cost-max").val())) ||
+	          ($("#input-cost-min").val() < 0 || $("#input-cost-max").val() < 0)) {
+	    $("#ctrl-cost").addClass("error");
+		$("#err-cost").text("Please provide positive numbers for min and max cost.");
+		$("#err-cost").show();
+		$("#input-cost-min").focus();
+		return false;
+    } else if($("#input-cost-min").val() > $("#input-cost-max").val()) {
+        $("#ctrl-cost").addClass("error");
+		$("#err-cost").text("Min cost should be less than or equal to max cost.");
+		$("#err-cost").show();
+		$("#input-cost-min").focus();
+		return false;
+    } else {
+        $("#ctrl-cost").removeClass("error");
+		$("#err-cost").hide();
+		return true;
+    }
 }
 
 function disableCosts() {
