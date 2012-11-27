@@ -65,6 +65,10 @@ $(document).ready(function(){
 	    $("#input-enddate").val($("#input-startdate").val());
     });
     
+    $("#input-free").change(function() {
+        disableCosts();
+    });
+    
     $("#publish").click(function() {
     	if (!check_all()) {
     		return false;
@@ -91,6 +95,7 @@ function requestCreate() {
 	var input_image =  document.getElementById('input-photo').files[0];
 	var input_cost_min = $("#input-cost-min").val();
 	var input_cost_max = $("#input-cost-max").val();
+	var input_free_checked = $("#input-free").is(':checked');
 	var input_location = $("#input-location").val();
 	var input_categories = $(".c-cat:checked").map(function() {
 		return $(this).val();
@@ -102,10 +107,11 @@ function requestCreate() {
 	    return;
 	}
 	
-	if(input_cost_min=="" || input_cost_max==""){
-		alert("Please specify cost.");
+	if((input_cost_min=="" || input_cost_max=="") && !input_free_checked){
+		alert("Please specify cost or check 'Free'.");
 		return;
 	}
+	
 	if(input_categories_string==""){
 		alert("Please choose at least 1 category.");
 		return;
@@ -124,6 +130,16 @@ function requestCreate() {
 	var start_str = input_startdate + " " + input_starttime + " " + start_clock;
 	var end_str = input_enddate + " " + input_endtime + " " + end_clock;
 	
+	// Pass in 0, 1 values to controller for 'free'
+	// If free, pass in non-blank dummy values for min and max cost
+	if(input_free_checked) {
+	    input_free_value = 1;
+	    input_cost_min = "0";
+	    input_cost_max = "0";
+	} else {
+	    input_free_value = 0;
+	}
+		
 	var fd = new FormData();
 	fd.append( 'image', input_image );
 	fd.append( 'title', input_title );
@@ -139,6 +155,7 @@ function requestCreate() {
 	fd.append( 'url', input_url );
 	fd.append( 'cost-min', input_cost_min );
 	fd.append( 'cost-max', input_cost_max );
+	fd.append( 'free', input_free_value );
 	fd.append( 'location', input_location );
 	fd.append( 'categories', input_categories_string );
 	
@@ -450,4 +467,16 @@ function check_url() {
 		$("#err-url").hide();
 		return true;
 	}
+}
+
+function disableCosts() {
+    if($("#input-free").is(':checked')) {
+        $("#input-cost-min").val("");
+        $("#input-cost-min").prop('disabled', true);
+        $("#input-cost-max").val("");
+        $("#input-cost-max").prop('disabled', true);
+    } else {
+        $("#input-cost-min").prop('disabled', false);
+        $("#input-cost-max").prop('disabled', false);
+    }
 }

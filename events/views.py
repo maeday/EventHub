@@ -204,6 +204,7 @@ def create_event(request):
               eUrl = request.POST.get('url')
               eMinCost = request.POST.get('cost-min')
               eMaxCost = request.POST.get('cost-max')
+              eFree = request.POST.get('free')
               eNeighborhood = request.POST.get('location')
               eCategoriesString = request.POST.get('categories')
               eimage = request.FILES.get('image')
@@ -213,10 +214,15 @@ def create_event(request):
               
               eCategories = eCategoriesString.split(',')
               
+              if eFree == "1":
+                eFreeBool = True
+              else:
+                eFreeBool = False
+              
               u = request.user
               n = Neighborhoods(id=eNeighborhood)
               e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
-                        poster=u, description=eDesc, free=False, neighborhood=n,
+                        poster=u, description=eDesc, free=eFreeBool, neighborhood=n,
                         cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
                         street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
               

@@ -24,7 +24,11 @@
 		</p>
 		<p class="pull-left">
 			<strong>Cost/Fees</strong><br>
+			{% if event.free %}
+			<strong>FREE EVENT</strong>
+			{% else %}
 			${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
+			{% endif %}
 		</p>
 		<p class="pull-right event-author">
 		    Posted by <a href="#">{{ event.poster.first_name }} {{ event.poster.last_name }}</a>
