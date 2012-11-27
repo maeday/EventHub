@@ -97,6 +97,11 @@ function requestCreate() {
 	}).get();
 	var input_categories_string = input_categories.join();
 	
+	if(input_location==-1){
+	    alert("Please select a neighborhood.");
+	    return;
+	}
+	
 	if(input_cost_min=="" || input_cost_max==""){
 		alert("Please specify cost.");
 		return;
