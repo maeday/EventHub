@@ -34,17 +34,12 @@
 	<div class="row">
 	          <div class="span7">
 				<p>
-					<strong>Cost/Fees</strong><br>
-	               $20 for UW students; $50 for general public
+				   <strong>Cost/Fees</strong><br>
+				   ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }}
 				   <small class="pull-right"><a href="/index">&raquo; Back to Results</a></small>
 	            </p>
 	          </div>
   
-		<div class="row">
-	          <div class="span7" style="padding-left: 19px;">
-	            <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-polaroid">
-	          </div>
-        </div>
 		  
     </div>
 
@@ -56,7 +51,7 @@
     <div class="row">
       <!--Social Stuff-->
       <div class="span8">
-        <div class="well well-custom">
+        <div class="well well-custom" style="min-height: 500px;">
           <div class="event-title">
             <h2>Social stuff</h2>
           </div>
@@ -69,7 +64,38 @@
   </div>
   <!--/span-->
 
-  <!--list of similar events-->
+
+{% if event.image %}
+  <div class="span4">
+		<div class="well well-custom">
+				<div class="row">
+						<div class="sidebar-img">
+								<img src="{{ event.image.url }}" class="img-polaroid">
+						</div>
+				</div>
+		</div>
+  </div>
+  {% else %}
+  {% endif %}
+    
+  <div class="span4">
+		<div class="well well-custom">
+				<div class="row">
+				  		<div class="location-title" style="width:250px; margin-left: 19px;">
+						        <strong>{{ event.venue }}</strong><br>
+								{{ address }}<br>
+								<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
+						</div>
+				</div>
+				<div class="row">
+						<div class="sidebar-img">
+								<a href="http://maps.google.com/maps?q={{address}}" target="blank" ><img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid"></a>
+						</div>
+				</div>
+		</div>
+  </div>
+
+    <!--list of similar events-->
   <div class="span4">
     <div class="well well-custom">
       <div class="event-title">
@@ -98,23 +124,6 @@
     </div>
     <!-- /well-->
   </div><!-- /span-->
-
-  <div class="span4">
-		<div class="well well-custom">
-				<div class="row">
-				  		<div class="location-title" style="width:250px; margin-left: 19px;">
-						        <strong>{{ event.venue }}</strong><br>
-								{{ address }}<br>
-								<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
-						</div>
-				</div>
-				<div class="row">
-						<div style="width:250px; margin-left: 19px;">
-								<a href="http://maps.google.com/maps?q={{address}}" target="blank" ><img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid"></a>
-						</div>
-				</div>
-		</div>
-  </div>
-
+  
 </div>
 {% include "footer.html" %}
