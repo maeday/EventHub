@@ -176,8 +176,15 @@ def event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     template = 'event.html'
     address = "%s, %s, %s %s" % (event.street, event.city, event.state, event.zipcode)
+
+    # Now we want to add additional events for the recommended events using the
+    # recommend function (can't do two POST requests)
+    recommended = recommend(event)
+
     template_context = {'event': event,
-                        'address': address}
+                        'address': address,
+                        'recommended_list': recommended}
+
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
@@ -335,3 +342,36 @@ def get_events(request):
         
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
+
+'''
+Function that finds similar events to the event that is provided (included in the
+post request arguments). Can also work like the "filterlist" functionality by providing
+the page of events that needs to be displayed (given lots of events)
+'''
+def recommend(event):
+    # TODO: Determine better recommendation algorithm than just similar 
+    #       categories/locations (suggestion would be from user following)
+
+    event_list = Event.objects.all()
+
+    # Do reverse lookup of categories and neighborhood with Q object.
+    categories = event.categories.all()
+    neighborhood = event.neighborhood.name
+
+    # Filter by neighborhood
+    q = Q(neighborhood__name__exact=neighborhood)
+    event_list = event_list.filter(q).distinct()
+
+    # Filter by categories.
+    if len(categories) > 1:
+        q = Q(categories__name__exact=categories[0])
+        for category in categories[1:]:
+            q.add(Q(categories__id__exact=category),Q.OR)
+
+    # TODO: Determine number of elements to return and how to generate them
+
+    # Now get the first n elements from the search and then return
+    event_list = event_list.exclude(name__exact=event.name).exclude(end_date__lt=datetime.now())[0:40]
+
+    return event_list
+

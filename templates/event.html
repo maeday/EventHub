@@ -75,42 +75,26 @@
       <div class="event-title">
         <h3>Similar Events</h3>
       </div>
-      <div class="list-title">
-        <strong>Saturday, October 13</strong>
-      </div>
+
+      {% if recommended_list %} {% for event in recommended_list %}
+      <div class="list-title"></div>
+
       <div class="list-item">
         <div class="pull-left">
-            <img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
+	    <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
         </div>
         <div class="span2">
-            <a href="#">Washington vs. USC Football Game</a><br>
-            <small>4:00 PM - 7:30 PM</small>
+            <a href="/event/{{ event.id }}">{{ event.name|truncatechars:50 }}</a><br>
+            <small>{{ event.start_date }} - {{ event.end_date }}</small>
         </div>
       </div>
-      <div class="list-item">
-        <div class="pull-left">
-            <img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-list" >
-        </div>
-        <div class="span2">
-            <a href="#">Washington vs. USC Volleyball Game</a><br>
-            <small>4:00 PM - 7:30 PM</small>
-        </div>
-      </div>
-      <div class="list-title">
-        <strong>Sunday, October 14</strong>
-      </div>
-	  <div class="list-item">
-        <div class="pull-left">
-            <img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
-        </div>
-        <div class="span2">
-            <a href="#">Washington vs. USC Football Game</a><br>
-            <small>4:00 PM - 7:30 PM</small>
-        </div>
-	  </div>
+
+      {% endfor %} {% else %}
       <p>
-        <a href="index">More...</a>
+         No similar events found.
       </p>
+      {% endif %}
+
     </div>
     <!-- /well-->
   </div><!-- /span-->
