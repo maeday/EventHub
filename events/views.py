@@ -381,3 +381,19 @@ def recommend(event):
 
     return event_list
 
+@csrf_exempt
+def delete_event(request):
+    if request.user.is_authenticated():
+        template = 'text.html'
+        if request.POST:
+            event_id = request.POST.get('id')
+            event = get_object_or_404(Event, id=event_id)
+            event.delete()
+        
+            template_context = {'text': "1"}
+            request_context = RequestContext(request, template_context)
+            return render_to_response(template, request_context)
+        else:
+            template_context = {}
+            request_context = RequestContext(request, template_context)
+            return render_to_response(template, request_context)

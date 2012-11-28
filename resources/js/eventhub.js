@@ -71,6 +71,10 @@ $(document).ready(function(){
 		}
 
 	});
+	
+	$('.close').click(function(event){
+		delete_event(event.target.value);
+	});
     
 	$("#login-error").fadeIn("slow"); 
 	
@@ -309,4 +313,30 @@ function disablefield() {
         document.getElementById('uploadPic').disabled=''; 
         document.getElementById('uploadPic').value='Allowed'; 
     } 
+}
+
+function delete_event(id) {
+	var fd = new FormData();
+	fd.append( 'id', id );
+
+	var request = $.ajax({
+		url: "delete_event",
+		type: "POST",
+		data: fd,
+		processData: false,
+		contentType: false,
+		cache: false
+	});
+
+	request.done(function(msg) {
+		if (msg == "1") {
+			location.reload();
+		} else {
+			alert("Could not delete event");
+		}
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Ajax request failed: " + textStatus);
+	});
 }
