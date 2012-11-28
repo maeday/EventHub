@@ -72,7 +72,7 @@ $(document).ready(function(){
 
 	});
 	
-	$('.close').click(function(event){
+	$('.delete_close').click(function(event){
 		delete_event(event.target.value);
 	});
     
@@ -98,6 +98,85 @@ $(document).ready(function(){
     
     $("#search-btn").click(function() {
 	    eventSearch(true); 
+    });
+    
+    $("#confirm_edits").click(function(event) {
+    	if (!edit_check_all()) {
+    		return false;
+    	}
+    	editEvent(event.target.value);
+    });
+    
+// BEGINNING OF CREATE.JS DOCUMENT READY
+// ONLY PUTTING THIS HERE BECAUSE I DO NOT KNOW HOW TO IMPORT A JS FILE IN A JS FILE
+// PLEASE FIX IF YOU KNOW HOW
+	$(".edit-datepicker").datepicker({ minDate:new Date() });
+		
+	$("#edit-picker-1").click(function() {
+    	$("#edit-input-startdate").focus();
+    });
+    $("#edit-picker-2").click(function() {
+    	$("#edit-input-enddate").focus();
+    });
+    
+    $("#edit-clockswitch-1").click(function() {
+    	edit_switch_clock($(this));
+    });
+    $("#edit-clockswitch-2").click(function() {
+    	edit_switch_clock($(this));
+    });
+    
+    $("#edit-input-title").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#edit-ctrl-title").removeClass("error");
+			$("#edit-err-title").hide();
+			return true;
+		}
+    });
+    
+    $("#edit-input-description").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#edit-ctrl-description").removeClass("error");
+			$("#edit-err-description").hide();
+			return true;
+		}
+    });
+    
+    $("#edit-input-venue").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#edit-ctrl-venue").removeClass("error");
+			$("#edit-err-venue").hide();
+			return true;
+		}
+    });
+    
+    $("#edit-input-street").keyup(function() {
+    	if ($(this).val() != "") {
+			$("#edit-ctrl-street").removeClass("error");
+			$("#edit-err-street").hide();
+			return true;
+		}
+    });
+    
+    $("#edit-input-startdate").blur(function() {
+	    edit_check_date($(this), $("#edit-err-start"), $("#edit-ctrl-start"));
+    });
+    $("#edit-input-starttime").blur(function() {
+	    edit_check_time($(this), $("#edit-err-start"), $("#edit-ctrl-start"));
+    });
+    $("#edit-input-enddate").blur(function() {
+	    edit_check_date($(this), $("#edit-err-end"), $("#edit-ctrl-end"));
+    });
+    $("#edit-input-endtime").blur(function() {
+	    edit_check_time($(this), $("#edit-err-end"), $("#edit-ctrl-end"));
+    });
+    
+    $("#edit-input-startdate").change(function() {
+	    $("#edit-input-enddate").val($("#edit-input-startdate").val());
+    });
+    
+    $("#edit-input-free").change(function() {
+        edit_disableCosts();
     });
     
     prevSearched = true;
@@ -339,4 +418,435 @@ function delete_event(id) {
 	request.fail(function(jqXHR, textStatus) {
 		alert("Ajax request failed: " + textStatus);
 	});
+}
+
+function editEvent(id) {
+	var input_id = id;
+	var input_title = $("#edit-input-title").val();
+	var input_desc = $("#edit-input-description").val();
+	var input_poster = $("#edit-user-id").val();
+	var input_startdate = $("#edit-input-startdate").val();
+	var input_starttime = $("#edit-input-starttime").val();
+	var input_enddate = $("#edit-input-enddate").val();
+	var input_endtime = $("#edit-input-endtime").val();
+	var input_venue = $("#edit-input-venue").val();
+	var input_street = $("#edit-input-street").val();
+	var input_city = $("#edit-input-city").val();
+	var input_state = $("#edit-input-state").val().toUpperCase();
+	var input_zip = $("#edit-input-zip").val();
+	var input_url = $("#edit-input-url").val();
+	var input_image =  document.getElementById('edit-input-photo').files[0];
+	var input_cost_min = $("#edit-input-cost-min").val();
+	var input_cost_max = $("#edit-input-cost-max").val();
+	var input_free_checked = $("#edit-input-free").is(':checked');
+	var input_location = $("#edit-input-location").val();
+	var input_categories = $(".edit-c-cat:checked").map(function() {
+		return $(this).val();
+	}).get();
+	var input_categories_string = input_categories.join();
+	
+	if(input_location==-1){
+	    alert("Please select a neighborhood.");
+	    return;
+	}
+	
+	if(input_categories_string==""){
+		alert("Please choose at least 1 category.");
+		return;
+	}
+	var start_clock = "am";
+	if ($("#edit-clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
+		start_clock = "pm";
+	}
+	
+	var end_clock = "am";
+	if ($("#edit-clockswitch-2").html() == "&nbsp;PM&nbsp;") { // if end clock is PM
+		end_clock = "pm";
+	}
+	
+	// Stringifies time variables. ex) "11/04/2012 04:15 pm"
+	var start_str = input_startdate + " " + input_starttime + " " + start_clock;
+	var end_str = input_enddate + " " + input_endtime + " " + end_clock;
+	
+	// Pass in 0, 1 values to controller for 'free'
+	// If free, pass in non-blank dummy values for min and max cost
+	if(input_free_checked) {
+	    input_free_value = 1;
+	    input_cost_min = "0";
+	    input_cost_max = "0";
+	} else {
+	    input_free_value = 0;
+	}
+		
+	var fd = new FormData();
+	fd.append( 'id', input_id );
+	fd.append( 'image', input_image );
+	fd.append( 'title', input_title );
+	fd.append( 'poster', input_poster );
+	fd.append( 'description', input_desc );
+	fd.append( 'start', start_str );
+	fd.append( 'end', end_str );
+	fd.append( 'venue', input_venue );
+	fd.append( 'street', input_street );
+	fd.append( 'city', input_city );
+	fd.append( 'state', input_state );
+	fd.append( 'zip', input_zip );
+	fd.append( 'url', input_url );
+	fd.append( 'cost-min', input_cost_min );
+	fd.append( 'cost-max', input_cost_max );
+	fd.append( 'free', input_free_value );
+	fd.append( 'location', input_location );
+	fd.append( 'categories', input_categories_string );
+	
+	var request = $.ajax({
+		url: "edit_event",
+		type: "POST",
+		data: fd,
+		processData: false,
+	    contentType: false,
+	    cache: false
+	});
+	
+	request.done(function(msg) {
+		if (msg == "1") {
+			$("#editEvent").modal('hide');
+			location.reload();
+		} else {
+			alert("Could not edit event");
+		}
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Ajax request failed: " + textStatus);
+	});
+}
+
+// BEGINNING OF CREATE.JS FUNCTIONS
+// ONLY PUTTING THIS HERE BECAUSE I DO NOT KNOW HOW TO IMPORT A JS FILE IN A JS FILE
+// PLEASE FIX IF YOU KNOW HOW
+
+// Checks for errors in the form.
+function edit_check_all() {
+	return edit_check_title() && edit_check_times_comprehensive() && edit_check_summary() && edit_check_venue() && edit_check_street() && edit_check_city() && edit_check_state() && edit_check_costs() && edit_check_url();
+}
+
+function edit_check_title() {
+	if ($("#edit-input-title").val() == "") {
+		$("#edit-ctrl-title").addClass("error");
+		$("#edit-err-title").text("You forgot the title!");
+		$("#edit-err-title").show();
+		$("#edit-input-title").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-title").removeClass("error");
+		$("#edit-err-title").hide();
+		return true;
+	}
+}
+
+function edit_check_times_comprehensive() {
+	return edit_check_date($("#edit-input-startdate"), $("#edit-err-start"), $("#edit-ctrl-start")) && edit_check_time($("#edit-input-starttime"), $("#edit-err-start"), $("#edit-ctrl-start")) && edit_check_date($("#edit-input-enddate"), $("#edit-err-end"), $("#edit-ctrl-end")) 
+		&& edit_check_time($("#edit-input-endtime"), $("#edit-err-end"), $("#edit-ctrl-end")) && edit_check_time_logic();
+}
+
+function edit_check_summary() {
+	if ($("#edit-input-description").val() == "") {
+		$("#edit-ctrl-description").addClass("error");
+		$("#edit-err-description").text("Please summarize the event.");
+		$("#edit-err-description").show();
+		$("#edit-input-description").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-description").removeClass("error");
+		$("#edit-err-description").hide();
+		return true;
+	}
+}
+
+function edit_check_date(input, err, ctrl) {
+	var str = input.val();
+	var errorMsg = edit_validate_date(str);
+	
+	err.text(errorMsg);
+	
+	if (errorMsg != "") {
+		ctrl.addClass("error");
+		err.show();
+		input.focus();
+		return false;
+	}
+	
+	err.hide();
+	ctrl.removeClass("error");
+	return true;
+}
+
+function edit_check_time(input, err, ctrl) {
+	var str = input.val();
+	var errorMsg = edit_validate_time(str);
+	
+	err.text(errorMsg);
+	
+	if (errorMsg != "") {
+		ctrl.addClass("error");
+		err.show();
+		input.focus();
+		return false;
+	}
+	
+	err.hide();
+	ctrl.removeClass("error");
+	return true;
+}
+
+// Validates date format with Regex. Returns error message or empty string if no error.
+function edit_validate_date(str) {
+	var allowBlank = false;
+	var minYear = (new Date()).getFullYear() - 10; // current year
+	var maxYear = minYear + 20;
+	
+	var errorMsg = "";
+	
+	re = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+	
+	if (str != '') {
+		if (regs = str.match(re)) {
+			if (regs[1] < 1 || regs[1] > 12) {
+				errorMsg = "Invalid month format: " + regs[1];
+			} else if (regs[2] < 1 || regs[2] > 31) {
+				errorMsg = "Invalid day format: " + regs[2];
+			} else if (regs[3] < minYear || regs[3] > maxYear) {
+				errorMsg = "Invalid year format: Date out of acceptable range";			}
+		} else {
+			errorMsg = "Invalid date format: " + str;
+		}
+	} else if (!allowBlank) {
+		errorMsg = "You forgot the date!"
+	}
+	
+	return errorMsg;
+}
+
+// Validates time format with Regex. Returns error message or empty string if no error.
+function edit_validate_time(str) {
+	var errorMsg = "";
+	
+	re = /^(\d{1,2}):(\d{2})(:00)?$/;
+	
+	if (str != '') {
+		if (regs = str.match(re)) {
+			if (regs[1] < 1 || regs[1] > 12) {
+				errorMsg = "Invalid hour format: " + regs[1];
+			}
+			if (!errorMsg && regs[2] > 59) {
+				errorMsg = "Invalid minute format: " + regs[2];
+			}
+		} else {
+			errorMsg = "Invalid time format: " + str;
+		}
+	}
+	
+	return errorMsg;
+}
+
+function edit_check_time_logic() {
+	// get start date
+	re = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+	var str = $("#edit-input-startdate").val();
+	regs = str.match(re);
+	var start_month = parseInt(regs[1], 10);
+	var start_day = parseInt(regs[2], 10);
+	var start_year = regs[3];
+	
+	// get end date
+	str = $("#edit-input-enddate").val();
+	regs = str.match(re);
+	var end_month = parseInt(regs[1], 10);
+	var end_day = parseInt(regs[2], 10);
+	var end_year = regs[3];
+	
+	// get start time
+	re = re = /^(\d{1,2}):(\d{2})(:00)?$/;
+	str = $("#edit-input-starttime").val();
+	regs = str.match(re);
+	var start_hour = parseInt(regs[1], 10);
+	var start_minute = parseInt(regs[2], 10);
+	if ($("#edit-clockswitch-1").html() == "&nbsp;PM&nbsp;" && start_hour != 12)
+		start_hour += 12;
+	if ($("#edit-clockswitch-1").html() == "&nbsp;AM&nbsp;" && start_hour == 12)
+		start_hour -= 12;
+	
+	// get end time
+	str = $("#edit-input-endtime").val();
+	regs = str.match(re);
+	var end_hour = parseInt(regs[1], 10);
+	var end_minute = parseInt(regs[2], 10);
+	if ($("#edit-clockswitch-2").html() == "&nbsp;PM&nbsp;" && end_hour != 12)
+		end_hour += 12;
+	if ($("#edit-clockswitch-2").html() == "&nbsp;AM&nbsp;" && end_hour == 12)
+		end_hour -= 12;
+	
+	var start_date = new Date(start_year, start_month - 1, start_day, start_hour, start_minute, 0, 0);
+	var end_date = new Date(end_year, end_month - 1, end_day, end_hour, end_minute, 0, 0);
+	// side note ^ : months are zero-based
+	var today = new Date();
+	today.setHours(0);
+	today.setMinutes(0);
+	today.setSeconds(0);
+	today.setMilliseconds(0);
+	
+	var errorMsg = "";
+	
+	if (start_date < today) {
+		errorMsg = "Cannot use past date";
+		$("#edit-err-start").text(errorMsg);
+		$("#edit-err-start").show();
+		$("#edit-ctrl-start").addClass("error");
+		//$("#edit-input-startdate").focus();
+		return false;
+	} else if (end_date < start_date) {
+		errorMsg = "Cannot finish before start";
+		$("#edit-err-end").text(errorMsg);
+		$("#edit-err-end").show();
+		$("#edit-ctrl-end").addClass("error");
+		$("#edit-input-endtime").focus();
+		return false;
+	} else {
+		$("#edit-err-start").hide();
+		$("#edit-ctrl-start").removeClass("error");
+		$("#edit-err-end").hide();
+		$("#edit-ctrl-end").removeClass("error");
+		return true;
+	}
+}
+
+function edit_switch_clock(btn) {
+	if (btn.html() == "&nbsp;AM&nbsp;") {
+		btn.html("&nbsp;PM&nbsp;");
+	} else {
+		btn.html("&nbsp;AM&nbsp;");
+	}
+}
+
+function edit_check_venue() {
+	if ($("#edit-input-venue").val() == "") {
+		$("#edit-ctrl-venue").addClass("error");
+		$("#edit-err-venue").text("Please specify the name of the place.");
+		$("#edit-err-venue").show();
+		$("#edit-input-venue").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-venue").removeClass("error");
+		$("#edit-err-venue").hide();
+		return true;
+	}
+}
+
+function edit_check_street() {
+	if ($("#edit-input-street").val() == "") {
+		$("#edit-ctrl-street").addClass("error");
+		$("#edit-err-street").text("Please enter street address.");
+		$("#edit-err-street").show();
+		$("#edit-input-street").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-street").removeClass("error");
+		$("#edit-err-street").hide();
+		return true;
+	}
+}
+
+function edit_check_city() {
+	if ($("#edit-input-city").val() == "") {
+		$("#edit-ctrl-city").addClass("error");
+		$("#edit-err-city").text("Please enter city.");
+		$("#edit-err-city").show();
+		$("#edit-input-city").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-city").removeClass("error");
+		$("#edit-err-city").hide();
+		return true;
+	}
+}
+
+function edit_check_state() {
+	if ($("#edit-input-state").val() == "") {
+		$("#edit-ctrl-city").addClass("error");
+		$("#edit-err-city").text("Please enter state.");
+		$("#edit-err-city").show();
+		$("#edit-input-state").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-city").removeClass("error");
+		$("#edit-err-city").hide();
+		return true;
+	}
+}
+
+function edit_check_zip() {
+	if ($("#edit-input-zip").val() == "") {
+		$("#edit-ctrl-city").addClass("error");
+		$("#edit-err-city").text("Please enter zip code.");
+		$("#edit-err-city").show();
+		$("#edit-input-zip").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-city").removeClass("error");
+		$("#edit-err-city").hide();
+		return true;
+	}
+}
+
+function edit_check_url() {
+	if ($("#edit-input-url").val() == "") {
+		$("#edit-ctrl-url").addClass("error");
+		$("#edit-err-url").text("Please enter a URL address.");
+		$("#edit-err-url").show();
+		$("#edit-input-url").focus();
+		return false;
+	} else {
+		$("#edit-ctrl-url").removeClass("error");
+		$("#edit-err-url").hide();
+		return true;
+	}
+}
+
+function edit_check_costs() {
+    if(($("#edit-input-cost-min").val()=="" || $("#edit-input-cost-max").val()=="") && !$("#edit-input-free").is(':checked')) {
+        $("#edit-ctrl-cost").addClass("error");
+		$("#edit-err-cost").text("Please specify cost or check 'Free'.");
+		$("#edit-err-cost").show();
+		$("#edit-input-cost-min").focus();
+		return false;
+	} else if((isNaN($("#edit-input-cost-min").val()) || isNaN($("#edit-input-cost-max").val())) ||
+	          ($("#edit-input-cost-min").val() < 0 || $("#edit-input-cost-max").val() < 0)) {
+	    $("#edit-ctrl-cost").addClass("error");
+		$("#edit-err-cost").text("Please provide positive numbers for min and max cost.");
+		$("#edit-err-cost").show();
+		$("#edit-input-cost-min").focus();
+		return false;
+    } else if($("#edit-input-cost-min").val() * 1.0 > $("#edit-input-cost-max").val() * 1.0) {
+        $("#edit-ctrl-cost").addClass("error");
+		$("#edit-err-cost").text("Min cost should be less than or equal to max cost.");
+		$("#edit-err-cost").show();
+		$("#edit-input-cost-min").focus();
+		return false;
+    } else {
+        $("#edit-ctrl-cost").removeClass("error");
+		$("#edit-err-cost").hide();
+		return true;
+    }
+}
+
+function edit_disableCosts() {
+    if($("#edit-input-free").is(':checked')) {
+        $("#edit-input-cost-min").val("");
+        $("#edit-input-cost-min").prop('disabled', true);
+        $("#edit-input-cost-max").val("");
+        $("#edit-input-cost-max").prop('disabled', true);
+    } else {
+        $("#edit-input-cost-min").prop('disabled', false);
+        $("#edit-input-cost-max").prop('disabled', false);
+    }
 }

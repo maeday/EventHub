@@ -46,6 +46,7 @@ urlpatterns += patterns('events.views',
     url(r'^testfilter$', 'testfilter'),
     url(r'^getevents$', 'get_events'),
     url(r'^delete_event$', 'delete_event'),
+    url(r'^edit_event$', 'edit_event'),
 )
 
 urlpatterns += patterns('',

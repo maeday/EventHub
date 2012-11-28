@@ -387,7 +387,7 @@ def dashboard(request):
         elif 'error' in request.GET:
             template_context['error'] = request.GET['error']
             
-    template_context['user_events'] = Event.objects.filter(poster=request.user.id).order_by('start_date').exclude(end_date__lt=datetime.datetime.now())
+    template_context['user_events'] = Event.objects.filter(poster=request.user.id).order_by('start_date')
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 

@@ -245,21 +245,6 @@ def create_event(request):
          
               return render_to_response(template, request_context)
 
-"""
-@csrf_exempt
-def change_event_name(request):     
-     if request.POST:
-          eid = request.POST.get('eventid')
-          e = Event.objects.get(id=eid)
-          new_name = request.POST.get('newname')
-          e.event_name = new_name
-          e.save()
-          
-          return HttpResponseRedirect(reverse('events.views.index'))
-     else:
-          return index(request)
-"""
-
 def follow_event(request, event_id):
     template_context = {}
     if request.user.is_authenticated():
@@ -396,4 +381,76 @@ def delete_event(request):
         else:
             template_context = {}
             request_context = RequestContext(request, template_context)
+            return render_to_response(template, request_context)
+
+@csrf_exempt
+def edit_event(request):
+    if request.user.is_authenticated():
+        template = 'text.html'
+        if request.POST:
+            eID = request.POST.get('id')
+            eName = request.POST.get('title')
+            eDesc = request.POST.get('description')
+            eStartDateTimeString = request.POST.get('start')
+            eEndDateTimeString = request.POST.get('end')
+            eVenue = request.POST.get('venue')
+            eStreet = request.POST.get('street')
+            eCity = request.POST.get('city')
+            eState = request.POST.get('state')
+            eZipcode = request.POST.get('zip')
+            eUrl = request.POST.get('url')
+            eMinCost = request.POST.get('cost-min')
+            eMaxCost = request.POST.get('cost-max')
+            eFree = request.POST.get('free')
+            eNeighborhood = request.POST.get('location')
+            eCategoriesString = request.POST.get('categories')
+            eimage = request.FILES.get('image')
+            
+            startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
+            endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
+            
+            eCategories = eCategoriesString.split(',')
+            
+            if eFree == "1":
+              eFreeBool = True
+            else:
+              eFreeBool = False
+            
+            n = Neighborhoods(id=eNeighborhood)
+            
+            e = get_object_or_404(Event, id=eID)
+            
+            e.name = eName;
+            e.description = eDesc;
+            e.start_date = startDateTime;
+            e.end_date = endDateTime;
+            e.last_modified = datetime.now();
+            e.free = eFreeBool;
+            e.neighborhood = n;
+            e.cost_max = eMaxCost;
+            e.cost_min = eMinCost;
+            e.venue = eVenue;
+            e.url = eUrl;
+            e.street = eStreet;
+            e.city = eCity;
+            e.state = eState;
+            e.zipcode = eZipcode;
+            e.image = eimage;
+            
+            if eCategories:
+                e.categories.clear()
+                for categoryNum in eCategories:
+                    category = Categories.objects.get(id=categoryNum)
+                    e.categories.add(category)
+                    
+            e.save()
+                    
+            template_context = {'text': "1"}
+            request_context = RequestContext(request, template_context)
+            
+            return render_to_response(template, request_context)
+        else:
+            template_context = {}
+            request_context = RequestContext(request, template_context)
+            
             return render_to_response(template, request_context)

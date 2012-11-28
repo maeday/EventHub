@@ -478,7 +478,7 @@ function check_costs() {
 		$("#err-cost").show();
 		$("#input-cost-min").focus();
 		return false;
-    } else if($("#input-cost-min").val() > $("#input-cost-max").val()) {
+    } else if($("#input-cost-min").val() * 1.0 > $("#input-cost-max").val() * 1.0) {
         $("#ctrl-cost").addClass("error");
 		$("#err-cost").text("Min cost should be less than or equal to max cost.");
 		$("#err-cost").show();
