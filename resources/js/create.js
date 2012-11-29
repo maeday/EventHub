@@ -73,12 +73,12 @@ $(document).ready(function(){
     	if (!check_all()) {
     		return false;
     	}
-    	requestCreate();
+    	requestCreate("false");
     });
     	
 });
 
-function requestCreate() {
+function requestCreate(overwrite) {
 	var input_title = $("#input-title").val();
 	var input_desc = $("#input-description").val();
 	var input_poster = $("#user-id").val();
@@ -153,6 +153,7 @@ function requestCreate() {
 	fd.append( 'free', input_free_value );
 	fd.append( 'location', input_location );
 	fd.append( 'categories', input_categories_string );
+        fd.append( 'overwrite', overwrite);
 	
 	var request = $.ajax({
 		url: "create_event",
@@ -163,12 +164,25 @@ function requestCreate() {
 	    cache: false
 	});
 	
+	// Regex that is used to determine if we get the event id (for page redirect)
+        var isInt = /^\d+$/;
+	
 	request.done(function(msg) {
-		if (msg == "1") {
+		// Basically check to see if we created the event or got an error.
+		if (String(msg).search(isInt) != -1){
 			$("#createEvent").modal('hide');
-			refreshEventList();
+			window.location = "/event/" + String(msg);
+		} else if(msg == "exists") {
+			// If the event existed, we can ask the user if they want to overwrite
+			// as it is better than denying them after entering info. 
+			var choice = confirm("Event has already been created. Overwrite previous event details with entered information?");
+
+			if (choice){
+				requestCreate("true");
+			}
 		} else {
-			alert("Could not create event");
+			// Error so just inform user of error.
+			alert("Error: Could not create event");
 		}
 	});
 	

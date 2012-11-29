@@ -109,8 +109,6 @@
       </div>
 
       {% if recommended_list %} {% for event in recommended_list %}
-      <div class="list-title"></div>
-
       <div class="list-item">
         <div class="pull-left">
 	    <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
@@ -121,6 +119,12 @@
         </div>
       </div>
 
+      <div class="list-title"></div>
+
+      {% empty %}
+      <p>
+         No similar events found.
+      </p>
       {% endfor %} {% else %}
       <p>
          No similar events found.

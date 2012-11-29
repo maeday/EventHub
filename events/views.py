@@ -16,6 +16,8 @@ from django.db.models.fields import DateTimeField
 
 from datetime import datetime
 
+from django.db import IntegrityError
+
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
@@ -192,51 +194,86 @@ def event(request, event_id):
 def create_event(request):
      if request.user.is_authenticated():
          if request.POST:
-              eName = request.POST.get('title')
-              eDesc = request.POST.get('description')
-              eStartDateTimeString = request.POST.get('start')
-              eEndDateTimeString = request.POST.get('end')
-              eVenue = request.POST.get('venue')
-              eStreet = request.POST.get('street')
-              eCity = request.POST.get('city')
-              eState = request.POST.get('state')
-              eZipcode = request.POST.get('zip')
-              eUrl = request.POST.get('url')
-              eMinCost = request.POST.get('cost-min')
-              eMaxCost = request.POST.get('cost-max')
-              eFree = request.POST.get('free')
-              eNeighborhood = request.POST.get('location')
-              eCategoriesString = request.POST.get('categories')
-              eimage = request.FILES.get('image')
+              template = "text.html"
+              template_context = {}
+
+              try:
+                  eName = request.POST.get('title')
+                  eDesc = request.POST.get('description')
+                  eStartDateTimeString = request.POST.get('start')
+                  eEndDateTimeString = request.POST.get('end')
+                  eVenue = request.POST.get('venue')
+                  eStreet = request.POST.get('street')
+                  eCity = request.POST.get('city')
+                  eState = request.POST.get('state')
+                  eZipcode = request.POST.get('zip')
+                  eUrl = request.POST.get('url')
+                  eMinCost = request.POST.get('cost-min')
+                  eMaxCost = request.POST.get('cost-max')
+                  eFree = request.POST.get('free')
+                  eNeighborhood = request.POST.get('location')
+                  eCategoriesString = request.POST.get('categories')
+                  eimage = request.FILES.get('image')
+
+                  startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
+                  endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
+
+                  if eFree == "1":
+                      eFreeBool = True
+                  else:
+                      eFreeBool = False
+
+                  u = request.user
+
+                  # Check to see if the event has already been created (search by user and by event name)
+                  # If so, we should really jsut tell the user that a similar event has been created
+                  # and that they should go edit that event rather than create a new one.
+                  overwrite = request.POST.get('overwrite')
+
+                  hasEvent = Event.objects.filter(name__iexact=eName, poster=u)
+
+                  if hasEvent:
+                      if overwrite == "false":
+                          template = 'text.html'
+                          template_context = {'text': 'exists'}
+                          request_context = RequestContext(request, template_context)
+                          return render_to_response(template, request_context)
+                      elif overwrite == "true":
+                          # TODO: Call edit event function here with the new information!!!!!
+
+                          eid = hasEvent[0].id
+
+                          template_context = {'text': eid}
+                      else:
+                          template_context = {'text': 'exception'}                          
+                          
+                  else:
+
+                      eCategories = eCategoriesString.split(',')
               
-              startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
-              endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
+                      n = Neighborhoods(id=eNeighborhood)
+                      e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
+                                poster=u, description=eDesc, free=eFreeBool, neighborhood=n,
+                                cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
+                                street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
               
-              eCategories = eCategoriesString.split(',')
-              
-              if eFree == "1":
-                eFreeBool = True
-              else:
-                eFreeBool = False
-              
-              u = request.user
-              n = Neighborhoods(id=eNeighborhood)
-              e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
-                        poster=u, description=eDesc, free=eFreeBool, neighborhood=n,
-                        cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
-                        street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
-              
-              e.save()
-              
-              if eCategories:
-                  for categoryNum in eCategories:
-                      category = Categories.objects.get(id=categoryNum)
-                      e.categories.add(category)
-              
-              template = 'text.html'
-              template_context = {'text': "1"}
-              request_context = RequestContext(request, template_context)
+                      e.save()
+
+                      if eCategories:
+                          for categoryNum in eCategories:
+                              category = Categories.objects.get(id=categoryNum)
+                              e.categories.add(category)
+
+                      # Well, we created the event so all we really need to do is to               
+                      # is just return the id so that we can redirect to the event page.
+                      eid = Event.objects.get(name__iexact=eName).id
+
+                      template_context = {'text': eid}
          
+              except (Exception, IntegrityError) as e:
+                  template_context = {'text': 'exception'}
+
+              request_context = RequestContext(request, template_context)
               return render_to_response(template, request_context)
          else:
               template = 'text.html'
@@ -340,10 +377,10 @@ post request arguments). Can also work like the "filterlist" functionality by pr
 the page of events that needs to be displayed (given lots of events)
 '''
 def recommend(event):
+    event_list = Event.objects.all()
+
     # TODO: Determine better recommendation algorithm than just similar 
     #       categories/locations (suggestion would be from user following)
-
-    event_list = Event.objects.all()
 
     # Do reverse lookup of categories and neighborhood with Q object.
     categories = event.categories.all()
@@ -351,20 +388,35 @@ def recommend(event):
 
     # Filter by neighborhood
     q = Q(neighborhood__name__exact=neighborhood)
-    event_list = event_list.filter(q).distinct()
 
     # Filter by categories.
-    if len(categories) > 1:
-        q = Q(categories__name__exact=categories[0])
-        for category in categories[1:]:
-            q.add(Q(categories__id__exact=category),Q.OR)
+    if len(categories) > 0:
+        for category in categories[0:]:
+            name = category.name
+            q.add(Q(categories__name__exact=name),Q.OR)
+
+    event_list = event_list.filter(q).distinct()
 
     # TODO: Determine number of elements to return and how to generate them
 
-    # Now get the first n elements from the search and then return
-    event_list = event_list.exclude(name__exact=event.name).exclude(end_date__lt=datetime.now())[0:40]
+    # Now get 5 random elements from the search and then return as recommended
+    event_list = event_list.exclude(name__exact=event.name).exclude(end_date__lt=datetime.now())[:100]
+    result = []
 
-    return event_list
+    if event_list:
+        list_max = len(event_list)
+        numbers = []
+
+        number = random.randint(0,list_max-1)
+
+        for i in range(0,min(5, list_max)):
+            while number in numbers:
+                number = random.randint(0,list_max-1)
+        
+            numbers.append(number)
+            result.append(event_list[number])
+    
+    return result
 
 @csrf_exempt
 def delete_event(request):
