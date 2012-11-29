@@ -36,7 +36,7 @@
 				<p>
 				   <strong>Cost/Fees</strong><br>
 				   {% if event.free %}
-			       <strong>FREE EVENT</strong>
+			       FREE
 			       {% elif event.cost_min == event.cost_max %}
 			       ${{ event.cost_min|floatformat:2 }} for all
 			       {% else %}
@@ -115,7 +115,11 @@
         </div>
         <div class="span2">
             <a href="/event/{{ event.id }}">{{ event.name|truncatechars:50 }}</a><br>
-            <small>{{ event.start_date }} - {{ event.end_date }}</small>
+			{% if event.start_date.date == event.end_date.date %}
+				<small>{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</small>
+		    {% else %}
+		            <small>{{ event.start_date }} - {{ event.end_date }}</small>
+		    {% endif %}
         </div>
       </div>
 

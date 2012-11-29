@@ -108,6 +108,14 @@ p.event-description {
   *margin-left: 0;
 }
 
+.control-label-profile {
+  float: left;
+  width: 160px;
+  padding-top: 5px;
+  padding-left: 40px;
+  text-align: left;
+}
+
 .registration-title {
 	text-align: center;
 	padding-top:10px;
@@ -120,6 +128,9 @@ p.event-description {
 	line-height: 1.1;
 	color: #555;
 	font-weight: bold;
+}
+h7{
+		color: #555;
 }
 
 .location-title{
@@ -331,7 +342,7 @@ body {
 }
 
 .modal-profile{
-   width: 520px;
+   width: 620px;
 }
 
 #refresher {
