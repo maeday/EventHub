@@ -228,27 +228,15 @@ def create_event(request):
                   # Check to see if the event has already been created (search by user and by event name)
                   # If so, we should really jsut tell the user that a similar event has been created
                   # and that they should go edit that event rather than create a new one.
-                  overwrite = request.POST.get('overwrite')
-
                   hasEvent = Event.objects.filter(name__iexact=eName, poster=u)
 
                   if hasEvent:
-                      if overwrite == "false":
                           template = 'text.html'
                           template_context = {'text': 'exists'}
                           request_context = RequestContext(request, template_context)
                           return render_to_response(template, request_context)
-                      elif overwrite == "true":
-                          # TODO: Call edit event function here with the new information!!!!!
-
-                          eid = hasEvent[0].id
-
-                          template_context = {'text': eid}
-                      else:
-                          template_context = {'text': 'exception'}                          
                           
                   else:
-
                       eCategories = eCategoriesString.split(',')
               
                       n = Neighborhoods(id=eNeighborhood)
