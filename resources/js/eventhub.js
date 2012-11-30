@@ -100,11 +100,15 @@ $(document).ready(function(){
 	    eventSearch(true); 
     });
     
+    $('.edit-event-btn').click(function(event) {
+    	$("#confirm_edits").val(event.target.value);
+    });
+    
     $("#confirm_edits").click(function(event) {
     	if (!edit_check_all()) {
     		return false;
     	}
-    	editEvent(event.target.value);
+    	editEvent($("#confirm_edits").val());
     });
     
 // BEGINNING OF CREATE.JS DOCUMENT READY
