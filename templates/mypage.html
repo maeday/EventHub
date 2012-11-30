@@ -11,14 +11,10 @@
 	{% endif %}
 
 	<!--My Profile-->
-	<div class="span5">
+	<div class="span12">
 		<div class="well well-custom">
-			<div class="title">
-				<h3>My Profile<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top: 3px;" >Edit Profile</button></h3>
-			</div>
-			<div>
 				<div class="row">
-					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
+					<div class="span2" >
 					{% if user.get_profile.use_fb_pic == 1 %}
 						{% if user.get_profile.fbid != -1 %}
 						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
@@ -33,47 +29,54 @@
 						{% endif %}
 					{% endif %}
 					</div>
-					<div class="span3" style="margin-left: 0px;padding-left: 0px">
+					<div class="span9" style="margin-left: 0px;padding-left: 0px">
+						<div class="title">
+								<h3>My Profile</h3>
+						</div>
 						<p>
-							<strong>First name:</strong> {{ user.first_name }}
+							<h4>{{ user.first_name }} {{ user.last_name }}</h4> 
 						</p>
 						<p>
-							<strong>Last name: </strong>{{ user.last_name }}
-						</p>
-						<p>
-							<strong>Email address:</strong> {{ user.email }}
+							<strong>{{ user.email }}</strong>
+							<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top:-15px;" >Edit Profile</button>
 						</p>
 						{% if user.get_profile.fbid == -1 %}<a href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">Connect with Facebook</a>{% endif %}
 						
 					</div>
 				</div>
-			</div>
+			
 		</div>
 	</div>
 	
 	
 	<!--My events-->
-	<div class="span7">
+	<div class="span6">
 		<div class="well well-custom">
 			<div>
 				<h3>My Events <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#createEvent" style="margin-top:5px;">Create Event</button></h3>
 			</div>
-			<table class="table table-hover">
+			<table class="table table-hover table-compact">
 			<tbody>
 			{% if user_events %} {% for event in user_events %}
 			<tr>
 				<td>
-					<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:140px;height:90px">
+					<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
 				</td>
 				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4><a href="/event/{{ event.id }}">{{ event.name }}</a><button class="close delete_close" rel="popover" title="Delete Event" value={{ event.id }}>&times;</button></h4>
+					<div>
+						<h4><a href="/event/{{ event.id }}">{{ event.name }}</a></h4>
 					</div>
 					<strong>{{ event.start_date|date:"l, F j" }} </strong>
 					<p>
 						{{ event.start_date|date:"g:i A" }}
+						<button class="btn btn-small btn-primary pull-right" rel="popover" title="Edit Event" type="button" data-toggle="modal" data-target="#editEvent{{ event.id }}" style="margin-top:-10px; margin-left: 3px;" >
+								<i class="icon-pencil icon-white"></i>
+						</button>
+						<button class="btn btn-small btn-primary pull-right" rel="popover" title="Delete Event" value={{ event.id }} style="margin-top: -10px;">
+								<i class="icon-trash icon-white"></i>
+						</button>
 					</p>
-					<button class="btn btn-small btn-primary pull-right" type="button" data-toggle="modal" data-target="#editEvent{{ event.id }}" style="margin-top: 3px;" >Edit Event</button>
+					
 				</td>
 			</tr>
 			<!-- Edit Event modal -->
@@ -90,6 +93,37 @@
 			</p>
 		</div>
 	</div>
+	<!-- Subscribed events -->
+		<div class="span6">
+			<div class="well well-custom">
+				<div>
+					<h3>Subscribed Events </h3>
+				</div>
+				<table class="table table-hover table-compact">
+						<tbody>
+								<tr>
+									<td>
+										<img src="{{ STATIC_URL }}photos/no-image-big.png" class="img-polaroid" style="width:100px;height:80px">
+									</td>
+									<td>
+										<div style="padding-top:0;padding-bottom:0;">
+											<h4><a href="/event/{{ event.id }}">{{ event.name }}</a></h4>
+										</div>
+										<strong>{{ event.start_date|date:"l, F j" }} </strong>
+										<p>
+											 {{ event.start_date|date:"g:i A" }}
+
+											<button class="close" rel="popover" title="Remove event from subscribed events" value={{ event.id }} style="margin-top: -10px;">
+												<i class="icon-remove"></i>
+											</button>
+										</p>
+									</td>
+								</tr>
+								<p>You have not yet subscribed to any events.</p>
+						</tbody>
+				</table>
+			</div>
+		</div>
 </div>
 
 <!-- Edit Profile modal-->
