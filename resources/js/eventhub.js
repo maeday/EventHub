@@ -184,8 +184,22 @@ $(document).ready(function(){
         edit_disableCosts();
     });
     
+    $("#follow").click(function() {
+      if ($(this).hasClass('btn-primary')) {
+        followEvent($("#event-id").html());
+        $(this).removeClass('btn-primary');
+        $(this).addClass('btn-inverse');
+        $(this).html('Unfollow');
+      } else {
+        unfollowEvent($("#event-id").html());
+        $(this).removeClass('btn-inverse');
+        $(this).addClass('btn-primary');
+        $(this).html('Follow');
+      }
+    });
+    
     prevSearched = true;
-	eventSearch(true);
+    eventSearch(true);
 });
 
 function countChecked(identifier) {
@@ -276,6 +290,14 @@ function infinite_scroll() {
 		});
 	}
 	waitingForScroll = false;
+}
+
+function followEvent(eventId) {
+  $.get("/follow/"+eventId);
+}
+
+function unfollowEvent(eventId) {
+  $.get("/unfollow/"+eventId);
 }
 
 // Function that will extract the locations, the categories, and the keywords that will
