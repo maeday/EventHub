@@ -102,6 +102,7 @@ $(document).ready(function(){
     
     $('.edit-event-btn').click(function(event) {
     	$("#confirm_edits").val(event.target.value);
+    	populate_fields(event.target.value);
     });
     
     $("#confirm_edits").click(function(event) {
@@ -518,6 +519,32 @@ function editEvent(id) {
 		} else {
 			alert("Could not edit event");
 		}
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Ajax request failed: " + textStatus);
+	});
+}
+
+function jDecode(str) {
+    return $("<div/>").html(str).text();
+}
+
+function populate_fields(event_id) {
+	var fd = new FormData();
+	fd.append( 'id', event_id );
+		
+	var request = $.ajax({
+		url: "get_event_info",
+		type: "POST",
+		data: fd,
+		processData: false,
+	    contentType: false,
+	    cache: false
+	});
+	
+	request.done(function(msg) {
+		$("#edit-input-title").val(jDecode(msg));
 	});
 	
 	request.fail(function(jqXHR, textStatus) {

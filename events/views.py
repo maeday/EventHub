@@ -494,3 +494,23 @@ def edit_event(request):
             request_context = RequestContext(request, template_context)
             
             return render_to_response(template, request_context)
+
+@csrf_exempt
+def get_event_info(request):
+    template = 'text.html'
+    if request.POST:
+        eID = request.POST.get('id')
+        
+        e = get_object_or_404(Event, id=eID)
+        
+        eName = e.name;
+        
+        template_context = {'text': eName}
+        request_context = RequestContext(request, template_context)
+        
+        return render_to_response(template, request_context)
+    else:
+        template_context = {}
+        request_context = RequestContext(request, template_context)
+        
+        return render_to_response(template, request_context)
