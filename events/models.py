@@ -46,6 +46,9 @@ class Event(models.Model):
     
     def remove_follower(self, user):
         self.followers.remove(user)
+        
+    def user_is_follower(self, user):
+        return user in self.followers.all()
 
 
 
