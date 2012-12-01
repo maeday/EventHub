@@ -18,8 +18,7 @@ from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
-from accounts.models import UserProfile, FacebookSession, User
-from events.models import Event, Categories, Neighborhoods
+from accounts.models import UserProfile, FacebookSession
 #from datetime import datetime
 
 ###############################################################################
@@ -362,34 +361,6 @@ def connect(request):
         return redirect('/mypage?error='+error, permanent=True)
     else:
         return redirect('/login')
-    
-def dashboard(request):
-    template = 'mypage.html'
-
-    categories_list = Categories.objects.all()
-    neighborhoods_list = Neighborhoods.objects.all()     
-
-    template_context = {
-        'success'   : False,
-        'active'    : True,
-        'invalid'   : False,
-        'app_id'    : settings.FACEBOOK_APP_ID,
-        'redir_uri' : settings.WEB_ROOT + '/mypage',
-        'categories_list': categories_list,
-        'neighborhoods_list': neighborhoods_list
-    }
-    
-    if not request.user.is_authenticated():
-        return redirect('/login')
-    if request.GET:
-        if 'code' in request.GET:
-            return connect(request)
-        elif 'error' in request.GET:
-            template_context['error'] = request.GET['error']
-            
-    template_context['user_events'] = Event.objects.filter(poster=request.user.id).order_by('start_date')
-    request_context = RequestContext(request, template_context)
-    return render_to_response(template, request_context)
 
 def forgot_password(request):
     template = 'accounts/forgot.html'

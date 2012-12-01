@@ -28,10 +28,13 @@ urlpatterns += patterns('accounts.views',
     url(r'^loginfb$', 'login_facebook'),
     #url(r'^connect$', 'connect'),
     url(r'^confirm/(?P<activation_key>.*)$', 'confirm'),
-    url(r'^mypage$', 'dashboard'),
     url(r'^forgot$', 'forgot_password'),
     url(r'^reset/(?P<key>.*)$', 'reset_password'),
     url(r'^edit_profile$', 'edit_profile'),
+)
+
+urlpatterns += patterns('profiles.views',
+    url(r'^mypage$', 'dashboard'),
 )
 
 urlpatterns += patterns('events.views',
