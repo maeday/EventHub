@@ -18,7 +18,7 @@ class Event(models.Model):
     start_date = models.DateTimeField() 
     end_date = models.DateTimeField()
     name = models.CharField(max_length=100)
-    poster = models.ForeignKey(User)
+    poster = models.ForeignKey(User, related_name='events_posted')
     post_date = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     description = models.TextField() 
@@ -36,7 +36,7 @@ class Event(models.Model):
     url=models.URLField()
     # need PIL installed for image fields to work
     image = models.ImageField(upload_to="images/", null=True)
-    followers = models.ManyToManyField(User, related_name='fol+')
+    followers = models.ManyToManyField(User, related_name='events_following')
 
     def __unicode__(self):
         return self.name
@@ -46,6 +46,9 @@ class Event(models.Model):
     
     def remove_follower(self, user):
         self.followers.remove(user)
+        
+    def user_is_follower(self, user):
+        return user in self.followers.all()
 
 
 

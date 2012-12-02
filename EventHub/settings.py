@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     'django_localflavor_us',
     'accounts',
     'events',
+    'profiles',
     'south',
 )
 

@@ -100,11 +100,16 @@ $(document).ready(function(){
 	    eventSearch(true); 
     });
     
+    $('.edit-event-btn').click(function(event) {
+    	$("#confirm_edits").val(event.target.value);
+    	populate_fields(event.target.value);
+    });
+    
     $("#confirm_edits").click(function(event) {
     	if (!edit_check_all()) {
     		return false;
     	}
-    	editEvent(event.target.value);
+    	editEvent($("#confirm_edits").val());
     });
     
 // BEGINNING OF CREATE.JS DOCUMENT READY
@@ -179,8 +184,22 @@ $(document).ready(function(){
         edit_disableCosts();
     });
     
+    $("#follow").click(function() {
+      if ($(this).hasClass('btn-primary')) {
+        followEvent($("#event-id").html());
+        $(this).removeClass('btn-primary');
+        $(this).addClass('btn-inverse');
+        $(this).html('Unfollow');
+      } else {
+        unfollowEvent($("#event-id").html());
+        $(this).removeClass('btn-inverse');
+        $(this).addClass('btn-primary');
+        $(this).html('Follow');
+      }
+    });
+    
     prevSearched = true;
-	eventSearch(true);
+    eventSearch(true);
 });
 
 function countChecked(identifier) {
@@ -271,6 +290,14 @@ function infinite_scroll() {
 		});
 	}
 	waitingForScroll = false;
+}
+
+function followEvent(eventId) {
+  $.get("/follow/"+eventId);
+}
+
+function unfollowEvent(eventId) {
+  $.get("/unfollow/"+eventId);
 }
 
 // Function that will extract the locations, the categories, and the keywords that will
@@ -514,6 +541,32 @@ function editEvent(id) {
 		} else {
 			alert("Could not edit event");
 		}
+	});
+	
+	request.fail(function(jqXHR, textStatus) {
+		alert("Ajax request failed: " + textStatus);
+	});
+}
+
+function jDecode(str) {
+    return $("<div/>").html(str).text();
+}
+
+function populate_fields(event_id) {
+	var fd = new FormData();
+	fd.append( 'id', event_id );
+		
+	var request = $.ajax({
+		url: "get_event_info",
+		type: "POST",
+		data: fd,
+		processData: false,
+	    contentType: false,
+	    cache: false
+	});
+	
+	request.done(function(msg) {
+		$("#edit-input-title").val(jDecode(msg));
 	});
 	
 	request.fail(function(jqXHR, textStatus) {

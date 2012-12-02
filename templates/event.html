@@ -7,11 +7,22 @@
       <div class="span8">
         <div class="well well-custom">
           <div class="event-title">
-            <h3>{{ event.name }}</h3>
+            <h3>
+              {{ event.name }}
+              {% if user.is_authenticated %}
+                {# The follow/unfollow button will only show up if the user is logged in #}
+                {% if subscribed %}
+                  <button id="follow" class="btn btn-medium btn-inverse pull-right" type="button" style="margin-top:3px;" >Unfollow</button>
+                {% else %}
+                  <button id="follow" class="btn btn-medium btn-primary pull-right" type="button" style="margin-top:3px;" >Follow</button>
+                {% endif %}
+              {% endif %}
+            </h3>
           </div>
 
           <div class="row">
               <div class="span7">
+                <span id="event-id" style="display:none;">{{ event.id }}</span>
                 <p>
                   {% if event.start_date.date == event.end_date.date %}
                   <h5>

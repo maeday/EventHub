@@ -76,16 +76,18 @@
 								<i class="icon-trash icon-white"></i>
 						</button>
 					</p>
-					
+
+					<button class="btn btn-small btn-primary pull-right edit-event-btn" type="button" data-toggle="modal" data-target="#editEvent" style="margin-top: 3px;" value={{ event.id }}>Edit Event</button>
+
 				</td>
 			</tr>
-			<!-- Edit Event modal -->
-            {% include "edit.html" %}
 			{% endfor %} {% else %}
 			<p>
 					No events are available.
 			</p>
  			{% endif %}
+ 			<!-- Edit Event modal -->
+            {% include "edit.html" %}
 			</tbody>
 			</table>
 			<p>
