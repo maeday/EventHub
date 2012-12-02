@@ -103,9 +103,11 @@
 				</div>
 				<table class="table table-hover table-compact">
 						<tbody>
+              {% if subscribed_events %}
+                {% for event in subscribed_events %}
 								<tr>
 									<td>
-										<img src="{{ STATIC_URL }}photos/no-image-big.png" class="img-polaroid" style="width:100px;height:80px">
+                    <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
 									</td>
 									<td>
 										<div style="padding-top:0;padding-bottom:0;">
@@ -121,7 +123,10 @@
 										</p>
 									</td>
 								</tr>
+                {% endfor %}
+              {% else %}
 								<p>You have not yet subscribed to any events.</p>
+              {% endif %}
 						</tbody>
 				</table>
 			</div>
