@@ -45,7 +45,7 @@
 					<span id="err-description" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
-			<div class="control-group">
+			<div id="ctrl-location" class="control-group">
 				<label class="control-label-custom" for="input-location">Location</label>
 				<div class="controls-custom">
 					<select id="input-location">
@@ -54,7 +54,7 @@
 					<option value={{ neighborhood.id }}>{{ neighborhood.name }}</option>
 					{% endfor %} {% endif %}
 					</select>
-					<span class="help-inline"></span>
+					<span id="err-location" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 			<div id="ctrl-venue" class="control-group">
@@ -91,7 +91,7 @@
 					<label class="checkbox">
 					<input id="input-free" type="checkbox">
 					Free </label>
-					<span id="err-cost" class="help-block" style="display:none;padding-top:10px;"></span>
+					<span id="err-cost" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 			<div id="ctrl-url" class="control-group">
@@ -111,6 +111,7 @@
 					<input class="c-cat" type="checkbox" value={{ category.id }}>
 					{{ category.name }} </label>
 					{% endfor %} {% endif %}
+					<span id="err-categories" class="help-block" style="display:none;padding-top:5px;"></span>
 				</div>
 			</div>
 			<div id="ctrl-image" class="control-group">

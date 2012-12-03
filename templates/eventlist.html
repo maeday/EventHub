@@ -14,7 +14,7 @@
 		<p class="event-description">
 			{{ event.description|truncatechars:300 }}
 			{% if event.description|length >= 300 %}
-			(<a href="/event/{{ event.id }}">see more</a>)
+			&nbsp;<a href="/event/{{ event.id }}">See more</a>
 			{% endif %}
 		</p>
 		<p>
@@ -25,7 +25,7 @@
 		<p class="pull-left">
 			<strong>Cost/Fees</strong><br>
 			{% if event.free %}
-			FREE
+			Free
 			{% elif event.cost_min == event.cost_max %}
 			${{ event.cost_min|floatformat:2 }} for all
 			{% else %}
@@ -38,7 +38,9 @@
 	</td>
 </tr>
  {% endfor %} {% else %}
-<p>
-	No events are available.
-</p>
+<tr>
+	<td>
+		No events are available.
+	</td>
+</tr>
  {% endif %}

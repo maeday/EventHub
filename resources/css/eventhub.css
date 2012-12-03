@@ -115,6 +115,18 @@ p.event-description {
   padding-left: 40px;
   text-align: left;
 }
+.control-label-text {
+  padding-top: 20px;
+  padding-left: 40px;
+  text-align: left;
+}
+.control-label-upload {
+  float: left;
+  padding-top: 5px;
+  padding-left: 40px;
+  padding-right: 20px;
+  text-align: left;
+}
 
 .registration-title {
 	text-align: center;
@@ -129,8 +141,8 @@ p.event-description {
 	color: #555;
 	font-weight: bold;
 }
-h7{
-		color: #555;
+.email-text {
+	color: #555;
 }
 
 .location-title{
@@ -321,16 +333,14 @@ body {
 
 .event-image {
   width:190px;
-  height:130px;
   margin-top:7px;
   margin-left:5px;
 }
 
 .sidebar-img{
     width:250px;
-	margin-left: 19px;
-	margin-right: auto;
 	margin-top: 15px;
+	text-align: center;
 }
 
 .form-bottom {
@@ -362,6 +372,6 @@ body {
 
 .profile-medium {
 	width: 100px;
-	margin:0 2px 4px 0;
+	margin:18px 0px -5px 3px;
 	border: 1px solid #f2f2f2;
 }

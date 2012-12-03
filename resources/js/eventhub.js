@@ -100,9 +100,9 @@ $(document).ready(function(){
 	    eventSearch(true); 
     });
     
-    $('.edit-event-btn').click(function(event) {
-    	$("#confirm_edits").val(event.target.value);
-    	populate_fields(event.target.value);
+    $('.edit-event-btn').click(function() {
+    	$("#confirm_edits").val($(this).val());
+    	populate_fields($(this).val());
     });
     
     $("#confirm_edits").click(function(event) {
