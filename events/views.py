@@ -21,6 +21,13 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
+import string
+import random
+BUCKET_NAME = 'eventhub'
+AWS_ACCESS_KEY_ID = 'AKIAI7TBNHIRFWVNNCYQ'
+AWS_SECRET_ACCESS_KEY = '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'
+
+
 # Code from http://jeffelmore.org/2010/09/25/smarter-caching-of-django-querysets/
 class SmartCachingQuerySet(QuerySet):
     """
