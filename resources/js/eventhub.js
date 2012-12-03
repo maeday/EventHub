@@ -215,7 +215,7 @@ function editProfile() {
 	var newPassword2 = document.getElementById("new-password-2").value;
 	var userEmail = $.trim(document.getElementById("user-email").value);
 	var useFbPic = document.getElementById("fbPic").checked;
-	var userPic = document.getElementById('uploadPic').files[0];
+	var userPic = document.getElementById("uploadPic").files[0];
 	if(newPassword1.length>0){
 		if(newPassword1.length<6){
 		 alert("Password should be at least 6 characters!");
@@ -226,7 +226,6 @@ function editProfile() {
 			return;
 		}
   }
-	
 	var fd = new FormData();
 	fd.append( 'firstName', firstName );
 	fd.append( 'lastName', lastName );
