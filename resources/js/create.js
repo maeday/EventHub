@@ -55,6 +55,13 @@ $(document).ready(function(){
 			return true;
 		}
     });
+
+	$('.c-cat').change(function(event){
+		if ($(this).is(':checked')) {
+			$("#ctrl-categories").removeClass("error");
+			$("#err-categories").hide();
+		}
+	});
     
     $("#input-startdate").blur(function() {
 	    check_date($(this), $("#err-start"), $("#ctrl-start"));
@@ -110,10 +117,6 @@ function requestCreate() {
 	}).get();
 	var input_categories_string = input_categories.join();
 	
-	if(input_categories_string==""){
-		alert("Please choose at least 1 category.");
-		return;
-	}
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
 		start_clock = "pm";
@@ -200,7 +203,7 @@ function requestCreate() {
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_location() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_url();
+	return check_title() && check_times_comprehensive() && check_summary() && check_location() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_url() && check_categories();
 }
 
 function check_title() {
@@ -495,6 +498,19 @@ function check_url() {
 	} else {
 		$("#ctrl-url").removeClass("error");
 		$("#err-url").hide();
+		return true;
+	}
+}
+
+function check_categories() {
+	if ($(".c-cat:checked").map(function() { return $(this).val(); }).get() == "") {
+		$("#ctrl-categories").addClass("error");
+		$("#err-categories").text("Please select at least one category.");
+		$("#err-categories").show();
+		return false;
+	} else {
+		$("#ctrl-categories").removeClass("error");
+		$("#err-categories").hide();
 		return true;
 	}
 }
