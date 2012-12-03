@@ -32,6 +32,14 @@ $(document).ready(function(){
 		}
     });
     
+    $("#input-location").change(function() {
+    	if ($(this).val() != -1) {
+			$("#ctrl-location").removeClass("error");
+			$("#err-location").hide();
+			return true;
+		}
+    });
+    
     $("#input-venue").keyup(function() {
     	if ($(this).val() != "") {
 			$("#ctrl-venue").removeClass("error");
@@ -101,11 +109,6 @@ function requestCreate() {
 		return $(this).val();
 	}).get();
 	var input_categories_string = input_categories.join();
-	
-	if(input_location==-1){
-	    alert("Please select a neighborhood.");
-	    return;
-	}
 	
 	if(input_categories_string==""){
 		alert("Please choose at least 1 category.");
@@ -197,7 +200,7 @@ function requestCreate() {
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_url();
+	return check_title() && check_times_comprehensive() && check_summary() && check_location() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_url();
 }
 
 function check_title() {
@@ -229,6 +232,20 @@ function check_summary() {
 	} else {
 		$("#ctrl-description").removeClass("error");
 		$("#err-description").hide();
+		return true;
+	}
+}
+
+function check_location() {
+	if ($("#input-location").val() == -1) {
+		$("#ctrl-location").addClass("error");
+		$("#err-location").text("Please select a neighborhood.");
+		$("#err-location").show();
+		$("#input-location").focus();
+	    return false;
+	} else {
+		$("#ctrl-location").removeClass("error");
+		$("#err-location").hide();
 		return true;
 	}
 }
@@ -485,20 +502,20 @@ function check_url() {
 function check_costs() {
     if(($("#input-cost-min").val()=="" || $("#input-cost-max").val()=="") && !$("#input-free").is(':checked')) {
         $("#ctrl-cost").addClass("error");
-		$("#err-cost").text("Please specify cost or check 'Free'.");
+		$("#err-cost").text("Please specify how much the event costs.");
 		$("#err-cost").show();
 		$("#input-cost-min").focus();
 		return false;
 	} else if((isNaN($("#input-cost-min").val()) || isNaN($("#input-cost-max").val())) ||
 	          ($("#input-cost-min").val() < 0 || $("#input-cost-max").val() < 0)) {
 	    $("#ctrl-cost").addClass("error");
-		$("#err-cost").text("Please provide positive numbers for min and max cost.");
+		$("#err-cost").text("Negative numbers cannot be used.");
 		$("#err-cost").show();
 		$("#input-cost-min").focus();
 		return false;
     } else if($("#input-cost-min").val() * 1.0 > $("#input-cost-max").val() * 1.0) {
         $("#ctrl-cost").addClass("error");
-		$("#err-cost").text("Min cost should be less than or equal to max cost.");
+		$("#err-cost").text("Minimum cost cannot be larger than maximum.");
 		$("#err-cost").show();
 		$("#input-cost-min").focus();
 		return false;
