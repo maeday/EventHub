@@ -207,7 +207,7 @@ function countChecked(identifier) {
 }
 
 
-function editProfile(){
+function editProfile() {
 	var firstName = $.trim(document.getElementById("first-name").value);
 	var lastName = $.trim(document.getElementById("last-name").value);
 	var oldPassword = document.getElementById("old-password").value;
@@ -215,7 +215,7 @@ function editProfile(){
 	var newPassword2 = document.getElementById("new-password-2").value;
 	var userEmail = $.trim(document.getElementById("user-email").value);
 	var useFbPic = document.getElementById("fbPic").checked;
-	var userPic = document.getElementById('uploadPic').files[0]
+	var userPic = document.getElementById('uploadPic').files[0];
 	if(newPassword1.length>0){
 		if(newPassword1.length<6){
 		 alert("Password should be at least 6 characters!");
