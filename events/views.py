@@ -21,6 +21,13 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
+import string
+import random
+BUCKET_NAME = 'eventhub'
+AWS_ACCESS_KEY_ID = 'AKIAI7TBNHIRFWVNNCYQ'
+AWS_SECRET_ACCESS_KEY = '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'
+
+
 # Code from http://jeffelmore.org/2010/09/25/smarter-caching-of-django-querysets/
 class SmartCachingQuerySet(QuerySet):
     """
@@ -215,6 +222,8 @@ def create_event(request):
                   eNeighborhood = request.POST.get('location')
                   eCategoriesString = request.POST.get('categories')
                   eimage = request.FILES.get('image')
+                  
+                  eimageUrl = storeToAmazonS3(eimage)
 
                   startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
                   endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -232,8 +241,8 @@ def create_event(request):
                   hasEvent = Event.objects.filter(name__iexact=eName, poster=u)
 
                   if hasEvent:
-                          template = 'text.html'
-                          template_context = {'text': 'exists'}
+                          eid = Event.objects.get(name__iexact=eName).id
+                          template_context = {'text': 'exists,' + str(eid)}
                           request_context = RequestContext(request, template_context)
                           return render_to_response(template, request_context)
                           
@@ -244,7 +253,7 @@ def create_event(request):
                       e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                                 poster=u, description=eDesc, free=eFreeBool, neighborhood=n,
                                 cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
-                                street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
+                                street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image_url=eimageUrl)
               
                       e.save()
 
@@ -258,8 +267,9 @@ def create_event(request):
                       eid = Event.objects.get(name__iexact=eName).id
 
                       template_context = {'text': eid}
-         
+
               except (Exception, IntegrityError) as e:
+                  template = 'text.html'
                   template_context = {'text': 'exception'}
 
               request_context = RequestContext(request, template_context)
@@ -441,6 +451,7 @@ def edit_event(request):
     if request.user.is_authenticated():
         template = 'text.html'
         if request.POST:
+
             eID = request.POST.get('id')
             eName = request.POST.get('title')
             eDesc = request.POST.get('description')
@@ -459,6 +470,8 @@ def edit_event(request):
             eCategoriesString = request.POST.get('categories')
             eimage = request.FILES.get('image')
             
+            eimageUrl = storeToAmazonS3(eimage)
+
             startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
             endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
             
@@ -470,8 +483,9 @@ def edit_event(request):
               eFreeBool = False
             
             n = Neighborhoods(id=eNeighborhood)
-            
+
             e = get_object_or_404(Event, id=eID)
+            
             
             e.name = eName;
             e.description = eDesc;
@@ -488,8 +502,9 @@ def edit_event(request):
             e.city = eCity;
             e.state = eState;
             e.zipcode = eZipcode;
-            e.image = eimage;
-            
+            e.image_url = eimageUrl;
+            print '##########################'+e.image_url
+
             if eCategories:
                 e.categories.clear()
                 for categoryNum in eCategories:
@@ -527,3 +542,20 @@ def get_event_info(request):
         request_context = RequestContext(request, template_context)
         
         return render_to_response(template, request_context)
+        
+def storeToAmazonS3(fileObject):
+    if fileObject==None:
+        return None
+    import boto
+    s3 = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+    bucket = s3.get_bucket(BUCKET_NAME)
+    random_string = id_generator(20)
+    newFileName = random_string+fileObject.name
+    key = bucket.new_key(newFileName)
+    key.set_contents_from_string(fileObject.read())
+    key.set_acl('public-read')
+    return 'http://s3.amazonaws.com/'+BUCKET_NAME+'/'+newFileName
+    
+def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
+

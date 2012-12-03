@@ -198,12 +198,16 @@ def user_login(request):
         return redirect('/mypage')
     else:
         form = EmailAuthenticationForm
+        prev = request.GET.get('next', '/mypage')
         if request.POST:
             form = EmailAuthenticationForm(request.POST)
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)
-                return redirect('/mypage')
+                if(prev != '/' and prev != '/index' and prev != '/mypage'):
+                    return redirect(prev)
+                else:
+                    return redirect('/mypage')
         template_context['form'] = form
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)

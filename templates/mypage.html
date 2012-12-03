@@ -59,7 +59,7 @@
 			{% if user_events %} {% for event in user_events reversed %}
 			<tr>
 				<td>
-					<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
+					<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
 				</td>
 				<td>
 					<div>
@@ -69,13 +69,10 @@
 					<p>
 						{{ event.start_date|date:"g:i A" }}
 						
-					<button class="btn btn-small btn-primary pull-right edit-event-btn" type="button" data-toggle="modal" rel="popover" title="Edit Event" data-target="#editEvent" style="margin-top:-10px; margin-left: 3px;" value={{ event.id }}>
-						<i class="icon-pencil icon-white"></i>
-					</button>
-						<!--<button class="btn btn-small btn-primary pull-right edit-event-btn" rel="popover" title="Edit Event" type="button" data-toggle="modal" data-target="#editEvent" value={{ event.id }} style="margin-top:-10px; margin-left: 3px;" >
+					    <button class="btn btn-small btn-primary pull-right edit-event-btn" type="button" data-toggle="modal" rel="popover" title="Edit Event" data-target="#editEvent" style="margin-top:-10px; margin-left: 3px;" value={{ event.id }}>
 								<i class="icon-pencil icon-white"></i>
-						</button>-->
-						<button class="btn btn-small btn-primary pull-right" rel="popover" title="Delete Event" value={{ event.id }} style="margin-top: -10px;">
+					    </button>
+						<button class="btn btn-small btn-primary pull-right delete_close" rel="popover" title="Delete Event" value={{ event.id }} style="margin-top: -10px;">
 								<i class="icon-trash icon-white"></i>
 						</button>
 					</p>
@@ -157,7 +154,7 @@
 						</div>
 				</div>
 				<div class="control-label-text">
-					Email address: &nbsp;<span class="email-text">{{ user.email }}</span>
+					Email address: &nbsp;<span class="email-text" id="user-email">{{ user.email }}</span>
 				</div>
 		    </div>
 

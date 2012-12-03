@@ -248,7 +248,7 @@ function requestCreate() {
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_location() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_url() && check_categories();
+	return check_title() && check_times_comprehensive() && check_summary() && check_location() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_categories();
 }
 
 function check_title() {

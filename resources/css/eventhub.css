@@ -351,6 +351,13 @@ body {
     padding: 13px 19px 0;
 }
 
+.registration-centered {
+	text-align: center;
+	padding-top:10px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
 .modal-profile{
    width: 620px;
 }
@@ -374,4 +381,9 @@ body {
 	width: 100px;
 	margin:18px 0px -5px 3px;
 	border: 1px solid #f2f2f2;
+}
+
+.form-horizontal legend {
+	line-height: 15px;
+	padding-bottom: 10px;
 }
