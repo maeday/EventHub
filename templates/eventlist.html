@@ -14,7 +14,7 @@
 		<p class="event-description">
 			{{ event.description|truncatechars:300 }}
 			{% if event.description|length >= 300 %}
-			(<a href="/event/{{ event.id }}">see more</a>)
+			&nbsp;<a href="/event/{{ event.id }}">See more</a>
 			{% endif %}
 		</p>
 		<p>
