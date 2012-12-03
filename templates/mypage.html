@@ -144,16 +144,22 @@
 		    <legend><small>Personal</small></legend>
 			<div class="control-group">
 				<div class="row">
-						<label class="control-label-custom " for="input01">First name</label>
-						<div class="controls-custom controls-row">
-							<input id="first-name" type="text" class="input-small" id="input01" name="title" value="{{ user.first_name }}" >
-						    Last name&nbsp;&nbsp;&nbsp;<input id="last-name" type="text" class="input-medium" id="input01" name="title" value="{{ user.last_name }}" >
+						<label class="control-label-custom" for="input01">First name</label>
+						<div class="controls-custom">
+							<input id="first-name" type="text" class="input-medium" id="input01" name="title" value="{{ user.first_name }}">
+						</div>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="row">
+						<label class="control-label-custom" for="input02">Last name</label>
+						<div class="controls-custom">
+							<input id="last-name" type="text" class="input-medium" id="input02" name="title" value="{{ user.last_name }}">
 						</div>
 				</div>
 				<div class="control-label-text">
-					Email address: <span class="email-text">{{ user.email }}</span>
+					Email address: &nbsp;<span class="email-text">{{ user.email }}</span>
 				</div>
-
 		    </div>
 
     		<div class="control-group">
@@ -161,38 +167,36 @@
 				<label class="radio inline">
 					<input type="radio" name="picType" id="fbPic" value="fbPic" onChange="disablefield();">
 					Use Facebook Picture
-				</label>
+				</label>&nbsp;&nbsp;
 				<label class="radio inline">
 					<input type="radio" name="picType" id="noFbPic" value="pic" checked="checked" onChange="disablefield();" >
 					Upload picture
 				</label>
 			</div>
 			<div class="control-group">
-				<label class="control-label-profile" style="width:90px;" for="input11">Image</label>
-				<div class="controls-custom">
-					<div class="input-append">
-						<input type="file" name="uploadPic" id="uploadPic"/>
-					</div>
+				<label class="control-label-upload">Image</label>
+				<div>
+					<input type="file" name="uploadPic" id="uploadPic">
 				</div>
 			</div>
 
 			
 			<div class="control-group">
 				 <legend><small>Change Password</small></legend>
-				<label class="control-label-profile" for="input01">Current&nbsp;Password</label>
+				<label class="control-label-profile" for="input01">Current Password</label>
 				<div class="controls-custom">
 					<input id="old-password" type="password" class="input-medium" id="input01" name="title"  ><span class="help-inline"></span>
 				</div>
 			</div>
 				
 			<div class="control-group">
-				<label class="control-label-profile" for="input01">New&nbsp;Password</label>
+				<label class="control-label-profile" for="input01">New Password</label>
 				<div class="controls-custom">
 					<input id="new-password-1" type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label-profile" for="input01">Confirm&nbsp;new&nbsp;password</label>
+				<label class="control-label-profile" for="input01">Repeat Password</label>
 				<div class="controls-custom">
 					<input id="new-password-2" type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
 				</div>
