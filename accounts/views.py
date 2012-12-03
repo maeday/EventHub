@@ -5,6 +5,7 @@ except ImportError: import json
 
 from EventHub import settings
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
@@ -17,7 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
-    ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid
+    ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid, \
+    ERROR_MSG_INCORRECT_USERPASS, ERROR_MSG_USER_INACTIVE
 from accounts.models import UserProfile, FacebookSession
 #from datetime import datetime
 
@@ -59,6 +61,10 @@ def parse_signed_request(signed_request, secret):
 @csrf_exempt
 @never_cache
 def register(request):
+#    success_msg = "You have successfully registered for an EventHub account!\
+#            Please check your email for your activation link so you can start using our site."
+#    messages.add_message(request, messages.SUCCESS, success_msg)
+#    return redirect('/login')
     '''Handle user registration request'''
     template = 'accounts/register-1.html'
     template_context = {
@@ -140,7 +146,10 @@ def register(request):
                           [email])
                 
                 # Redirect to 'My Page' after successful registration
-                return redirect('/login?register=success')
+                success_msg = "You have successfully registered for an EventHub account!\
+                    Please check your email for your activation link so you can start using our site."
+                messages.add_message(request, messages.SUCCESS, success_msg)
+                return redirect('/login')
             else:
                 template_context['extra'] = form.errors
         
@@ -173,6 +182,7 @@ def confirm(request, activation_key):
     return render_to_response(template, request_context)
 
 def user_login(request):
+#    messages.add_message(request, messages.INFO, 'Hello world.')
     '''Allow user to log in'''
     template = 'accounts/login.html'
     template_context = {
@@ -187,6 +197,7 @@ def user_login(request):
         # User is already logged in; redirect to 'My Page'
         return redirect('/mypage')
     else:
+        form = EmailAuthenticationForm
         prev = request.GET.get('next', '/mypage')
         if request.POST:
             form = EmailAuthenticationForm(request.POST)
@@ -197,17 +208,7 @@ def user_login(request):
                     return redirect(prev)
                 else:
                     return redirect('/mypage')
-            else:
-                # Username/password combo incorrect
-#                template_context['extra'] = form.errors
-                template_context['form'] = form
-                template_context['problem'] = form.non_field_errors
-                template_context['invalid'] = True
-        elif request.GET:
-            if 'register' in request.GET:
-                template_context['register'] = request.GET['register']
-            elif 'error' in request.GET:
-                template_context['error'] = request.GET['error']
+        template_context['form'] = form
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
@@ -219,7 +220,6 @@ def user_logout(request):
     
 def login_facebook(request):
     '''Allow user to log in through Facebook'''
-    error = None
 
     if request.user.is_authenticated():
         return HttpResponseRedirect('/mypage')
@@ -240,8 +240,8 @@ def login_facebook(request):
             response = cgi.parse_qs(urllib.urlopen(url).read())
             
             if not response:
-                # TODO: Handle this in template
-                error = 'AUTH_ERROR'
+                msg = "We could not connect to Facebook."
+                messages.add_message(request, messages.ERROR, msg)
             
             else:
                 access_token = response['access_token'][0]
@@ -260,15 +260,15 @@ def login_facebook(request):
                         login(request, user)
                         return HttpResponseRedirect('/mypage')
                     else:
-                        error = 'AUTH_DISABLED'
+                        messages.add_message(request, messages.ERROR, ERROR_MSG_USER_INACTIVE, extra_tags='safe')
                 else:
-                    error = 'AUTH_FAILED'
+                    msg = "We could not find any user associated with this Facebook account!"
+                    messages.add_message(request, messages.ERROR, msg)
         elif 'error_reason' in request.GET:
-            error = 'AUTH_DENIED'
+            msg = "You are not logged in to Facebook!"
+            messages.add_message(request, messages.ERROR, msg)
 
-    template_context = {'settings': settings, 'error': error}
-    return redirect('/login?error='+error, permanent=True)
-    #return render_to_response('accounts/login.html', template_context, context_instance=RequestContext(request))
+    return redirect('/login', permanent=True)
 
 @csrf_exempt
 def connect(request):
@@ -442,7 +442,10 @@ def reset_password(request, key):
                 # reset password
                 user_profile.key_expires = timezone.now()
                 user_profile.save()
-                template_context['success'] = True
+                success_msg = "Congratulations! Your password has been reset. You can now sign in with your new password."
+                messages.add_message(request, messages.SUCCESS, success_msg)
+                return redirect('/login')
+#                template_context['success'] = True
             template_context['form'] = form
             
     request_context = RequestContext(request, template_context)
