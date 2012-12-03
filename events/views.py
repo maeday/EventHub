@@ -222,6 +222,8 @@ def create_event(request):
                   eNeighborhood = request.POST.get('location')
                   eCategoriesString = request.POST.get('categories')
                   eimage = request.FILES.get('image')
+                  
+                  eimageUrl = storeToAmazonS3(eimage)
 
                   startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
                   endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -251,7 +253,7 @@ def create_event(request):
                       e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                                 poster=u, description=eDesc, free=eFreeBool, neighborhood=n,
                                 cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
-                                street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
+                                street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image_url=eimageUrl)
               
                       e.save()
 
@@ -484,6 +486,7 @@ def edit_event(request):
 
             e = get_object_or_404(Event, id=eID)
             
+            
             e.name = eName;
             e.description = eDesc;
             e.start_date = startDateTime;
@@ -500,7 +503,7 @@ def edit_event(request):
             e.state = eState;
             e.zipcode = eZipcode;
             e.image_url = eimageUrl;
-            
+            print '##########################'+e.image_url
 
             if eCategories:
                 e.categories.clear()
