@@ -96,7 +96,7 @@
 					 {% if recommended_list %} {% for event in recommended_list %}
 					<div class="list-item">
 						<div class="pull-left">
-							<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
+							<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
 						</div>
 						<div class="span2">
 							<strong><a href="/event/{{ event.id }}">{{ event.name|truncatechars:50 }}</a><br>
