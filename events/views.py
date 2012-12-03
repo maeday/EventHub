@@ -549,8 +549,10 @@ def storeToAmazonS3(fileObject):
     import boto
     s3 = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
     bucket = s3.get_bucket(BUCKET_NAME)
-    random_string = id_generator(30)
-    newFileName = random_string
+    random_string = id_generator(35)
+    import os.path
+    extension = os.path.splitext(fileObject.name)[1]
+    newFileName = random_string+extension
     key = bucket.new_key(newFileName)
     key.set_contents_from_string(fileObject.read())
     key.set_acl('public-read')
