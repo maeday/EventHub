@@ -166,11 +166,15 @@ function requestCreate() {
 	// Regex that is used to determine if we get the event id (for page redirect)
         var isInt = /^\d+$/;
 	
-	request.done(function(msg) {
+	// Function that is run if the Ajax call from the server was a success.
+	request.done(function(result) {
+		var parts = result.split(",");
+		var msg = parts[0];
+
 		// Basically check to see if we created the event or got an error.
 		if (String(msg).search(isInt) != -1){
 			$("#createEvent").modal('hide');
-			window.location = "/event/" + String(msg);
+			window.location = '/event/' + String(msg);
 		} else if(msg == "exists") {
 			// If the event existed, we can ask the user if they want to overwrite
 			// as it is better than denying them after entering info. 
@@ -179,9 +183,49 @@ function requestCreate() {
 			if (choice){
 				// Overwrite so just call edit event function
 
-				// TODO: Call edit event function in JS file or using Ajax request.
-				// For now, just alert that we edited event and close event editing window.
-				alert("Edited event!");
+				var fd = new FormData();
+				fd.append( 'image', input_image );
+				fd.append( 'title', input_title );
+				fd.append( 'poster', input_poster );
+				fd.append( 'description', input_desc );
+				fd.append( 'start', start_str );
+				fd.append( 'end', end_str );
+				fd.append( 'venue', input_venue );
+				fd.append( 'street', input_street );
+				fd.append( 'city', input_city );
+				fd.append( 'state', input_state );
+				fd.append( 'zip', input_zip );
+				fd.append( 'url', input_url );
+				fd.append( 'cost-min', input_cost_min );
+				fd.append( 'cost-max', input_cost_max );
+				fd.append( 'free', input_free_value );
+				fd.append( 'location', input_location );
+				fd.append( 'categories', input_categories_string );
+				var temp = parseInt(parts[1]);
+				fd.append('id', temp);
+
+				var erequest = $.ajax({
+					url: "edit_event",
+					type: "POST",
+					data: fd,
+					processData: false,
+				    contentType: false,
+				    cache: false
+				});
+	
+				erequest.done(function(msg) {
+					if (msg == "1") {
+						$("#editEvent").modal('hide');
+						location.reload();
+					} else {
+						alert("Could not edit event");
+					}
+				});
+	
+				erequest.fail(function(jqXHR, textStatus) {
+					alert("Ajax request failed: " + textStatus);
+				});
+
 				$("#createEvent").modal('hide');
 			}
 		} else {
@@ -190,6 +234,7 @@ function requestCreate() {
 		}
 	});
 	
+	// Ajax call that occurs when there is an unexpected error from the server.
 	request.fail(function(jqXHR, textStatus) {
 		alert("Ajax request failed: " + textStatus);
 	});
