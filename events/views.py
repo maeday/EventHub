@@ -232,8 +232,8 @@ def create_event(request):
                   hasEvent = Event.objects.filter(name__iexact=eName, poster=u)
 
                   if hasEvent:
-                          template = 'text.html'
-                          template_context = {'text': 'exists'}
+                          eid = Event.objects.get(name__iexact=eName).id
+                          template_context = {'text': 'exists,' + str(eid)}
                           request_context = RequestContext(request, template_context)
                           return render_to_response(template, request_context)
                           
@@ -258,8 +258,9 @@ def create_event(request):
                       eid = Event.objects.get(name__iexact=eName).id
 
                       template_context = {'text': eid}
-         
+
               except (Exception, IntegrityError) as e:
+                  template = 'text.html'
                   template_context = {'text': 'exception'}
 
               request_context = RequestContext(request, template_context)
@@ -441,6 +442,7 @@ def edit_event(request):
     if request.user.is_authenticated():
         template = 'text.html'
         if request.POST:
+
             eID = request.POST.get('id')
             eName = request.POST.get('title')
             eDesc = request.POST.get('description')
@@ -458,7 +460,7 @@ def edit_event(request):
             eNeighborhood = request.POST.get('location')
             eCategoriesString = request.POST.get('categories')
             eimage = request.FILES.get('image')
-            
+
             startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
             endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
             
@@ -470,7 +472,7 @@ def edit_event(request):
               eFreeBool = False
             
             n = Neighborhoods(id=eNeighborhood)
-            
+
             e = get_object_or_404(Event, id=eID)
             
             e.name = eName;
@@ -489,7 +491,7 @@ def edit_event(request):
             e.state = eState;
             e.zipcode = eZipcode;
             e.image = eimage;
-            
+
             if eCategories:
                 e.categories.clear()
                 for categoryNum in eCategories:

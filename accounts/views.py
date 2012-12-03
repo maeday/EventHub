@@ -187,12 +187,16 @@ def user_login(request):
         # User is already logged in; redirect to 'My Page'
         return redirect('/mypage')
     else:
+        prev = request.GET.get('next', '/mypage')
         if request.POST:
             form = EmailAuthenticationForm(request.POST)
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)
-                return redirect('/mypage')
+                if(prev != '/' and prev != '/index' and prev != '/mypage'):
+                    return redirect(prev)
+                else:
+                    return redirect('/mypage')
             else:
                 # Username/password combo incorrect
 #                template_context['extra'] = form.errors
