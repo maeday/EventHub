@@ -31,7 +31,8 @@
 					</div>
 					<div class="span9" style="margin-left: 0px;padding-left: 0px">
 						<div class="title">
-								<h3>My Profile</h3>
+							{% if user.get_profile.fbid == -1 %}<a class="pull-right" href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test"><small>Connect with Facebook</small></a>{% endif %}
+							<h3>My Profile</h3>
 						</div>
 						<p>
 							<h4>{{ user.first_name }} {{ user.last_name }}</h4> 
@@ -40,8 +41,6 @@
 							<strong>{{ user.email }}</strong>
 							<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top:-15px;" >Edit Profile</button>
 						</p>
-						{% if user.get_profile.fbid == -1 %}<a href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">Connect with Facebook</a>{% endif %}
-						
 					</div>
 				</div>
 			
