@@ -1,0 +1,186 @@
+{% include 'header.html' %}
+
+<div class="row">
+	<!--My Profile-->
+	<div class="span12">
+		<div class="well well-custom">
+				<div class="row">
+					<div class="span2" >
+					{% if user.get_profile.use_fb_pic == 1 %}
+						{% if user.get_profile.fbid != -1 %}
+						<img src="https://graph.facebook.com/{{ p_user.get_profile.fbid }}/picture?type=normal" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+						{% else %}
+						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
+						{% endif %}
+					{% else %}
+						{% if user.get_profile.pic %}
+						<img src="{{ p_user.get_profile.pic.url }}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+						{% else %}
+						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
+						{% endif %}
+					{% endif %}
+					</div>
+					<div class="span9" style="margin-left: 0px;padding-left: 0px">
+						<div class="title">
+							<h3>{{ p_user.first_name }} {{ p_user.last_name }}</h3>
+						</div>
+						<p>
+							<strong>{{ p_user.email }}</strong>
+						</p>
+					</div>
+				</div>
+			
+		</div>
+	</div>
+	
+	
+	<!--My events-->
+	<div class="span6">
+		<div class="well well-custom">
+			<div>
+				<h3>Posted Events</h3>
+			</div>
+			<table class="table table-hover table-compact">
+			<tbody>
+			{% if user_events %} {% for event in user_events reversed %}
+			<tr>
+				<td>
+					<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
+				</td>
+				<td>
+					<div>
+						<h4><a href="/event/{{ event.id }}">{{ event.name }}</a></h4>
+					</div>
+					<strong>{{ event.start_date|date:"l, F j" }} </strong>
+					<p>
+						{{ event.start_date|date:"g:i A" }}
+					</p>
+
+
+				</td>
+			</tr>
+			{% endfor %} {% else %}
+			<p>
+				{{ p_user.first_name }} {{ p_user.last_name }} has not created any events.
+			</p>
+ 			{% endif %}
+ 			<!-- Edit Event modal -->
+            {% include "edit.html" %}
+			</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- Subscribed events -->
+		<div class="span6">
+			<div class="well well-custom">
+				<div>
+					<h3>Following Events</h3>
+				</div>
+				<table class="table table-hover table-compact">
+						<tbody>
+              {% if subscribed_events %}
+                {% for event in subscribed_events %}
+								<tr>
+									<td>
+                    <img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
+									</td>
+									<td>
+										<div style="padding-top:0;padding-bottom:0;">
+											<h4><a href="/event/{{ event.id }}">{{ event.name }}</a></h4>
+										</div>
+										<strong>{{ event.start_date|date:"l, F j" }} </strong>
+										<p>
+											 {{ event.start_date|date:"g:i A" }}
+										</p>
+									</td>
+								</tr>
+                {% endfor %}
+              {% else %}
+								<p>{{ p_user.first_name }} {{ p_user.last_name }} is not following any events.</p>
+              {% endif %}
+						</tbody>
+				</table>
+			</div>
+		</div>
+</div>
+
+<!-- Edit Profile modal-->
+<div id="EditProfile" class="modal modal-profile hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 id="myModalLabel">Edit my Profile</h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+		    <legend><small>Personal</small></legend>
+			<div class="control-group">
+				<div class="row">
+						<label class="control-label-custom" for="input01">First name</label>
+						<div class="controls-custom">
+							<input id="first-name" type="text" class="input-medium" id="input01" name="title" value="{{ user.first_name }}">
+						</div>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="row">
+						<label class="control-label-custom" for="input02">Last name</label>
+						<div class="controls-custom">
+							<input id="last-name" type="text" class="input-medium" id="input02" name="title" value="{{ user.last_name }}">
+						</div>
+				</div>
+				<div class="control-label-text">
+					Email address: &nbsp;<span class="email-text" id="user-email">{{ user.email }}</span>
+				</div>
+		    </div>
+
+    		<div class="control-group">
+				<legend><small>Profile Picture</small></legend>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<label class="radio inline">
+					<input type="radio" name="picType" id="fbPic" value="fbPic" onChange="disablefield();">
+					Use Facebook Picture
+				</label>&nbsp;&nbsp;
+				<label class="radio inline">
+					<input type="radio" name="picType" id="noFbPic" value="pic" checked="checked" onChange="disablefield();" >
+					Upload picture
+				</label>
+			</div>
+			<div class="control-group">
+				<label class="control-label-upload">Image</label>
+				<div>
+					<input type="file" name="uploadPic" id="uploadPic">
+				</div>
+			</div>
+
+			
+			<div class="control-group">
+				 <legend><small>Change Password</small></legend>
+				<label class="control-label-profile" for="input01">Current Password</label>
+				<div class="controls-custom">
+					<input id="old-password" type="password" class="input-medium" id="input01" name="title"  ><span class="help-inline"></span>
+				</div>
+			</div>
+				
+			<div class="control-group">
+				<label class="control-label-profile" for="input01">New Password</label>
+				<div class="controls-custom">
+					<input id="new-password-1" type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label-profile" for="input01">Repeat Password</label>
+				<div class="controls-custom">
+					<input id="new-password-2" type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal">Cancel</button>
+		<button id = "editProfile_btn" class="btn btn-primary">Save</button>
+	</div>
+</div>
+
+
+
+{% include "footer.html" %}

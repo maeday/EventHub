@@ -5,6 +5,8 @@ from EventHub import settings
 
 from accounts.views import connect
 
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import Context
 from django.template.context import RequestContext
@@ -45,4 +47,20 @@ def dashboard(request):
     return render_to_response(template, request_context)
 
 def profile(request, user_id):
-    return redirect('/index')
+    template = 'profile.html'
+    template_context = {
+        'app_id'    : settings.FACEBOOK_APP_ID,
+        'redir_uri' : settings.WEB_ROOT + '/mypage',
+    }
+    
+    if not request.user.is_authenticated():
+        msg = "You must be logged in to view other user's profiles."
+        messages.add_message(request, messages.ERROR, msg)
+        return redirect('/login')
+
+    user = get_object_or_404(User, id=user_id)
+    template_context['p_user'] = user
+    template_context['user_events'] = user.events_posted.all().order_by('start_date')
+    template_context['subscribed_events'] = user.events_following.all().order_by('start_date')
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
