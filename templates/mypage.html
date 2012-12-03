@@ -57,7 +57,7 @@
 			</div>
 			<table class="table table-hover table-compact">
 			<tbody>
-			{% if user_events %} {% for event in user_events %}
+			{% if user_events %} {% for event in user_events reversed %}
 			<tr>
 				<td>
 					<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
