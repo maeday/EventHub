@@ -72,8 +72,8 @@ $(document).ready(function(){
 
 	});
 	
-	$('.delete_close').click(function(event){
-		delete_event(event.target.value);
+	$('.delete_close').click(function(){
+		delete_event($(this).val());
 	});
     
 	$("#login-error").fadeIn("slow"); 
