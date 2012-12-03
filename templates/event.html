@@ -42,7 +42,7 @@
   
 		<div class="row">
 	          <div class="span7" style="padding-left: 19px;">
-	            <img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-polaroid">
+	            <img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-polaroid">
 	          </div>
         </div>
 		  

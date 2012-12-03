@@ -14,6 +14,12 @@ from datetime import datetime
 
 from django.db.models import Q
 
+import string
+import random
+BUCKET_NAME = 'eventhub'
+AWS_ACCESS_KEY_ID = 'AKIAI7TBNHIRFWVNNCYQ'
+AWS_SECRET_ACCESS_KEY = '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'
+
 def index(request):
      latest_event_list = Event.objects.all().order_by('start_date').exclude(
                          end_date__lt=datetime.now())
@@ -116,13 +122,14 @@ def create_event(request):
               
               u = request.user
               n = Neighborhoods(id=eNeighborhood)
+              eimageUrl = storeToAmazonS3(eimage)
+              print eimageUrl
               e = Event(start_date=startDateTime, end_date=endDateTime, name=eName, 
                         poster=u, description=eDesc, free=False, neighborhood=n,
                         cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
-                        street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image=eimage)
+                        street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image_url=eimageUrl)
               
               e.save()
-              
               if eCategories:
                   for categoryNum in eCategories:
                       category = Categories.objects.get(id=categoryNum)
@@ -140,6 +147,23 @@ def create_event(request):
          
               return render_to_response(template, request_context)
 
+def storeToAmazonS3(fileObject):
+    if fileObject==None:
+        return None
+    import boto
+    s3 = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+    bucket = s3.get_bucket(BUCKET_NAME)
+    random_string = id_generator(20)
+    newFileName = random_string+fileObject.name
+    key = bucket.new_key(newFileName)
+    key.set_contents_from_string(fileObject.read())
+    key.set_acl('public-read')
+    return 'http://s3.amazonaws.com/'+BUCKET_NAME+'/'+newFileName
+    
+def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
+    
+    
 """
 @csrf_exempt
 def change_event_name(request):     
