@@ -6,6 +6,7 @@ from EventHub import settings
 from accounts.views import connect
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import Context
@@ -17,6 +18,7 @@ from django.views.decorators.cache import never_cache
 
 from events.models import Event, Categories, Neighborhoods
 
+@login_required
 def dashboard(request):
     template = 'mypage.html'
 
@@ -33,8 +35,8 @@ def dashboard(request):
         'neighborhoods_list': neighborhoods_list
     }
     
-    if not request.user.is_authenticated():
-        return redirect('/login')
+    # if not request.user.is_authenticated():
+        # return redirect('/login')
     if request.GET:
         if 'code' in request.GET:
             return connect(request)

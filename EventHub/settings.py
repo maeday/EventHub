@@ -33,6 +33,8 @@ FACEBOOK_REDIRECT_URI = 'http://theeventhub.heroku.com/' # TODO: Update this set
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
+LOGIN_URL = '/login'
+
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.EmailBackend',
     'accounts.backends.FacebookBackend',

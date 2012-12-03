@@ -59,7 +59,6 @@ def parse_signed_request(signed_request, secret):
 ###############################################################################
 
 @csrf_exempt
-@never_cache
 def register(request):
     '''Handle user registration request'''
     template = 'accounts/register-1.html'
@@ -165,6 +164,8 @@ def confirm(request, activation_key):
                                      activation_key=activation_key)
     if user_profile.key_expires < timezone.now():
         # User's activation key has expired
+        #msg = ""
+        #messages.add_message(request, messages.ERROR, msg)
         template_context = {'expired': True}
     else:
         # Activate user
@@ -178,7 +179,6 @@ def confirm(request, activation_key):
     return render_to_response(template, request_context)
 
 def user_login(request):
-#    messages.add_message(request, messages.INFO, 'Hello world.')
     '''Allow user to log in'''
     template = 'accounts/login.html'
     template_context = {
