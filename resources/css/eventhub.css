@@ -351,6 +351,13 @@ body {
     padding: 13px 19px 0;
 }
 
+.registration-centered {
+	text-align: center;
+	padding-top:10px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
 .modal-profile{
    width: 620px;
 }
