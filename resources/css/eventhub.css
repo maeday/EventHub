@@ -327,9 +327,8 @@ body {
 
 .sidebar-img{
     width:250px;
-	margin-left: 19px;
-	margin-right: auto;
 	margin-top: 15px;
+	text-align: center;
 }
 
 .form-bottom {

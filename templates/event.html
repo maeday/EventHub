@@ -44,7 +44,7 @@
 		<div class="row">
 			<!--Social Stuff-->
 			<div class="span8">
-				<div class="well well-custom" style="min-height: 500px;">
+				<div class="well well-custom">
 					<div class="event-title">
 						<h2>Social stuff</h2>
 					</div>
@@ -74,7 +74,7 @@
 		<div class="row">
 			<div class="span4">
 				<div class="well well-custom">
-					<div class="location-title" style="width:250px; margin-left: 19px;">
+					<div class="location-title" >
 						<strong>{{ event.venue }}</strong><br>
 						 {{ address }}<br>
 						<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
@@ -86,6 +86,7 @@
 			</div>
 		</div>
 		
+		<!-- similar events-->
 		<div class="row">
 			<div class="span4">
 				<div class="well well-custom">
@@ -98,9 +99,9 @@
 							<img src="{% if event.image %}{{ event.image.url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
 						</div>
 						<div class="span2">
-							<a href="/event/{{ event.id }}">{{ event.name|truncatechars:50 }}</a><br>
+							<strong><a href="/event/{{ event.id }}">{{ event.name|truncatechars:50 }}</a><br>
 							 {% if event.start_date.date == event.end_date.date %} <small>{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</small>
-							{% else %} <small>{{ event.start_date }} - {{ event.end_date }}</small>
+							{% else %} <small>{{ event.start_date |date:"F j, g:i A" }} - {{ event.end_date|date:"F j, g:i A"  }}</small></strong>
 							{% endif %}
 						</div>
 					</div>
