@@ -69,15 +69,16 @@
 					<strong>{{ event.start_date|date:"l, F j" }} </strong>
 					<p>
 						{{ event.start_date|date:"g:i A" }}
-						<button class="btn btn-small btn-primary pull-right" rel="popover" title="Edit Event" type="button" data-toggle="modal" data-target="#editEvent{{ event.id }}" style="margin-top:-10px; margin-left: 3px;" >
+						
+					<button class="btn btn-small btn-primary pull-right edit-event-btn" type="button" data-toggle="modal" rel="popover" title="Edit Event" data-target="#editEvent" style="margin-top:-10px; margin-left: 3px;" value={{ event.id }}>Edit</button>
+						<!--<button class="btn btn-small btn-primary pull-right edit-event-btn" rel="popover" title="Edit Event" type="button" data-toggle="modal" data-target="#editEvent" value={{ event.id }} style="margin-top:-10px; margin-left: 3px;" >
 								<i class="icon-pencil icon-white"></i>
-						</button>
+						</button>-->
 						<button class="btn btn-small btn-primary pull-right" rel="popover" title="Delete Event" value={{ event.id }} style="margin-top: -10px;">
 								<i class="icon-trash icon-white"></i>
 						</button>
 					</p>
 
-					<button class="btn btn-small btn-primary pull-right edit-event-btn" type="button" data-toggle="modal" data-target="#editEvent" style="margin-top: 3px;" value={{ event.id }}>Edit Event</button>
 
 				</td>
 			</tr>
