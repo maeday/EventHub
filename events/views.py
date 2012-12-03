@@ -536,3 +536,20 @@ def get_event_info(request):
         request_context = RequestContext(request, template_context)
         
         return render_to_response(template, request_context)
+        
+def storeToAmazonS3(fileObject):
+    if fileObject==None:
+        return None
+    import boto
+    s3 = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+    bucket = s3.get_bucket(BUCKET_NAME)
+    random_string = id_generator(20)
+    newFileName = random_string+fileObject.name
+    key = bucket.new_key(newFileName)
+    key.set_contents_from_string(fileObject.read())
+    key.set_acl('public-read')
+    return 'http://s3.amazonaws.com/'+BUCKET_NAME+'/'+newFileName
+    
+def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
+
