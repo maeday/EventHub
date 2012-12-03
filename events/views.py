@@ -467,6 +467,8 @@ def edit_event(request):
             eNeighborhood = request.POST.get('location')
             eCategoriesString = request.POST.get('categories')
             eimage = request.FILES.get('image')
+            
+            eimageUrl = storeToAmazonS3(eimage)
 
             startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
             endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -497,7 +499,8 @@ def edit_event(request):
             e.city = eCity;
             e.state = eState;
             e.zipcode = eZipcode;
-            e.image = eimage;
+            e.image_url = eimageUrl;
+            
 
             if eCategories:
                 e.categories.clear()
