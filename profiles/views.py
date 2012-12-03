@@ -53,10 +53,10 @@ def profile(request, user_id):
         'redir_uri' : settings.WEB_ROOT + '/mypage',
     }
     
-    if not request.user.is_authenticated():
-        msg = "You must be logged in to view other user's profiles."
-        messages.add_message(request, messages.ERROR, msg)
-        return redirect('/login')
+#    if not request.user.is_authenticated():
+#        msg = "You must be logged in to view other user's profiles."
+#        messages.add_message(request, messages.ERROR, msg)
+#        return redirect('/login?next=/profile/'+user_id)
 
     user = get_object_or_404(User, id=user_id)
     template_context['p_user'] = user
