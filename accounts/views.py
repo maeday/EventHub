@@ -61,10 +61,6 @@ def parse_signed_request(signed_request, secret):
 @csrf_exempt
 @never_cache
 def register(request):
-#    success_msg = "You have successfully registered for an EventHub account!\
-#            Please check your email for your activation link so you can start using our site."
-#    messages.add_message(request, messages.SUCCESS, success_msg)
-#    return redirect('/login')
     '''Handle user registration request'''
     template = 'accounts/register-1.html'
     template_context = {
@@ -281,31 +277,7 @@ def connect(request):
         if request.user.get_profile().fbid != -1:
             # They already have an account connected, shouldn't be here
             return redirect('/mypage')
-#        elif request.POST.get('signed_request'):
-#            # Post request received from first page (through Facebook API)
-#            signed_request = request.POST.get('signed_request')
-#            data = parse_signed_request(signed_request, settings.FACEBOOK_APP_SECRET)
-#            register_info = data['registration']
-#            
-#            # TODO: Should we check if email matches registered account?
-#            
-#            if 'user_id' in data:
-#                template_context['has_fbid'] = True
-#                template_context['redir_uri'] = settings.WEB_ROOT + '/connect'
-#                template_context['fbid'] = data['user_id']
-#                if not isUniqueFbid(template_context['fbid']):
-#                    template_context['used_fbid'] = True
-#                else:
-#                    user = request.user
-#                    profile = user.get_profile()
-#                    profile.fbid = template_context['fbid']
-#                    profile.save()
-#                    template_context['success'] = True
-#            else:
-#                template_context['no_fbid'] = True
-#        request_context = RequestContext(request, template_context)
-#        return render_to_response(template, request_context)
-    
+
         if request.GET:
             if 'code' in request.GET:
                 args = {
@@ -346,18 +318,6 @@ def connect(request):
                         error = 'SUCCESS'
                     else:
                         error = 'ALREADY_EXISTS'
-                    
-                    
-        
-#                    user = authenticate(token=access_token)
-#                    if user:
-#                        if user.is_active:
-#                            login(request, user)
-#                            return HttpResponseRedirect('/mypage')
-#                        else:
-#                            error = 'AUTH_DISABLED'
-#                    else:
-#                        error = 'AUTH_FAILED'
             elif 'error_reason' in request.GET:
                 error = 'AUTH_DENIED'
     
