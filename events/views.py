@@ -1,7 +1,7 @@
 import random
 
+from django.contrib import messages
 from django.core.cache import cache
-
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -267,6 +267,10 @@ def create_event(request):
                       eid = Event.objects.get(name__iexact=eName).id
 
                       template_context = {'text': eid}
+                      
+                      # Set message so user sees that the event was successfully created
+                      success_msg = 'You have successfully created the event \"' + eName + '"'
+                      messages.add_message(request, messages.SUCCESS, success_msg)
 
               except (Exception, IntegrityError) as e:
                   template = 'text.html'

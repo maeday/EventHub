@@ -1,15 +1,28 @@
 {% include 'header.html' %}
 {% include "create.html" %}
 
-<div class="row">
-	{% if error == "ALREADY_EXISTS" %}
-		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<strong>Oh snap!</strong> That Facebook account is already connected to an existing EventHub account.
-			If you would like to connect a different Facebook account, please log out of Facebook and try again.		
-		</div>
+{% if messages %}
+    {% for message in messages %}
+    {% if message.tags %}
+    <div id="login-error" class="alert alert-{% spaceless %}
+	    {% if 'error' in message.tags %}
+	    	error
+    	{% elif 'success' in message.tags %}
+    		success
+		{% endif %}{% endspaceless %}" style="display:none;margin-top:10px;margin-bottom:0;">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		{% if 'error' in message.tags %}<strong>Oh snap!</strong>{% endif %}
+		{% if 'safe' in message.tags %}
+            {{ message|safe }}
+        {% else %}
+            {{ message }}
+        {% endif %}
+	</div>
 	{% endif %}
+    {% endfor %}
+{% endif %}
 
+<div class="row">
 	<!--My Profile-->
 	<div class="span12">
 		<div class="well well-custom">

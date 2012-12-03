@@ -294,8 +294,9 @@ def connect(request):
                 response = cgi.parse_qs(urllib.urlopen(url).read())
                 
                 if not response:
-                    # TODO: Handle this in template
                     error = 'AUTH_ERROR_EXPIRED'
+                    msg = "Your Facebook session has expired! Please log in to Facebook again."
+                    messages.add_message(request, messages.ERROR, msg)
                 
                 else:
                     access_token = response['access_token'][0]
@@ -315,14 +316,21 @@ def connect(request):
                         profile = user.get_profile()
                         profile.fbid = fbid
                         profile.save()
-                        error = 'SUCCESS'
+                        success_msg = "You have successfully connected your Facebook account!"
+                        messages.add_message(request, messages.SUCCESS, success_msg)
+#                        error = 'SUCCESS'
                     else:
-                        error = 'ALREADY_EXISTS'
+#                        error = 'ALREADY_EXISTS'
+                        msg = "That Facebook account is already connected to an existing EventHub account.\
+                            If you would like to connect a different Facebook account, please log out of Facebook and try again."
+                        messages.add_message(request, messages.ERROR, msg)
             elif 'error_reason' in request.GET:
-                error = 'AUTH_DENIED'
+#                error = 'AUTH_DENIED'
+                msg = "You have refused to connect this app with Facebook."
+                messages.add_message(request, messages.ERROR, msg)
     
-        template_context = {'settings': settings, 'error': error}
-        return redirect('/mypage?error='+error, permanent=True)
+#        template_context = {'settings': settings, 'error': error}
+        return redirect('/mypage', permanent=True)
     else:
         return redirect('/login')
 
