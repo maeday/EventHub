@@ -115,6 +115,11 @@ p.event-description {
   padding-left: 40px;
   text-align: left;
 }
+.control-label-text {
+  padding-top: 20px;
+  padding-left: 40px;
+  text-align: left;
+}
 
 .registration-title {
 	text-align: center;
@@ -129,8 +134,8 @@ p.event-description {
 	color: #555;
 	font-weight: bold;
 }
-h7{
-		color: #555;
+.email-text {
+	color: #555;
 }
 
 .location-title{
