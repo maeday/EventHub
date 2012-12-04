@@ -551,6 +551,9 @@ function jDecode(str) {
     return $("<div/>").html(str).text();
 }
 
+function parse_and_populate(str) {
+}
+
 function populate_fields(event_id) {
 	var fd = new FormData();
 	fd.append( 'id', event_id );
@@ -565,7 +568,7 @@ function populate_fields(event_id) {
 	});
 	
 	request.done(function(msg) {
-		$("#edit-input-title").val(jDecode(msg));
+		parse_and_populate(msg);
 	});
 	
 	request.fail(function(jqXHR, textStatus) {
