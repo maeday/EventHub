@@ -58,7 +58,7 @@ p.event-description {
 .list-item{
 	/*border-bottom: 1px solid #DDDDDD;*/
 	margin-bottom: 3px;
-	margin-top: 3px;
+	margin-top: 7px;
 	height: 80px;
 }
 
@@ -142,7 +142,11 @@ p.event-description {
 	font-weight: bold;
 }
 .email-text {
-	color: #555;
+  color: #0080c0;
+}
+
+.gray-text {
+	color: #989898;
 }
 
 .location-title{
@@ -313,7 +317,7 @@ body {
 }
 
 .img-list{
-	max-height: 80px;
+	max-height: 65px;
 	max-width:  90px;
 	padding: 2px;
 	background-color: #fff;

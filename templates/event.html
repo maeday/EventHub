@@ -19,6 +19,11 @@
 						<h3>{{ event.name }}</h3>
 					</div>
 					<div class="row">
+						<p>
+								{% for category in event.categories.all %} 
+									   <span class="gray-text"><small class="pull-right">{{ category.name }} &nbsp; </small></span>
+								{% endfor %}
+						</p>
 						<div class="span7">
 							<span id="event-id" style="display:none;">{{ event.id }}</span>
 							<p>
@@ -41,7 +46,11 @@
 						<div class="span7">
 							<p>
 								<strong>Cost/Fees</strong><br>
-								 {% if event.free %} FREE {% elif event.cost_min == event.cost_max %} ${{ event.cost_min|floatformat:2 }} for all {% else %} ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }} {% endif %} <small class="pull-right"><a href="/index">&raquo; Back to Results</a></small>
+								 {% if event.free %} FREE {% elif event.cost_min == event.cost_max %} ${{ event.cost_min|floatformat:2 }} for all {% else %} ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }} {% endif %} 
+							</p>
+							<p class="event-author">
+								<small class="pull-left"><a href="/index">&raquo; Back to Results</a></small>
+								<span class="pull-right">Posted by <a href="/profile/{{ event.poster.id }}">{{ event.poster.first_name }} {{ event.poster.last_name }}</a></span>
 							</p>
 						</div>
 					</div>
@@ -98,21 +107,19 @@
 			<div class="span4">
 				<div class="well well-custom">
 					<div class="event-title">
-						<h3>Similar Events</h3>
+						<h3>Recommended Events</h3>
 					</div>
 					 {% if recommended_list %} {% for event in recommended_list %}
 					<div class="list-item">
 						<div class="pull-left">
 							<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
 						</div>
-						<div class="span2">
-							<strong><a href="/event/{{ event.id }}">{{ event.name|truncatechars:50 }}</a><br>
+						<div class="span2 pull-right">
+							<strong><a href="/event/{{ event.id }}">{{ event.name|truncatechars:19 }}</a><br>
 							 {% if event.start_date.date == event.end_date.date %} <small>{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</small>
 							{% else %} <small>{{ event.start_date|date:"F j, g:i A" }} - {{ event.end_date|date:"F j, g:i A"  }}</small></strong>
 							{% endif %}
 						</div>
-					</div>
-					<div class="list-title">
 					</div>
 					 {% empty %}
 					<p>
