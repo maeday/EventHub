@@ -547,9 +547,12 @@ def edit_profile(request):
         userEmail = request.POST.get('userEmail')
         useFbPic = request.POST.get('useFbPic')
         userPic = request.FILES.get('userPic')
+        accessGranted = True
         user = authenticate(email=userEmail, password=oldPassword)
+        if len(newPassword)>0 and user is None
+            accessGranted = False
         template_context = {'text': "1"}
-        if user is not None:
+        if accessGranted:
             if user.is_active:
                 user.first_name=firstName
                 user.last_name=lastName
