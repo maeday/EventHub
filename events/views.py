@@ -575,3 +575,18 @@ def storeToAmazonS3(fileObject):
 def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+@csrf_exempt 
+def see_all(request):
+    if request.POST:
+        user = request.POST.get('user')
+        event_list=Event.objects.filter(poster__id__exact=user.id)
+        template = 'text.html'
+        template_context = {'text': event_list}
+    
+    else:
+        template = '404.html'
+        template_context = {}
+        
+    #TODO: Have front end code implemented and link with this function
+    request_context = RequestContext(request, template_context)
+    return render_to_response(template, request_context)
