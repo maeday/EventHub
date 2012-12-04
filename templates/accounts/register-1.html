@@ -11,26 +11,7 @@
 
 <div class="row-fluid">
   <div class="span12">
-  {% if used_fbid %}
-    <div id="register-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      <strong>Oh snap!</strong> That Facebook account has already been registered with this app!		
-    </div>
-  {% elif used_email %}
-    {% if has_fbid %}
-    <div id="register-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      <strong>Oh snap!</strong> That email address is already being used!
-      If you want to connect your Facebook account to an existing account, please <a href="login">log in</a> to do so.		
-    </div>
-    {% else %}
-    <div id="register-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      <strong>Oh snap!</strong> That email address is already being used! Are you trying to <a href="login">log in</a>?		
-    </div>
-    {% endif %}
-  {% endif %}
-  
+  {% include 'messages.html' %}
     <div class="registration-title">
       <h2>Create an account</h2>
     </div>

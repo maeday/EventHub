@@ -15,13 +15,11 @@ from django.template.context import RequestContext
 from django.template.loader import get_template
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import never_cache
 
 from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ForgotPasswordForm, ResetPasswordForm, isUniqueEmail, isUniqueFbid, \
-    ERROR_MSG_INCORRECT_USERPASS, ERROR_MSG_USER_INACTIVE
+    ERROR_MSG_USER_INACTIVE
 from accounts.models import UserProfile, FacebookSession
-#from datetime import datetime
 
 ###############################################################################
 # Facebook signed request parser taken from:
@@ -60,7 +58,9 @@ def parse_signed_request(signed_request, secret):
 
 @csrf_exempt
 def register(request):
-    '''Handle user registration request'''
+    """
+    Handles user registration request
+    """
     template = 'accounts/register-1.html'
     template_context = {
         'app_id': settings.FACEBOOK_APP_ID,
@@ -91,6 +91,8 @@ def register(request):
             if not isUniqueEmail(template_context['email']):
                 valid = False
                 template_context['used_email'] = True
+            
+            unique_email = isUniqueEmail(template_context['email'])
                 
             template_context['fbid'] = -1
             if 'user_id' in data:
@@ -100,12 +102,27 @@ def register(request):
                 if not isUniqueFbid(template_context['fbid']):
                     valid = False
                     template_context['used_fbid'] = True
+                    error_msg = "That Facebook account has already been registered \
+                        with this app!"
+                    messages.add_message(request, messages.ERROR, error_msg)
+                elif not unique_email:
+                    error_msg = 'The email address associated with that Facebook \
+                        account is already being used! If you want to connect it \
+                        to an existing account, please <a href="login">log in</a> \
+                        and go to your dashboard to do so.'
+                    messages.add_message(request, messages.ERROR, error_msg, 
+                                         extra_tags='safe')
+            elif not unique_email:
+                error_msg = 'That email address is already being used! Are you \
+                    trying to <a href="login">log in</a>?'
+                messages.add_message(request, messages.ERROR, error_msg, 
+                                     extra_tags='safe')
             
             if not valid:
                 template = 'accounts/register-1.html'
         else:
             # Post request received from second page
-            form = EmailUserCreationForm(request.POST) # A form bound to the POST data
+            form = EmailUserCreationForm(request.POST)
             if form.is_valid(): 
                 # All validation rules pass
                 template_context['extra'] = 'SUCCESS'
@@ -141,18 +158,27 @@ def register(request):
                           [email])
                 
                 # Redirect to 'My Page' after successful registration
-                success_msg = "You have successfully registered for an EventHub account!\
-                    Please check your email for your activation link so you can start using our site."
+                success_msg = "You have successfully registered for an EventHub \
+                    account! Please check your email for your activation link so \
+                    you can start using our site."
                 messages.add_message(request, messages.SUCCESS, success_msg)
                 return redirect('/login')
             else:
-                template_context['extra'] = form.errors
+                # Form did not validate. Assuming email has been taken while user
+                # was still on registration page
+                error_msg = 'The email address "' + request.POST['email'] \
+                          + '" has been taken while you were registering. You \
+                          may already be registered for EventHub.'
+                messages.add_message(request, messages.ERROR, error_msg)
+                return redirect('/register')
         
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
 def confirm(request, activation_key):
-    '''Confirm user's activation key'''
+    """
+    Confirms user's activation key
+    """
     # template = 'accounts/confirm.html'
     # template_context = {}
 
@@ -161,7 +187,8 @@ def confirm(request, activation_key):
                                      activation_key=activation_key)
     if user_profile.key_expires < timezone.now():
         # User's activation key has expired
-        msg = 'This activation key has expired. Please go <a href="/resend">here</a> to get a new link sent to your email.'
+        msg = 'This activation key has expired. Please go \
+            <a href="/resend">here</a> to get a new link sent to your email.'
         messages.add_message(request, messages.ERROR, msg, extra_tags='safe')
         # template_context = {'expired': True}
     else:
@@ -172,14 +199,17 @@ def confirm(request, activation_key):
         user_profile.key_expires = timezone.now()
         user_profile.save()
         # template_context = {'success': True}
-        msg = '<strong>Congratulations!</strong> You have activated your account. You can now log in to EventHub.'
+        msg = '<strong>Congratulations!</strong> You have activated your account. \
+            You can now log in to EventHub.'
         messages.add_message(request, messages.ERROR, msg, extra_tags='safe')
     return redirect('/login')
     # request_context = RequestContext(request, template_context)
     # return render_to_response(template, request_context)
 
 def user_login(request):
-    '''Allow user to log in'''
+    """
+    Allows user to log in
+    """
     template = 'accounts/login.html'
     template_context = {
         'logged_in' : False,
@@ -209,14 +239,17 @@ def user_login(request):
     return render_to_response(template, request_context)
 
 def user_logout(request):
-    '''Allow user to log out'''
+    """
+    Allows user to log out
+    """
     # TODO: handle more cases (user not logged in, logout unsuccessful, etc.)
     logout(request)
     return redirect('/index', permanent=True)
     
 def login_facebook(request):
-    '''Allow user to log in through Facebook'''
-
+    """
+    Allows user to log in through Facebook
+    """
     if request.user.is_authenticated():
         return HttpResponseRedirect('/mypage')
 
@@ -256,9 +289,12 @@ def login_facebook(request):
                         login(request, user)
                         return HttpResponseRedirect('/mypage')
                     else:
-                        messages.add_message(request, messages.ERROR, ERROR_MSG_USER_INACTIVE, extra_tags='safe')
+                        messages.add_message(request, messages.ERROR, 
+                                             ERROR_MSG_USER_INACTIVE, 
+                                             extra_tags='safe')
                 else:
-                    msg = "We could not find any user associated with this Facebook account!"
+                    msg = "We could not find any user associated with this \
+                        Facebook account!"
                     messages.add_message(request, messages.ERROR, msg)
         elif 'error_reason' in request.GET:
             msg = "You are not logged in to Facebook!"
@@ -268,17 +304,16 @@ def login_facebook(request):
 
 @csrf_exempt
 def connect(request):
-    template = 'accounts/fbconnect.html'
-    template_context = {
-        'app_id': settings.FACEBOOK_APP_ID,
-        'web_root': settings.WEB_ROOT
-    }
+    """
+    Connects an authenticated user to their Facebook account
+    """
     if request.user.is_authenticated():
         if request.user.get_profile().fbid != -1:
             # They already have an account connected, shouldn't be here
             return redirect('/mypage')
 
         if request.GET:
+            # Most likely a reply from Facebook request
             if 'code' in request.GET:
                 args = {
                     'client_id': settings.FACEBOOK_APP_ID,
@@ -287,15 +322,13 @@ def connect(request):
                     'code': request.GET['code'],
                 }
                 
-                #csrf_token = request.GET['state']
-    
                 url = 'https://graph.facebook.com/oauth/access_token?' + \
                         urllib.urlencode(args)
                 response = cgi.parse_qs(urllib.urlopen(url).read())
                 
                 if not response:
-                    error = 'AUTH_ERROR_EXPIRED'
-                    msg = "Your Facebook session has expired! Please log in to Facebook again."
+                    msg = "Your Facebook session has expired! Please log in to \
+                        Facebook again."
                     messages.add_message(request, messages.ERROR, msg)
                 
                 else:
@@ -316,25 +349,27 @@ def connect(request):
                         profile = user.get_profile()
                         profile.fbid = fbid
                         profile.save()
-                        success_msg = "You have successfully connected your Facebook account!"
+                        success_msg = "You have successfully connected your \
+                            Facebook account!"
                         messages.add_message(request, messages.SUCCESS, success_msg)
-#                        error = 'SUCCESS'
                     else:
-#                        error = 'ALREADY_EXISTS'
-                        msg = "That Facebook account is already connected to an existing EventHub account.\
-                            If you would like to connect a different Facebook account, please log out of Facebook and try again."
+                        msg = "That Facebook account is already connected to an \
+                            existing EventHub account. If you would like to \
+                            connect a different Facebook account, please log out \
+                            of Facebook and try again."
                         messages.add_message(request, messages.ERROR, msg)
             elif 'error_reason' in request.GET:
-#                error = 'AUTH_DENIED'
                 msg = "You have refused to connect this app with Facebook."
                 messages.add_message(request, messages.ERROR, msg)
     
-#        template_context = {'settings': settings, 'error': error}
         return redirect('/mypage', permanent=True)
     else:
         return redirect('/login')
 
 def forgot_password(request):
+    """
+    Allows user to send an email with a link to reset their password.
+    """
     template = 'accounts/forgot.html'
     template_context = {}
     success = False
@@ -385,16 +420,29 @@ def forgot_password(request):
     return render_to_response(template, request_context)
 
 def reset_password(request, key):
-    '''Confirm user's activation key'''
+    """
+    Allows user to reset their password if they used a valid key.
+    """
     template = 'accounts/resetpassword.html'
     template_context = {'key': key,
                         'success': False}
     # Trigger 404 if reset key is not valid
     user_profile = get_object_or_404(UserProfile,
                                      activation_key=key)
+    
+    # Check if user is activated. If not, automatically activate them.
+    user = user_profile.user
+    if not user.is_active:
+        user.is_active = True
+        user.save()
+        msg = "You account has automatically been activated!"
+        messages.add_message(request, messages.SUCCESS, msg)
+    
     if user_profile.key_expires < timezone.now():
         # User's reset password key has expired
-        template_context['expired'] = True
+        msg = "Sorry, but this link has expired. You will have to have a new \
+            link sent to your email to reset your password."
+        messages.add_message(request, messages.ERROR, msg)
     else:
         if request.POST:
             # User sent request to reset password
@@ -410,16 +458,19 @@ def reset_password(request, key):
                 # reset password
                 user_profile.key_expires = timezone.now()
                 user_profile.save()
-                success_msg = "Congratulations! Your password has been reset. You can now sign in with your new password."
+                success_msg = "Congratulations! Your password has been reset. \
+                    You can now sign in with your new password."
                 messages.add_message(request, messages.SUCCESS, success_msg)
                 return redirect('/login')
-#                template_context['success'] = True
             template_context['form'] = form
             
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
 def resend_key(request):
+    """
+    Allows user to generate and send a new activation key.
+    """
     template = 'accounts/resend.html'
     template_context = {}
     success = False
@@ -438,7 +489,8 @@ def resend_key(request):
             
             # Check if user is already active
             if user.is_active:
-                error_msg = "That user is already active! You should be able to log in to this site."
+                error_msg = "That user is already active! You should be able to \
+                    sign in to this site."
                 messages.add_message(request, messages.ERROR, error_msg)
             
             else:
@@ -493,18 +545,18 @@ def edit_profile(request):
         template_context = {'text': "1"}
         if user is not None:
             if user.is_active:
-            		user.first_name=firstName
-            		user.last_name=lastName
-            		if len(newPassword)>0:
-            		    user.set_password(newPassword)
-            		userProfile = user.get_profile()
-            		if useFbPic=='1':
-            		    userProfile.use_fb_pic=True
-            		else:
-            		    userProfile.use_fb_pic=False
-            		    userProfile.pic = userPic
-            		userProfile.save()
-            		user.save()
+                user.first_name=firstName
+                user.last_name=lastName
+                if len(newPassword)>0:
+                    user.set_password(newPassword)
+                userProfile = user.get_profile()
+                if useFbPic=='1':
+                    userProfile.use_fb_pic=True
+                else:
+                    userProfile.use_fb_pic=False
+                    userProfile.pic = userPic
+                userProfile.save()
+                user.save()
                 #login(request, user)
             else:
                 template_context = {'text': "3"}
