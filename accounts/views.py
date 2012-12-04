@@ -179,9 +179,6 @@ def confirm(request, activation_key):
     """
     Confirms user's activation key
     """
-    # template = 'accounts/confirm.html'
-    # template_context = {}
-
     # Trigger 404 if activation key is not valid
     user_profile = get_object_or_404(UserProfile,
                                      activation_key=activation_key)
@@ -190,7 +187,6 @@ def confirm(request, activation_key):
         msg = 'This activation key has expired. Please go \
             <a href="/resend">here</a> to get a new link sent to your email.'
         messages.add_message(request, messages.ERROR, msg, extra_tags='safe')
-        # template_context = {'expired': True}
     else:
         # Activate user
         user_account = user_profile.user
@@ -198,13 +194,11 @@ def confirm(request, activation_key):
         user_account.save()
         user_profile.key_expires = timezone.now()
         user_profile.save()
-        # template_context = {'success': True}
-        msg = '<strong>Congratulations!</strong> You have activated your account. \
-            You can now log in to EventHub.'
-        messages.add_message(request, messages.ERROR, msg, extra_tags='safe')
+        success_msg = '<strong>Congratulations!</strong> You have activated your \
+            account. You can now log in to EventHub.'
+        messages.add_message(request, messages.SUCCESS, success_msg, 
+                             extra_tags='safe')
     return redirect('/login')
-    # request_context = RequestContext(request, template_context)
-    # return render_to_response(template, request_context)
 
 def user_login(request):
     """
