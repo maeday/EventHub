@@ -238,7 +238,12 @@ def user_logout(request):
     """
     # TODO: handle more cases (user not logged in, logout unsuccessful, etc.)
     logout(request)
-    return redirect('/index', permanent=True)
+    prev = request.META.get('HTTP_REFERER', '/index')
+
+    if '/mypage' in prev:
+        prev = '/index'
+
+    return redirect(prev, permanent=True)
     
 def login_facebook(request):
     """

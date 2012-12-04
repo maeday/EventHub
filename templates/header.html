@@ -75,7 +75,7 @@
 				{% endif %}
               {{ user.first_name }} {{ user.last_name }}</a> &nbsp; | &nbsp; <a href="/logout" class="navbar-link">Sign Out</a> &nbsp; 
               {% else %}
-              <a href="/login" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
+              <a href="/login?next={{ request.path }}" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
               {% endif %}
             </p>
             <ul class="nav">
