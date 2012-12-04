@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     activation_key = models.CharField(max_length=40)
     key_expires = models.DateTimeField()
     fbid = models.BigIntegerField(default=-1)
-	picUrl = models.URLField(max_length=255, null=True)
+    picUrl = models.URLField(max_length=255, null=True)
     pic = models.ImageField(upload_to="pics/", null=True)
     use_fb_pic = models.BooleanField(default=True)
 
