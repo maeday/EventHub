@@ -244,14 +244,12 @@ function editProfile() {
 	});
 	
 	request.done(function(msg) {
-		if (msg == "1") {
+		if (msg == "1" || msg == "3") {
 			document.location.href = '/mypage';
 		} else if(msg == "2"){
 			alert("Your username and/or password were incorrect.");
-		}else if(msg == "3"){
-			alert("Your account is inactive.");
-		}else {
-			alert("Failing ");
+		} else {
+			alert("Error: User Profile editing failed.");
 		}
 	});
 	
