@@ -153,20 +153,17 @@ def register(request):
 
 def confirm(request, activation_key):
     '''Confirm user's activation key'''
-    template = 'accounts/confirm.html'
-    template_context = {}
-    # if request.user.is_authenticated():
-        # # User is already logged on and activated
-        # template_context = {'has_account': True}
-    # else:
+    # template = 'accounts/confirm.html'
+    # template_context = {}
+
     # Trigger 404 if activation key is not valid
     user_profile = get_object_or_404(UserProfile,
                                      activation_key=activation_key)
     if user_profile.key_expires < timezone.now():
         # User's activation key has expired
-        #msg = ""
-        #messages.add_message(request, messages.ERROR, msg)
-        template_context = {'expired': True}
+        msg = 'This activation key has expired. Please go <a href="/resend">here</a> to get a new link sent to your email.'
+        messages.add_message(request, messages.ERROR, msg, extra_tags='safe')
+        # template_context = {'expired': True}
     else:
         # Activate user
         user_account = user_profile.user
@@ -174,9 +171,12 @@ def confirm(request, activation_key):
         user_account.save()
         user_profile.key_expires = timezone.now()
         user_profile.save()
-        template_context = {'success': True}
-    request_context = RequestContext(request, template_context)
-    return render_to_response(template, request_context)
+        # template_context = {'success': True}
+        msg = '<strong>Congratulations!</strong> You have activated your account. You can now log in to EventHub.'
+        messages.add_message(request, messages.ERROR, msg, extra_tags='safe')
+    return redirect('/login')
+    # request_context = RequestContext(request, template_context)
+    # return render_to_response(template, request_context)
 
 def user_login(request):
     '''Allow user to log in'''
@@ -434,32 +434,42 @@ def resend_key(request):
             # Email exists, send email to user
             success = True
             
-            # Build activation key
             user = form.get_user()
-            username = user.username
-            salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
-            activation_key = hashlib.sha1(salt+username).hexdigest()
-            key_expires = datetime.datetime.today() + datetime.timedelta(2)
             
-            # Modify and save user profile
-            profile = user.get_profile()
-            profile.activation_key = activation_key
-            profile.key_expires = key_expires
-            profile.save()
+            # Check if user is already active
+            if user.is_active:
+                error_msg = "That user is already active! You should be able to log in to this site."
+                messages.add_message(request, messages.ERROR, error_msg)
             
-            email = user.email                                                                                                                    
-            email_subject = 'Your EventHub activation link'
-            email_template = get_template('accounts/email/register.txt')
-            context = Context({
-                'email'          : email,
-                'web_root'       : settings.WEB_ROOT,
-                'activation_key' : activation_key
-            })
-            email_body = email_template.render(context)
-            send_mail(email_subject,
-                      email_body,
-                      'accounts-noreply@theeventhub.com',
-                      [email])
+            else:
+                # Build activation key
+                username = user.username
+                salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
+                activation_key = hashlib.sha1(salt+username).hexdigest()
+                key_expires = datetime.datetime.today() + datetime.timedelta(2)
+                
+                # Modify and save user profile
+                profile = user.get_profile()
+                profile.activation_key = activation_key
+                profile.key_expires = key_expires
+                profile.save()
+                
+                email = user.email                                                                                                                    
+                email_subject = 'Your EventHub activation link'
+                email_template = get_template('accounts/email/register.txt')
+                context = Context({
+                    'email'          : email,
+                    'web_root'       : settings.WEB_ROOT,
+                    'activation_key' : activation_key
+                })
+                email_body = email_template.render(context)
+                send_mail(email_subject,
+                          email_body,
+                          'accounts-noreply@theeventhub.com',
+                          [email])
+                
+                success_msg = "A new activation link has been sent to your email."
+                messages.add_message(request, messages.SUCCESS, success_msg)
             
         template_context = {
             'form' : form,
