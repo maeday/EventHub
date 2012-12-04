@@ -549,7 +549,7 @@ def edit_profile(request):
         userPic = request.FILES.get('userPic')
         accessGranted = True
         user = authenticate(email=userEmail, password=oldPassword)
-        if len(newPassword)>0 and user is None
+        if len(newPassword)>0 and user is None:
             accessGranted = False
         template_context = {'text': "1"}
         if accessGranted:
