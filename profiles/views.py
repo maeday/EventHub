@@ -43,10 +43,22 @@ def dashboard(request):
         elif 'error' in request.GET:
             template_context['error'] = request.GET['error']
             
-    template_context['user_events'] = request.user.events_posted.all().order_by('start_date')
-    template_context['subscribed_events'] = request.user.events_following.all().order_by('start_date')
+    template_context['user_events'] = \
+        request.user.events_posted.all().order_by('start_date')
+    template_context['subscribed_events'] = \
+        request.user.events_following.all().order_by('start_date')
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
+
+def dashboard_unfollow(request, event_id):
+    if request.user.is_authenticated():
+        event_id = int(event_id)
+        event = get_object_or_404(Event, id=event_id)
+        event.remove_follower(request.user)
+        event.save()
+        info_msg = 'You have unfollowed the event "' + event.name + '".'
+        messages.add_message(request, messages.INFO, info_msg)
+    return redirect('/mypage')
 
 def profile(request, user_id):
     template = 'profile.html'

@@ -109,9 +109,9 @@
 										<p>
 											 {{ event.start_date|date:"g:i A" }}
 
-											<button class="close" rel="popover" title="Remove event from subscribed events" value={{ event.id }} style="margin-top: -10px;">
+											<a href="/mypage/unfollow/{{ event.id }}"><button class="close" rel="popover" title="Remove event from subscribed events" value={{ event.id }} style="margin-top: -10px;">
 												<i class="icon-remove"></i>
-											</button>
+											</button></a>
 										</p>
 									</td>
 								</tr>

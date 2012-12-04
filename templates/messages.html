@@ -6,6 +6,8 @@
           error
         {% elif 'success' in message.tags %}
           success
+        {% elif 'info' in message.tags %}
+          info
         {% endif %}{% endspaceless %}" style="display:none;margin-top:10px;margin-bottom:0;">
       <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
       {% if 'error' in message.tags %}<strong>Oh snap!</strong>{% endif %}

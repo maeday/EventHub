@@ -35,6 +35,7 @@ urlpatterns += patterns('accounts.views',
 
 urlpatterns += patterns('profiles.views',
     url(r'^mypage$', 'dashboard'),
+    url(r'^mypage/unfollow/(?P<event_id>.*)$', 'dashboard_unfollow'),
     url(r'^profile/(?P<user_id>.*)$', 'profile'),
 )
 
