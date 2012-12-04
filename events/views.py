@@ -1,4 +1,5 @@
 import random
+import json
 
 from django.contrib import messages
 from django.core.cache import cache
@@ -490,24 +491,23 @@ def edit_event(request):
 
             e = get_object_or_404(Event, id=eID)
             
-            
-            e.name = eName;
-            e.description = eDesc;
-            e.start_date = startDateTime;
-            e.end_date = endDateTime;
-            e.last_modified = datetime.now();
-            e.free = eFreeBool;
-            e.neighborhood = n;
-            e.cost_max = eMaxCost;
-            e.cost_min = eMinCost;
-            e.venue = eVenue;
-            e.url = eUrl;
-            e.street = eStreet;
-            e.city = eCity;
-            e.state = eState;
-            e.zipcode = eZipcode;
-            e.image_url = eimageUrl;
-            print '##########################'+e.image_url
+            e.name = eName
+            e.description = eDesc
+            e.start_date = startDateTime
+            e.end_date = endDateTime
+            e.last_modified = datetime.now()
+            e.free = eFreeBool
+            e.neighborhood = n
+            e.cost_max = eMaxCost
+            e.cost_min = eMinCost
+            e.venue = eVenue
+            e.url = eUrl
+            e.street = eStreet
+            e.city = eCity
+            e.state = eState
+            e.zipcode = eZipcode
+            e.image_url = eimageUrl
+            #print '##########################'+e.image_url
 
             if eCategories:
                 e.categories.clear()
@@ -532,12 +532,22 @@ def get_event_info(request):
     template = 'text.html'
     if request.POST:
         eID = request.POST.get('id')
-        
+
         e = get_object_or_404(Event, id=eID)
         
-        eName = e.name;
+        eStartTime = e.start_date.strftime("%m/%d/%Y %I:%M %p")
+        eEndTime = e.end_date.strftime("%m/%d/%Y %I:%M %p")
         
-        template_context = {'text': eName}
+        if e.free:
+            eFree = "1"
+        else:
+            eFree = "0"
+                    
+        
+        data = { "name":"hello", "desc":"hi there" }
+        data_string = json.dumps(data)
+        
+        template_context = {'text': data_string}
         request_context = RequestContext(request, template_context)
         
         return render_to_response(template, request_context)
