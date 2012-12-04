@@ -551,6 +551,10 @@ def edit_profile(request):
         user = authenticate(email=userEmail, password=oldPassword)
         if len(newPassword)>0 and user is None:
             accessGranted = False
+        elif not request.user.is_authenticated():
+            accessGranted = False
+        else:
+            user = request.user
         template_context = {'text': "1"}
         if accessGranted:
             if user.is_active:

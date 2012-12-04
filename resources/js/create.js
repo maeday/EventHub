@@ -317,6 +317,8 @@ function check_date(input, err, ctrl) {
 }
 
 function check_time(input, err, ctrl) {
+	normalize_time(input);
+	
 	var str = input.val();
 	var errorMsg = validate_time(str);
 	
@@ -332,6 +334,18 @@ function check_time(input, err, ctrl) {
 	err.hide();
 	ctrl.removeClass("error");
 	return true;
+}
+
+function normalize_time(input, str) {
+	var str = input.val();
+	
+	re = /^(\d{1,2})$/;
+	
+	if (str != '') {
+		if (regs = str.match(re)) {
+			input.val(str + ":00");
+		}
+	}
 }
 
 // Validates date format with Regex. Returns error message or empty string if no error.

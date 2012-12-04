@@ -247,7 +247,7 @@ function editProfile() {
 		if (msg == "1" || msg == "3") {
 			document.location.href = '/mypage';
 		} else if(msg == "2"){
-			alert("Your username and/or password were incorrect.");
+			alert("Your current password is incorrect.");
 		} else {
 			alert("Error: User Profile editing failed.");
 		}
