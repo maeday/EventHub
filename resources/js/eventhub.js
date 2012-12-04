@@ -216,16 +216,32 @@ function editProfile() {
 	var userEmail = $.trim(document.getElementById("user-email").innerHTML);
 	var useFbPic = document.getElementById("fbPic").checked;
 	var userPic = document.getElementById("uploadPic").files[0];
+	
+	$("#ctrl-old-password").removeClass("error");
+	$("#err-old-password").hide();
+	$("#ctrl-new-password-1").removeClass("error");
+	$("#err-new-password-1").hide();
+	$("#ctrl-new-password-2").removeClass("error");
+	$("#err-new-password-2").hide();
+	
 	if(newPassword1.length>0){
-		if(newPassword1.length<6){
-		 alert("Password should be at least 6 characters!");
-		 return;
-		}
+//		if(newPassword1.length<6){
+//		 //alert("Password should be at least 6 characters!");
+//		 $("#ctrl-new-password-1").addClass("error");
+//		 $("#err-new-password-1").text("Password should be at least 6 characters!");
+//		 $("#err-new-password-1").show();
+//		 $("#new-password-1").focus();
+//		 return;
+//		}
 		if(newPassword1!=newPassword2){
-			alert("Passwords do not match.");
+			//alert("Passwords do not match.");
+			$("#ctrl-new-password-2").addClass("error");
+			$("#err-new-password-2").text("Passwords do not match.");
+			$("#err-new-password-2").show();
+			$("#new-password-2").focus();
 			return;
 		}
-  }
+	}
 	var fd = new FormData();
 	fd.append( 'firstName', firstName );
 	fd.append( 'lastName', lastName );
@@ -247,7 +263,12 @@ function editProfile() {
 		if (msg == "1" || msg == "3") {
 			document.location.href = '/mypage';
 		} else if(msg == "2"){
-			alert("Your current password is incorrect.");
+			//alert("Your current password is incorrect.");
+			
+			$("#ctrl-old-password").addClass("error");
+			$("#err-old-password").text("Your current password is incorrect.");
+			$("#err-old-password").show();
+			$("#old-password").focus();
 		} else {
 			alert("Error: User Profile editing failed.");
 		}

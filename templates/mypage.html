@@ -173,24 +173,27 @@
 			</div>
 
 			
-			<div class="control-group">
+			<div id="ctrl-old-password" class="control-group">
 				 <legend><small>Change Password</small></legend>
-				<label class="control-label-profile" for="input01">Current Password</label>
-				<div class="controls-custom">
-					<input id="old-password" type="password" class="input-medium" id="input01" name="title"  ><span class="help-inline"></span>
+				<label class="control-label-profile" for="old-password">Current Password</label>
+				<div class="controls-profile">
+					<input id="old-password" type="password" class="input-medium" name="password"><!---<span class="help-inline"></span>--->
+					<span id="err-old-password" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 				
-			<div class="control-group">
-				<label class="control-label-profile" for="input01">New Password</label>
-				<div class="controls-custom">
-					<input id="new-password-1" type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+			<div id="ctrl-new-password-1" class="control-group">
+				<label class="control-label-profile" for="new-password-1">New Password</label>
+				<div class="controls-profile">
+					<input id="new-password-1" type="password" class="input-medium" name="newpassword"><!---<span class="help-inline"></span>--->
+					<span id="err-new-password-1" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label-profile" for="input01">Repeat Password</label>
-				<div class="controls-custom">
-					<input id="new-password-2" type="password" class="input-medium" id="input01" name="title" ><span class="help-inline"></span>
+			<div id="ctrl-new-password-2" class="control-group">
+				<label class="control-label-profile" for="new-password-2">Repeat Password</label>
+				<div class="controls-profile">
+					<input id="new-password-2" type="password" class="input-medium" name="newpassword2"><!---<span class="help-inline"></span>--->
+					<span id="err-new-password-2" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 			
