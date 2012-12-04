@@ -1,5 +1,7 @@
 import random
 import json
+import os.path
+import boto
 
 from django.contrib import messages
 from django.core.cache import cache
@@ -223,7 +225,7 @@ def create_event(request):
                   eNeighborhood = request.POST.get('location')
                   eCategoriesString = request.POST.get('categories')
                   eimage = request.FILES.get('image')
-                  
+
                   eimageUrl = storeToAmazonS3(eimage)
 
                   startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -255,7 +257,7 @@ def create_event(request):
                                 poster=u, description=eDesc, free=eFreeBool, neighborhood=n,
                                 cost_max=eMaxCost, cost_min=eMinCost, venue=eVenue, url=eUrl,
                                 street=eStreet, city=eCity, state=eState, zipcode=eZipcode, image_url=eimageUrl)
-              
+
                       e.save()
 
                       if eCategories:
@@ -560,11 +562,10 @@ def get_event_info(request):
 def storeToAmazonS3(fileObject):
     if fileObject==None:
         return None
-    import boto
+
     s3 = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
     bucket = s3.get_bucket(BUCKET_NAME)
     random_string = id_generator(35)
-    import os.path
     extension = os.path.splitext(fileObject.name)[1]
     newFileName = random_string+extension
     key = bucket.new_key(newFileName)

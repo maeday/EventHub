@@ -213,7 +213,7 @@ function editProfile() {
 	var oldPassword = document.getElementById("old-password").value;
 	var newPassword1 = document.getElementById("new-password-1").value;
 	var newPassword2 = document.getElementById("new-password-2").value;
-	var userEmail = $.trim(document.getElementById("user-email").value);
+	var userEmail = $.trim(document.getElementById("user-email").innerHTML);
 	var useFbPic = document.getElementById("fbPic").checked;
 	var userPic = document.getElementById("uploadPic").files[0];
 	if(newPassword1.length>0){
