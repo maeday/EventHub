@@ -21,6 +21,12 @@ from accounts.forms import EmailAuthenticationForm, EmailUserCreationForm, \
     ERROR_MSG_USER_INACTIVE
 from accounts.models import UserProfile, FacebookSession
 
+import string
+import random
+BUCKET_NAME = 'useravatar'
+AWS_ACCESS_KEY_ID = 'AKIAI7TBNHIRFWVNNCYQ'
+AWS_SECRET_ACCESS_KEY = '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'
+
 ###############################################################################
 # Facebook signed request parser taken from:
 # http://sunilarora.org/parsing-signedrequest-parameter-in-python-bas
@@ -553,7 +559,8 @@ def edit_profile(request):
                     userProfile.use_fb_pic=True
                 else:
                     userProfile.use_fb_pic=False
-                    userProfile.pic = userPic
+                    userPicUrl = storeToAmazonS3(userPic)
+                    userProfile.picUrl = userPicUrl
                 userProfile.save()
                 user.save()
                 #login(request, user)
@@ -568,3 +575,19 @@ def edit_profile(request):
         request_context = RequestContext(request, template_context)
         return render_to_response(template, request_context)
     
+def storeToAmazonS3(fileObject):
+    if fileObject==None:
+        return None
+
+    s3 = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+    bucket = s3.get_bucket(BUCKET_NAME)
+    random_string = id_generator(35)
+    extension = os.path.splitext(fileObject.name)[1]
+    newFileName = random_string+extension
+    key = bucket.new_key(newFileName)
+    key.set_contents_from_string(fileObject.read())
+    key.set_acl('public-read')
+    return 'http://s3.amazonaws.com/'+BUCKET_NAME+'/'+newFileName
+    
+def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
