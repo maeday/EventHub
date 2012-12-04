@@ -560,7 +560,7 @@ def edit_profile(request):
                 else:
                     userProfile.use_fb_pic=False
                     userPicUrl = storeToAmazonS3(userPic)
-                    userProfile.picUrl = userPicUrl
+                    userProfile.pic_url = userPicUrl
                 userProfile.save()
                 user.save()
                 #login(request, user)
