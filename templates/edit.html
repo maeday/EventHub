@@ -108,7 +108,7 @@
 				<div class="controls-custom controls-row">
 					{% if categories_list %} {% for category in categories_list %}
 					<label class="checkbox">
-					<input class="edit-c-cat" type="checkbox" value={{ category.id }}>
+					<input id=checkbox-{{ category.id }} class="edit-c-cat" type="checkbox" value={{ category.id }}>
 					{{ category.name }} </label>
 					{% endfor %} {% endif %}
 				</div>

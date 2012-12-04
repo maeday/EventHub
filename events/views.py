@@ -6,7 +6,7 @@ import boto
 from django.contrib import messages
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404, render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from django.template.context import RequestContext
@@ -531,7 +531,6 @@ def edit_event(request):
 
 @csrf_exempt
 def get_event_info(request):
-    template = 'text.html'
     if request.POST:
         eID = request.POST.get('id')
 
@@ -539,25 +538,24 @@ def get_event_info(request):
         
         eStartTime = e.start_date.strftime("%m/%d/%Y %I:%M %p")
         eEndTime = e.end_date.strftime("%m/%d/%Y %I:%M %p")
-        
+                
         if e.free:
             eFree = "1"
         else:
             eFree = "0"
+            
+        c = e.categories.all()
+        category_ids = []
+        for category in c:
+            category_ids.append(category.id)
                     
+        data = { "name":e.name, "desc":e.description, "start":eStartTime, "end":eEndTime,
+                 "free":eFree, "neighborhood":e.neighborhood.id, "venue":e.venue, "address":e.street, "city":e.city,
+                 "state":e.state, "zipcode":e.zipcode, "max":e.cost_max, "min":e.cost_min, "categories":category_ids,
+                 "url":e.url }
+        data_json = json.dumps(data);
         
-        data = { "name":"hello", "desc":"hi there" }
-        data_string = json.dumps(data)
-        
-        template_context = {'text': data_string}
-        request_context = RequestContext(request, template_context)
-        
-        return render_to_response(template, request_context)
-    else:
-        template_context = {}
-        request_context = RequestContext(request, template_context)
-        
-        return render_to_response(template, request_context)
+        return HttpResponse(data_json, mimetype="application/json")
         
 def storeToAmazonS3(fileObject):
     if fileObject==None:

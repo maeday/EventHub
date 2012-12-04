@@ -113,8 +113,9 @@ $(document).ready(function(){
     });
     
 // BEGINNING OF CREATE.JS DOCUMENT READY
-// ONLY PUTTING THIS HERE BECAUSE I DO NOT KNOW HOW TO IMPORT A JS FILE IN A JS FILE
-// PLEASE FIX IF YOU KNOW HOW
+//
+//
+
 	$(".edit-datepicker").datepicker({ minDate:new Date() });
 		
 	$("#edit-picker-1").click(function() {
@@ -570,23 +571,63 @@ function jDecode(str) {
     return $("<div/>").html(str).text();
 }
 
-function parse_and_populate(str) {
+function parse_and_populate(json) {
+	/*
+	var input_image =  document.getElementById('edit-input-photo').files[0];
+	*/
+	$("#edit-input-title").val(json.name);
+	
+	var startDateTime = json.start.split(" ");
+	var endDateTime = json.end.split(" ");
+
+	$("#edit-input-startdate").val(startDateTime[0]);
+	$("#edit-input-starttime").val(startDateTime[1]);
+	$("#edit-clockswitch-1").html("&nbsp;" + startDateTime[2] + "&nbsp;");
+	$("#edit-input-enddate").val(endDateTime[0]);
+	$("#edit-input-endtime").val(endDateTime[1]);
+	$("#edit-clockswitch-2").html("&nbsp;" + endDateTime[2] + "&nbsp;");
+	
+	$("#edit-input-description").val(json.desc);
+	$("#edit-input-location").val(json.neighborhood);
+	$("#edit-input-venue").val(json.venue);
+	$("#edit-input-street").val(json.address);
+	$("#edit-input-city").val(json.city);
+	$("#edit-input-zip").val(json.zipcode);
+	
+	if (json.free == "1") {
+		$('#edit-input-free').prop('checked', true);
+		$("#edit-input-cost-max").prop('disabled', true);
+		$("#edit-input-cost-min").prop('disabled', true);
+		$("#edit-input-cost-max").val("");
+		$("#edit-input-cost-min").val("");
+	} else {
+		$('#edit-input-free').prop('checked', false);
+		$("#edit-input-cost-max").prop('disabled', false);
+		$("#edit-input-cost-min").prop('disabled', false);
+		$("#edit-input-cost-max").val(json.max);
+		$("#edit-input-cost-min").val(json.min);
+	}
+	
+	$("#edit-input-url").val(json.url);
+	
+	$(".edit-c-cat").prop('checked', false);
+	for (i = 0; i < json.categories.length; i++) {
+		cid = "#checkbox-" + json.categories[i];
+		$(cid).prop('checked', true);
+	}
 }
 
 function populate_fields(event_id) {
-	var fd = new FormData();
-	fd.append( 'id', event_id );
 		
 	var request = $.ajax({
 		url: "get_event_info",
 		type: "POST",
-		data: fd,
-		processData: false,
-	    contentType: false,
+		data: {id:event_id},
+		dataType: "json",
 	    cache: false
 	});
 	
-	request.done(function(msg) {
+	request.success(function(msg) {
 		parse_and_populate(msg);
 	});
 	
@@ -596,12 +637,12 @@ function populate_fields(event_id) {
 }
 
 // BEGINNING OF CREATE.JS FUNCTIONS
-// ONLY PUTTING THIS HERE BECAUSE I DO NOT KNOW HOW TO IMPORT A JS FILE IN A JS FILE
-// PLEASE FIX IF YOU KNOW HOW
+//
+//
 
 // Checks for errors in the form.
 function edit_check_all() {
-	return edit_check_title() && edit_check_times_comprehensive() && edit_check_summary() && edit_check_venue() && edit_check_street() && edit_check_city() && edit_check_state() && edit_check_costs() && edit_check_url();
+	return edit_check_title() && edit_check_times_comprehensive() && edit_check_summary() && edit_check_venue() && edit_check_street() && edit_check_city() && edit_check_state() && edit_check_costs();
 }
 
 function edit_check_title() {
