@@ -15,8 +15,8 @@
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
 						{% endif %}
 					{% else %}
-						{% if user.get_profile.pic %}
-						<img src="{{user.get_profile.pic.url}}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+						{% if user.get_profile.pic_url %}
+						<img src="{{user.get_profile.pic_url}}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
 						{% else %}
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
 						{% endif %}

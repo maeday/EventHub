@@ -23,6 +23,7 @@ from accounts.models import UserProfile, FacebookSession
 
 import string
 import random
+import boto, os.path
 BUCKET_NAME = 'useravatar'
 AWS_ACCESS_KEY_ID = 'AKIAI7TBNHIRFWVNNCYQ'
 AWS_SECRET_ACCESS_KEY = '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'
@@ -563,9 +564,13 @@ def edit_profile(request):
                     userProfile.pic_url = userPicUrl
                 userProfile.save()
                 user.save()
+                success_msg = "Your user profile has successfully been changed!"
+                messages.add_message(request, messages.SUCCESS, success_msg)                
                 #login(request, user)
             else:
                 template_context = {'text': "3"}
+                success_msg = "Your user account is not active!"
+                messages.add_message(request, messages.SUCCESS, success_msg)
                 #state = "Your account is not active."
         else:
             template_context = {'text': "2"}
