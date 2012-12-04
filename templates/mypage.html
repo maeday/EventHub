@@ -87,7 +87,7 @@
 			</table>
 		</div>
 	</div>
-	<!-- Subscribed events -->
+	<!-- Followed events -->
 		<div class="span6">
 			<div class="well well-custom">
 				<div>
@@ -95,23 +95,23 @@
 				</div>
 				<table class="table table-hover table-compact">
 						<tbody>
-              {% if subscribed_events %}
-                {% for event in subscribed_events %}
+						 {% if subscribed_events %}
+						   {% for event in subscribed_events %}
 								<tr>
-									<td>
-                    <img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
+									<td width="105px;">
+										<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px;">
 									</td>
 									<td>
-										<div style="padding-top:0;padding-bottom:0;">
-											<h4><a href="/event/{{ event.id }}">{{ event.name }}</a></h4>
+										<div>
+											<h4><a href="/event/{{ event.id }}">{{ event.name }}</a>
+													<a href="/mypage/unfollow/{{ event.id }}"><button class="close pull-right" rel="popover" title="Remove event from subscribed events" value={{ event.id }}>
+														<i class="icon-remove"></i>
+												</button></a>
+											</h4>
 										</div>
 										<strong>{{ event.start_date|date:"l, F j" }} </strong>
 										<p>
 											 {{ event.start_date|date:"g:i A" }}
-
-											<a href="/mypage/unfollow/{{ event.id }}"><button class="close" rel="popover" title="Remove event from subscribed events" value={{ event.id }} style="margin-top: -10px;">
-												<i class="icon-remove"></i>
-											</button></a>
 										</p>
 									</td>
 								</tr>
