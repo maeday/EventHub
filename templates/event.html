@@ -1,65 +1,55 @@
-{% include 'header.html' %}
-{% include 'messages.html' %}
-
+{% include 'header.html' %} {% include 'messages.html' %}
 <div class="row">
 	<!-- Event Full view-->
 	<div class="span8">
 		<div class="row">
-			<div class="span8">
-				<div class="well well-custom">
-					<div class="event-title">
-						{% if user.is_authenticated and event.poster != user %} 
-							{# The follow/unfollow button will only show up if the user is logged in #} 
-							<button id="follow" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-{% spaceless %}{% if subscribed %} 
-								inverse">Unfollow
-							{% else %} 
-								primary">Follow
-							{% endif %}{% endspaceless %}</button>
-            {% else %}
-              <a href="/login?next={{ request.path }}">
-                <button id="follow-inactive" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-primary">
-                  Follow
-                </button>
-              </a>
-						{% endif %}
-						<h3>{{ event.name }}</h3>
-					</div>
-					<div class="row">
-						<p>
-								{% for category in event.categories.all %} 
-									   <span class="gray-text"><small class="pull-right">{{ category.name }} &nbsp; </small></span>
-								{% endfor %}
-						</p>
-						<div class="span7">
-							<span id="event-id" style="display:none;">{{ event.id }}</span>
-							<p>
-								 {% if event.start_date.date == event.end_date.date %}
-								<h5>
+			<div class="well well-custom">
+				<div class="row full-event">
+						<div class="event-title">
+						    {% if user.is_authenticated and event.poster != user %} {# The follow/unfollow button will only show up if the user is logged in #} <button id="follow" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-{% spaceless %}{% if subscribed %} inverse">Unfollow {% else %} primary">Follow {% endif %}{% endspaceless %}</button>
+							{% else %}
+								<a href="/login?next={{ request.path }}">
+								    <button id="follow-inactive" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-primary">
+										Follow
+									</button>
+								</a>
+							{% endif %}
+						    <h3>{{ event.name }}</h3>
+						</div>
+				</div>	
+				<div class="row full-event">
+					<p>
+						{% for category in event.categories.all %} <span class="gray-text"><small class="pull-right">{{ category.name }}&nbsp;</small></span>
+						{% endfor %}
+					</p>
+				</div>
+				<div class="row full-event">
+					<span id="event-id" style="display:none;">{{ event.id }}</span>
+					<p>
+						{% if event.start_date.date == event.end_date.date %}
+						    <h5>
 								{{ event.start_date|date:"l, F j" }} <strong class="pull-right">
 								{{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }} </strong>
-								</h5>
-								 {% else %}
-								<h5>
+						    </h5>
+						{% else %}
+						    <h5>
 								{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"l, F j" }}, {{ event.end_date|date:"g:i A " }} </h5>
 								 {% endif %}
-							</p>
-							<p>
+				    </p>
+				    <p>
 								 {{ event.description|linebreaksbr }}
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="span7">
-							<p>
-								<strong>Cost/Fees</strong><br>
-								 {% if event.free %} FREE {% elif event.cost_min == event.cost_max %} ${{ event.cost_min|floatformat:2 }} for all {% else %} ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }} {% endif %} 
-							</p>
-							<p class="event-author">
-								<small class="pull-left"><a href="/index">&raquo; Back to Results</a></small>
-								<span class="pull-right">Posted by <a href="/profile/{{ event.poster.id }}">{{ event.poster.first_name }} {{ event.poster.last_name }}</a></span>
-							</p>
-						</div>
-					</div>
+				    </p>
+				</div>
+				
+				<div class="row full-event">
+					<p>
+						<strong>Cost/Fees</strong><br>
+						 {% if event.free %} FREE {% elif event.cost_min == event.cost_max %} ${{ event.cost_min|floatformat:2 }} for all {% else %} ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }} {% endif %}
+					</p>
+					<p class="event-author">
+						<small class="pull-left"><a href="/index">&raquo; Back to Results</a></small>
+						<span class="pull-right">Posted by <a href="/profile/{{ event.poster.id }}">{{ event.poster.first_name }} {{ event.poster.last_name }}</a></span>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -79,9 +69,8 @@
 		</div>
 	</div>
 	<!--/span-->
-	 
 	<div class="span4">
-		{% if event.image_url %}
+		 {% if event.image_url %}
 		<div class="row">
 			<div class="span4">
 				<div class="well well-custom">
@@ -91,12 +80,11 @@
 				</div>
 			</div>
 		</div>
-		{% else %} {% endif %}
-		
+		 {% else %} {% endif %}
 		<div class="row">
 			<div class="span4">
 				<div class="well well-custom">
-					<div class="location-title" >
+					<div class="location-title">
 						<strong>{{ event.venue }}</strong><br>
 						 {{ address }}<br>
 						<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
@@ -107,7 +95,6 @@
 				</div>
 			</div>
 		</div>
-		
 		<!-- similar events-->
 		<div class="row">
 			<div class="span4">
@@ -122,9 +109,12 @@
 						</div>
 						<div class="span2 pull-right">
 							<strong><a href="/event/{{ event.id }}">{{ event.name|truncatechars:19 }}</a><br>
-							 {% if event.start_date.date == event.end_date.date %} <small>{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</small>
-							{% else %} <small>{{ event.start_date|date:"F j, g:i A" }} - {{ event.end_date|date:"F j, g:i A"  }}</small></strong>
-							{% endif %}
+								{% if event.start_date.date == event.end_date.date %}
+									<small>{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</small>
+								{% else %}
+									<small>{{ event.start_date|date:"F j, g:i A" }} - {{ event.end_date|date:"F j, g:i A" }}</small>
+							</strong>
+								{% endif %}
 						</div>
 					</div>
 					 {% empty %}
@@ -140,8 +130,6 @@
 				<!-- /well-->
 			</div>
 		</div>
-		
 	</div>
-	
 </div>
 {% include "footer.html" %}
