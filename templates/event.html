@@ -10,11 +10,17 @@
 					<div class="event-title">
 						{% if user.is_authenticated and event.poster != user %} 
 							{# The follow/unfollow button will only show up if the user is logged in #} 
-							<button id="follow"  type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-{% spaceless %}{% if subscribed %} 
+							<button id="follow" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-{% spaceless %}{% if subscribed %} 
 								inverse">Unfollow
 							{% else %} 
 								primary">Follow
 							{% endif %}{% endspaceless %}</button>
+            {% else %}
+              <a href="/login?next={{ request.path }}">
+                <button id="follow-inactive" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-primary">
+                  Follow
+                </button>
+              </a>
 						{% endif %}
 						<h3>{{ event.name }}</h3>
 					</div>
