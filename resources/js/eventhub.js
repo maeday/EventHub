@@ -208,7 +208,6 @@ $(document).ready(function(){
     });
     
     prevSearched = true;
-    eventSearch(true);
 });
 
 function countChecked(identifier) {
