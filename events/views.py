@@ -508,7 +508,8 @@ def edit_event(request):
             e.city = eCity
             e.state = eState
             e.zipcode = eZipcode
-            e.image_url = eimageUrl
+            if eimageUrl is not None:
+                e.image_url = eimageUrl
             #print '##########################'+e.image_url
 
             if eCategories:
