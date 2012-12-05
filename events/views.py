@@ -511,19 +511,9 @@ def edit_event(request):
             e.city = eCity
             e.state = eState
             e.zipcode = eZipcode
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if eimageUrl is not None:
-                e.image_url = eimageUrl
-=======
-            e.image_url = eimageUrl
->>>>>>> parent of 4fd2ab1... Image are not removed if no image is uploaded in event editing page.
-            #print '##########################'+e.image_url
-=======
             
             if eimageUrl is not "0":
                 e.image_url = eimageUrl
->>>>>>> Added ability to keep/change/delete event image from edit modal.
 
             if eCategories:
                 e.categories.clear()
