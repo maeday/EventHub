@@ -568,8 +568,7 @@ def edit_profile(request):
                 else:
                     userProfile.use_fb_pic=False
                     userPicUrl = storeToAmazonS3(userPic)
-                    if userPicUrl is not None:
-                        userProfile.pic_url = userPicUrl
+                    userProfile.pic_url = userPicUrl
                 userProfile.save()
                 user.save()
                 success_msg = "Your user profile has successfully been changed!"
