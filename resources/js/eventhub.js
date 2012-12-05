@@ -72,7 +72,11 @@ $(document).ready(function(){
 
 	});
 	
-	$('.delete_close').click(function(){
+	$('.delete-close').click(function() {
+		$("#confirm_delete").val($(this).val());
+	});
+	
+	$('#confirm_delete').click(function() {
 		delete_event($(this).val());
 	});
     
