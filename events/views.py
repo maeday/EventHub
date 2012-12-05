@@ -473,11 +473,14 @@ def edit_event(request):
             eMinCost = request.POST.get('cost-min')
             eMaxCost = request.POST.get('cost-max')
             eFree = request.POST.get('free')
+            eRemove = request.POST.get('remove')
             eNeighborhood = request.POST.get('location')
             eCategoriesString = request.POST.get('categories')
             eimage = request.FILES.get('image')
             
-            eimageUrl = storeToAmazonS3(eimage)
+            eimageUrl = "0"
+            if eimage or eRemove == "1":
+                eimageUrl = storeToAmazonS3(eimage)
 
             startDateTime = datetime.strptime(eStartDateTimeString, "%m/%d/%Y %I:%M %p")
             endDateTime = datetime.strptime(eEndDateTimeString, "%m/%d/%Y %I:%M %p")
@@ -508,9 +511,15 @@ def edit_event(request):
             e.city = eCity
             e.state = eState
             e.zipcode = eZipcode
+<<<<<<< HEAD
             if eimageUrl is not None:
                 e.image_url = eimageUrl
             #print '##########################'+e.image_url
+=======
+            
+            if eimageUrl is not "0":
+                e.image_url = eimageUrl
+>>>>>>> Added ability to keep/change/delete event image from edit modal.
 
             if eCategories:
                 e.categories.clear()

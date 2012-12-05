@@ -112,6 +112,10 @@ $(document).ready(function(){
     	editEvent($("#confirm_edits").val());
     });
     
+    $("#edit-remove-image").change(function() {
+    	edit_disableImage();
+    });
+    
 // BEGINNING OF CREATE.JS DOCUMENT READY
 //
 //
@@ -485,6 +489,7 @@ function editEvent(id) {
 	var input_cost_min = $("#edit-input-cost-min").val();
 	var input_cost_max = $("#edit-input-cost-max").val();
 	var input_free_checked = $("#edit-input-free").is(':checked');
+	var input_remove_checked = $("#edit-remove-image").is(':checked');
 	var input_location = $("#edit-input-location").val();
 	var input_categories = $(".edit-c-cat:checked").map(function() {
 		return $(this).val();
@@ -514,6 +519,7 @@ function editEvent(id) {
 	var start_str = input_startdate + " " + input_starttime + " " + start_clock;
 	var end_str = input_enddate + " " + input_endtime + " " + end_clock;
 	
+	var input_free_value;
 	// Pass in 0, 1 values to controller for 'free'
 	// If free, pass in non-blank dummy values for min and max cost
 	if(input_free_checked) {
@@ -522,6 +528,15 @@ function editEvent(id) {
 	    input_cost_max = "0";
 	} else {
 	    input_free_value = 0;
+	}
+	
+	var input_remove_value;
+	// Pass in 0, 1 values to controller for remove image
+	// If free, pass in blank dummy value for image url
+	if(input_remove_checked) {
+	    input_remove_value = 1;
+	} else {
+	    input_remove_value = 0;
 	}
 		
 	var fd = new FormData();
@@ -541,6 +556,7 @@ function editEvent(id) {
 	fd.append( 'cost-min', input_cost_min );
 	fd.append( 'cost-max', input_cost_max );
 	fd.append( 'free', input_free_value );
+	fd.append( 'remove', input_remove_value );
 	fd.append( 'location', input_location );
 	fd.append( 'categories', input_categories_string );
 	
@@ -615,6 +631,9 @@ function parse_and_populate(json) {
 		cid = "#checkbox-" + json.categories[i];
 		$(cid).prop('checked', true);
 	}
+	
+	$("#edit-remove-image").prop('checked', false);
+	$("#edit-input-photo").prop('disabled', false);
 }
 
 function populate_fields(event_id) {
@@ -963,5 +982,14 @@ function edit_disableCosts() {
     } else {
         $("#edit-input-cost-min").prop('disabled', false);
         $("#edit-input-cost-max").prop('disabled', false);
+    }
+}
+
+function edit_disableImage() {
+    if($("#edit-remove-image").is(':checked')) {
+    	$("#edit-input-photo").val("");
+        $("#edit-input-photo").prop('disabled', true);
+    } else {
+        $("#edit-input-photo").prop('disabled', false);
     }
 }
