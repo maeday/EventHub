@@ -80,7 +80,10 @@ $(document).ready(function(){
 		delete_event($(this).val());
 	});
     
-	$("#login-error").fadeIn("slow"); 
+    //$("#login-error").fadeIn("slow"); 
+    $("div.alert").each( function(index) {
+        $(this).fadeIn("slow");
+    });
 	
     // triggers infinite scroll
     $(window).scroll(function() {

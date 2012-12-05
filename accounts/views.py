@@ -545,7 +545,7 @@ def edit_profile(request):
         oldPassword = request.POST.get('oldPassword')
         newPassword = request.POST.get('newPassword')
         userEmail = request.POST.get('userEmail')
-        useFbPic = request.POST.get('useFbPic')
+        useFbPic = (request.POST.get('useFbPic') == "true")
         userPic = request.FILES.get('userPic')
         accessGranted = True
         user = authenticate(email=userEmail, password=oldPassword)
@@ -563,7 +563,8 @@ def edit_profile(request):
                 if len(newPassword)>0:
                     user.set_password(newPassword)
                 userProfile = user.get_profile()
-                if useFbPic=='1':
+                
+                if useFbPic:
                     userProfile.use_fb_pic=True
                 else:
                     userProfile.use_fb_pic=False
