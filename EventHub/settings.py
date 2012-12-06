@@ -35,6 +35,8 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 LOGIN_URL = '/login'
 
+CSRF_FAILURE_VIEW = 'accounts.views.csrf_failure'
+
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.EmailBackend',
     'accounts.backends.FacebookBackend',

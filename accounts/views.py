@@ -605,3 +605,9 @@ def storeToAmazonS3(fileObject):
     
 def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
+
+# This really doesn't belong here, but there isn't another place to put it right now
+def csrf_failure(request, reason=""):
+    template = "csrffailure.html"
+    request_context = RequestContext(request)
+    return render_to_response(template, request_context)
