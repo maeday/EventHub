@@ -1,0 +1,22 @@
+{% if messages %}
+  {% for message in messages %}
+    {% if message.tags %}
+      <div id="login-error" class="alert alert-{% spaceless %}
+        {% if 'error' in message.tags %}
+          error
+        {% elif 'success' in message.tags %}
+          success
+        {% elif 'info' in message.tags %}
+          info
+        {% endif %}{% endspaceless %}" style="display:none;margin-top:10px;margin-bottom:0;">
+      <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+      {% if 'error' in message.tags %}<strong>Oh snap!</strong>{% endif %}
+      {% if 'safe' in message.tags %}
+        {{ message|safe }}
+      {% else %}
+        {{ message }}
+      {% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}

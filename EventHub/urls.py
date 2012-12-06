@@ -12,7 +12,7 @@ urlpatterns = patterns('django.views.generic.simple',
     url(r'^events/', include('events.urls')),
     url(r'^event$', 'direct_to_template', {'template': 'event.html'}),
     url(r'^dummy$', 'direct_to_template', {'template': 'dummy.html'}),
-    
+    url(r'^dummyfilter$', 'direct_to_template', {'template': 'events/filter-dummy.html'}),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -28,10 +28,15 @@ urlpatterns += patterns('accounts.views',
     url(r'^loginfb$', 'login_facebook'),
     #url(r'^connect$', 'connect'),
     url(r'^confirm/(?P<activation_key>.*)$', 'confirm'),
-    url(r'^mypage$', 'dashboard'),
     url(r'^forgot$', 'forgot_password'),
     url(r'^reset/(?P<key>.*)$', 'reset_password'),
     url(r'^edit_profile$', 'edit_profile'),
+)
+
+urlpatterns += patterns('profiles.views',
+    url(r'^mypage$', 'dashboard'),
+    url(r'^mypage/unfollow/(?P<event_id>.*)$', 'dashboard_unfollow'),
+    url(r'^profile/(?P<user_id>.*)$', 'profile'),
 )
 
 urlpatterns += patterns('events.views',
@@ -42,6 +47,13 @@ urlpatterns += patterns('events.views',
     #url(r'^search_event$', 'search_event'),
     url(r'^create_event$', 'create_event'),
     url(r'^event/(?P<event_id>.*)$', 'event'),
+    url(r'^follow/(?P<event_id>.*)$', 'follow_event'),
+    url(r'^unfollow/(?P<event_id>.*)$', 'unfollow_event'),
+    url(r'^testfilter$', 'testfilter'),
+    url(r'^getevents$', 'get_events'),
+    url(r'^delete_event$', 'delete_event'),
+    url(r'^edit_event$', 'edit_event'),
+    url(r'^get_event_info$', 'get_event_info'),
 )
 
 urlpatterns += patterns('',

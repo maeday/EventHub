@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+  	<meta http-equiv="Cache-Control" content="public">
     <meta charset="utf-8">
     <title>EventHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
       }
     </script>
 
+    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/eventhub.css" rel="stylesheet">
     <script src="{{ STATIC_URL }}js/jquery.js"></script>
@@ -67,15 +69,15 @@
 					<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="profile-mini">
 					{% endif %}
 				{% else %}
-					{% if user.get_profile.pic %}
-					<img src="{{user.get_profile.pic.url}}" class="profile-mini" name="{{user.get_profile.use_fb_pic}}">
+					{% if user.get_profile.pic_url %}
+					<img src="{{user.get_profile.pic_url}}" class="profile-mini" name="{{user.get_profile.use_fb_pic}}">
 					{% else %}
 					<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="profile-mini">
 					{% endif %}
 				{% endif %}
               {{ user.first_name }} {{ user.last_name }}</a> &nbsp; | &nbsp; <a href="/logout" class="navbar-link">Sign Out</a> &nbsp; 
               {% else %}
-              <a href="/login" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
+              <a href="/login?next={{ request.path }}" class="navbar-link">Sign In</a> &nbsp; | &nbsp; <a href="/register" class="navbar-link">Register</a>
               {% endif %}
             </p>
             <ul class="nav">
@@ -89,3 +91,18 @@
     </div>
 
     <div class="container">
+      <!--[if IE]>
+      <div id="ie-error" class="alert alert-error" style="margin-top:10px;margin-bottom:0;">
+        <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+        We're sorry, but we are not currently supporting Internet Explorer due to its poor support of modern web standards.
+        We highly recommend that you switch to a better browser, such as <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a> 
+        or <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a>.
+      </div>
+      <![endif]-->
+      <noscript>
+      <div id="noscript-error" class="alert alert-error" style="margin-top:10px;margin-bottom:0;">
+        <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+        If you are seeing this message, your browser does not have JavaScript enabled. 
+        Unfortunately, this site will not work without it. Please enable it before continuing.
+      </div>
+      </noscript>

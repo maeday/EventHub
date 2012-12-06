@@ -32,6 +32,14 @@ $(document).ready(function(){
 		}
     });
     
+    $("#input-location").change(function() {
+    	if ($(this).val() != -1) {
+			$("#ctrl-location").removeClass("error");
+			$("#err-location").hide();
+			return true;
+		}
+    });
+    
     $("#input-venue").keyup(function() {
     	if ($(this).val() != "") {
 			$("#ctrl-venue").removeClass("error");
@@ -47,6 +55,13 @@ $(document).ready(function(){
 			return true;
 		}
     });
+
+	$('.c-cat').change(function(event){
+		if ($(this).is(':checked')) {
+			$("#ctrl-categories").removeClass("error");
+			$("#err-categories").hide();
+		}
+	});
     
     $("#input-startdate").blur(function() {
 	    check_date($(this), $("#err-start"), $("#ctrl-start"));
@@ -65,10 +80,17 @@ $(document).ready(function(){
 	    $("#input-enddate").val($("#input-startdate").val());
     });
     
+    $("#input-free").change(function() {
+        disableCosts();
+    });
+    
     $("#publish").click(function() {
     	if (!check_all()) {
     		return false;
     	}
+    	$(this).addClass("disabled");
+    	$(this).attr("disabled", true);
+    	$("#createLoader").show();
     	requestCreate();
     });
     	
@@ -91,20 +113,13 @@ function requestCreate() {
 	var input_image =  document.getElementById('input-photo').files[0];
 	var input_cost_min = $("#input-cost-min").val();
 	var input_cost_max = $("#input-cost-max").val();
+	var input_free_checked = $("#input-free").is(':checked');
 	var input_location = $("#input-location").val();
 	var input_categories = $(".c-cat:checked").map(function() {
 		return $(this).val();
 	}).get();
 	var input_categories_string = input_categories.join();
 	
-	if(input_cost_min=="" || input_cost_max==""){
-		alert("Please specify cost.");
-		return;
-	}
-	if(input_categories_string==""){
-		alert("Please choose at least 1 category.");
-		return;
-	}
 	var start_clock = "am";
 	if ($("#clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
 		start_clock = "pm";
@@ -119,6 +134,16 @@ function requestCreate() {
 	var start_str = input_startdate + " " + input_starttime + " " + start_clock;
 	var end_str = input_enddate + " " + input_endtime + " " + end_clock;
 	
+	// Pass in 0, 1 values to controller for 'free'
+	// If free, pass in non-blank dummy values for min and max cost
+	if(input_free_checked) {
+	    input_free_value = 1;
+	    input_cost_min = "0";
+	    input_cost_max = "0";
+	} else {
+	    input_free_value = 0;
+	}
+		
 	var fd = new FormData();
 	fd.append( 'image', input_image );
 	fd.append( 'title', input_title );
@@ -134,6 +159,7 @@ function requestCreate() {
 	fd.append( 'url', input_url );
 	fd.append( 'cost-min', input_cost_min );
 	fd.append( 'cost-max', input_cost_max );
+	fd.append( 'free', input_free_value );
 	fd.append( 'location', input_location );
 	fd.append( 'categories', input_categories_string );
 	
@@ -146,23 +172,92 @@ function requestCreate() {
 	    cache: false
 	});
 	
-	request.done(function(msg) {
-		if (msg == "1") {
+	// Regex that is used to determine if we get the event id (for page redirect)
+        var isInt = /^\d+$/;
+	
+	// Function that is run if the Ajax call from the server was a success.
+	request.done(function(result) {
+		var parts = result.split(",");
+		var msg = parts[0];
+
+		// Basically check to see if we created the event or got an error.
+		if (String(msg).search(isInt) != -1){
 			$("#createEvent").modal('hide');
-			refreshEventList();
+			window.location = '/event/' + String(msg);
+		} else if(msg == "exists") {
+			// If the event existed, we can ask the user if they want to overwrite
+			// as it is better than denying them after entering info. 
+			var choice = confirm("Event with similar name has already been created. Overwrite previous event details with entered information?");
+
+			if (choice){
+				// Overwrite so just call edit event function
+
+				var fd = new FormData();
+				fd.append( 'image', input_image );
+				fd.append( 'title', input_title );
+				fd.append( 'poster', input_poster );
+				fd.append( 'description', input_desc );
+				fd.append( 'start', start_str );
+				fd.append( 'end', end_str );
+				fd.append( 'venue', input_venue );
+				fd.append( 'street', input_street );
+				fd.append( 'city', input_city );
+				fd.append( 'state', input_state );
+				fd.append( 'zip', input_zip );
+				fd.append( 'url', input_url );
+				fd.append( 'cost-min', input_cost_min );
+				fd.append( 'cost-max', input_cost_max );
+				fd.append( 'free', input_free_value );
+				fd.append( 'location', input_location );
+				fd.append( 'categories', input_categories_string );
+				var temp = parseInt(parts[1]);
+				fd.append('id', temp);
+
+				var erequest = $.ajax({
+					url: "edit_event",
+					type: "POST",
+					data: fd,
+					processData: false,
+				    contentType: false,
+				    cache: false
+				});
+	
+				erequest.done(function(msg) {
+					if (msg == "1") {
+						$("#editEvent").modal('hide');
+						location.reload();
+					} else {
+						alert("Could not edit event");
+					}
+				});
+	
+				erequest.fail(function(jqXHR, textStatus) {
+					alert("Ajax request failed: " + textStatus);
+				});
+
+				$("#createEvent").modal('hide');
+			}
 		} else {
-			alert("Could not create event");
+			// Error so just inform user of error.
+			$("#createLoader").hide();
+			alert("Error: Could not create event");
 		}
+		
+		// Reset state of "Publish" button
+		$("#publish").removeClass("disabled");
+    	$("#publish").removeAttr("disabled");
 	});
 	
+	// Ajax call that occurs when there is an unexpected error from the server.
 	request.fail(function(jqXHR, textStatus) {
+		$("#createLoader").hide();
 		alert("Ajax request failed: " + textStatus);
 	});
 }
 
 // Checks for errors in the form.
 function check_all() {
-	return check_title() && check_times_comprehensive() && check_summary() && check_venue() && check_street() && check_city() && check_state() && check_url();
+	return check_title() && check_times_comprehensive() && check_summary() && check_location() && check_venue() && check_street() && check_city() && check_state() && check_costs() && check_categories();
 }
 
 function check_title() {
@@ -198,6 +293,20 @@ function check_summary() {
 	}
 }
 
+function check_location() {
+	if ($("#input-location").val() == -1) {
+		$("#ctrl-location").addClass("error");
+		$("#err-location").text("Please select a neighborhood.");
+		$("#err-location").show();
+		$("#input-location").focus();
+	    return false;
+	} else {
+		$("#ctrl-location").removeClass("error");
+		$("#err-location").hide();
+		return true;
+	}
+}
+
 function check_date(input, err, ctrl) {
 	var str = input.val();
 	var errorMsg = validate_date(str);
@@ -217,6 +326,8 @@ function check_date(input, err, ctrl) {
 }
 
 function check_time(input, err, ctrl) {
+	normalize_time(input);
+	
 	var str = input.val();
 	var errorMsg = validate_time(str);
 	
@@ -232,6 +343,18 @@ function check_time(input, err, ctrl) {
 	err.hide();
 	ctrl.removeClass("error");
 	return true;
+}
+
+function normalize_time(input, str) {
+	var str = input.val();
+	
+	re = /^(\d{1,2})$/;
+	
+	if (str != '') {
+		if (regs = str.match(re)) {
+			input.val(str + ":00");
+		}
+	}
 }
 
 // Validates date format with Regex. Returns error message or empty string if no error.
@@ -445,4 +568,56 @@ function check_url() {
 		$("#err-url").hide();
 		return true;
 	}
+}
+
+function check_categories() {
+	if ($(".c-cat:checked").map(function() { return $(this).val(); }).get() == "") {
+		$("#ctrl-categories").addClass("error");
+		$("#err-categories").text("Please select at least one category.");
+		$("#err-categories").show();
+		return false;
+	} else {
+		$("#ctrl-categories").removeClass("error");
+		$("#err-categories").hide();
+		return true;
+	}
+}
+
+function check_costs() {
+    if(($("#input-cost-min").val()=="" || $("#input-cost-max").val()=="") && !$("#input-free").is(':checked')) {
+        $("#ctrl-cost").addClass("error");
+		$("#err-cost").text("Please specify how much the event costs.");
+		$("#err-cost").show();
+		$("#input-cost-min").focus();
+		return false;
+	} else if((isNaN($("#input-cost-min").val()) || isNaN($("#input-cost-max").val())) ||
+	          ($("#input-cost-min").val() < 0 || $("#input-cost-max").val() < 0)) {
+	    $("#ctrl-cost").addClass("error");
+		$("#err-cost").text("Negative numbers cannot be used.");
+		$("#err-cost").show();
+		$("#input-cost-min").focus();
+		return false;
+    } else if($("#input-cost-min").val() * 1.0 > $("#input-cost-max").val() * 1.0) {
+        $("#ctrl-cost").addClass("error");
+		$("#err-cost").text("Minimum cost cannot be larger than maximum.");
+		$("#err-cost").show();
+		$("#input-cost-min").focus();
+		return false;
+    } else {
+        $("#ctrl-cost").removeClass("error");
+		$("#err-cost").hide();
+		return true;
+    }
+}
+
+function disableCosts() {
+    if($("#input-free").is(':checked')) {
+        $("#input-cost-min").val("");
+        $("#input-cost-min").prop('disabled', true);
+        $("#input-cost-max").val("");
+        $("#input-cost-max").prop('disabled', true);
+    } else {
+        $("#input-cost-min").prop('disabled', false);
+        $("#input-cost-max").prop('disabled', false);
+    }
 }

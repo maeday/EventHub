@@ -1,136 +1,144 @@
-{% include 'header.html' %}
+{% include 'header.html' %} 
+
+<div class="full-event">
+  {% include 'messages.html' %}
+</div>
 
 <div class="row">
-  <!-- Event Full view-->
-  <div class="span8">
-    <div class="row">
-      <div class="span8">
-        <div class="well well-custom">
-          <div class="event-title">
-            <h3>{{ event.name }}</h3>
-          </div>
-
-          <div class="row">
-              <div class="span7">
-                <p>
-                  {% if event.start_date.date == event.end_date.date %}
-                  <h5>
-                    {{ event.start_date|date:"l, F j" }}
-                    <strong class="pull-right">
-                      {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}
-                    </strong>
-                  </h5>
-                  {% else %}
-                  <h5>
-                    {{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"l, F j" }}, {{ event.end_date|date:"g:i A " }}
-                  </h5>
-                  {% endif %}
-                </p>
-                <p>
-			{{ event.description|linebreaksbr }}
-                </p>
-              </div>
-          </div>
-	<div class="row">
-	          <div class="span7">
-				<p>
-					<strong>Cost/Fees</strong><br>
-	               $20 for UW students; $50 for general public
-				   <small class="pull-right"><a href="/index">&raquo; Back to Results</a></small>
-	            </p>
-	          </div>
-  
+	<!-- Event Full view-->
+	<div class="span8">
 		<div class="row">
-	          <div class="span7" style="padding-left: 19px;">
-	            <img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-polaroid">
-	          </div>
-        </div>
-		  
-    </div>
-
-          
-        </div>
-      </div>
-    </div>
-    
-    <div class="row">
-      <!--Social Stuff-->
-      <div class="span8">
-        <div class="well well-custom">
-          <div class="event-title">
-            <h2>Social stuff</h2>
-          </div>
-          <div class="fb-comments" data-href="http://127.0.0.1:8000/event/{{ event.id }}" data-num-posts="5"></div>
-        </div>
-        <!-- /well-->
-      </div>
-      <!-- /span-->
-    </div>
-  </div>
-  <!--/span-->
-
-  <!--list of similar events-->
-  <div class="span4">
-    <div class="well well-custom">
-      <div class="event-title">
-        <h3>Similar Events</h3>
-      </div>
-      <div class="list-title">
-        <strong>Saturday, October 13</strong>
-      </div>
-      <div class="list-item">
-        <div class="pull-left">
-            <img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
-        </div>
-        <div class="span2">
-            <a href="#">Washington vs. USC Football Game</a><br>
-            <small>4:00 PM - 7:30 PM</small>
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="pull-left">
-            <img src="{{ STATIC_URL }}photos/volleyball.jpg" class="img-list" >
-        </div>
-        <div class="span2">
-            <a href="#">Washington vs. USC Volleyball Game</a><br>
-            <small>4:00 PM - 7:30 PM</small>
-        </div>
-      </div>
-      <div class="list-title">
-        <strong>Sunday, October 14</strong>
-      </div>
-	  <div class="list-item">
-        <div class="pull-left">
-            <img src="{{ STATIC_URL }}photos/football.png" class="img-list" >
-        </div>
-        <div class="span2">
-            <a href="#">Washington vs. USC Football Game</a><br>
-            <small>4:00 PM - 7:30 PM</small>
-        </div>
-	  </div>
-      <p>
-        <a href="index">More...</a>
-      </p>
-    </div>
-    <!-- /well-->
-  </div><!-- /span-->
-
-  <div class="span4">
-		<div class="well well-custom">
-				<div class="row">
-				  		<div class="location-title" style="width:250px; margin-left: 19px;">
-						        <strong>{{ event.venue }}</strong><br>
-								{{ address }}<br>
-								<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
+			<div class="well well-custom">
+				<div class="row full-event">
+						<div class="event-title">
+						    {% if user.is_authenticated and event.poster != user %} {# The follow/unfollow button will only show up if the user is logged in #} <button id="follow" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-{% spaceless %}{% if subscribed %} inverse">Unfollow {% else %} primary">Follow {% endif %}{% endspaceless %}</button>
+							{% else %}
+								<a href="/login?next={{ request.path }}">
+								    <button id="follow-inactive" type="button" style="margin-top:8px;" class="btn btn-medium pull-right btn-primary">
+										Follow
+									</button>
+								</a>
+							{% endif %}
+						    <h3>{{ event.name }}</h3>
 						</div>
+				</div>	
+				<div class="row full-event">
+					<p>
+						<span class="gray-text">
+							<small class="pull-left">
+								{{ event.neighborhood.name }}
+							</small>
+							<small class="pull-right" style="text-align:right;">
+							{% for category in event.categories.all %} 
+						    	{{ category.name }}{% if not forloop.last %}&nbsp;| {% endif %}
+							{% endfor %}
+							</small>
+						</span>
+					</p>
 				</div>
-				<div class="row">
-						<div style="width:250px; margin-left: 19px;">
-								<a href="http://maps.google.com/maps?q={{address}}" target="blank" ><img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid"></a>
-						</div>
+				<div class="row full-event">
+					<span id="event-id" style="display:none;">{{ event.id }}</span>
+					<p>
+						{% if event.start_date.date == event.end_date.date %}
+						    <h5>
+								{{ event.start_date|date:"l, F j" }} <strong class="pull-right">
+								{{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }} </strong>
+						    </h5>
+						{% else %}
+						    <h5>
+								{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"l, F j" }}, {{ event.end_date|date:"g:i A " }} </h5>
+								 {% endif %}
+				    </p>
+				    <p>
+								 {{ event.description|linebreaksbr }}
+				    </p>
 				</div>
+				
+				<div class="row full-event">
+					<p>
+						<strong>Cost/Fees</strong><br>
+						 {% if event.free %} FREE {% elif event.cost_min == event.cost_max %} ${{ event.cost_min|floatformat:2 }} for all {% else %} ${{ event.cost_min|floatformat:2 }} - ${{ event.cost_max|floatformat:2 }} {% endif %}
+					</p>
+					<p class="event-author">
+						<small class="pull-left"><a href="/index">&raquo; Back to Results</a></small>
+						<span class="pull-right">Posted by <a href="/profile/{{ event.poster.id }}">{{ event.poster.first_name }} {{ event.poster.last_name }}</a></span>
+					</p>
+				</div>
+			</div>
 		</div>
-  </div>
-
+		<!--Social Stuff-->
+		<div class="row">
+			<div class="well well-custom">
+				<div class="event-title">
+					<h2>Social stuff</h2>
+				</div>
+				<div class="fb-comments" data-href="{{ WEB_ROOT }}/event/{{ event.id }}" data-num-posts="5">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/span-->
+	<div class="span4">
+		 {% if event.image_url %}
+		<div class="row">
+			<div class="span4">
+				<div class="well well-custom">
+					<div class="sidebar-img">
+						<img src="{{ event.image_url }}" class="img-polaroid">
+					</div>
+				</div>
+			</div>
+		</div>
+		 {% else %} {% endif %}
+		<div class="row">
+			<div class="span4">
+				<div class="well well-custom">
+					<div class="location-title">
+						<strong>{{ event.venue }}</strong><br>
+						 {{ address }}<br>
+						<a href="{{ event.url }}">{{ event.url|truncatechars:37 }}</a>
+					</div>
+					<div class="sidebar-img">
+						<a href="http://maps.google.com/maps?q={{address}}" target="blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center={{ address|urlencode }}&zoom=16&size=1110x1110&sensor=false&key=AIzaSyA2E2E9m4wfWYC3H6Xb8hvHaaRUT3mzSE8" class="img-polaroid"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- similar events-->
+		<div class="row">
+			<div class="span4">
+				<div class="well well-custom">
+					<div class="event-title">
+						<h3>Recommended Events</h3>
+					</div>
+					 {% if recommended_list %} {% for event in recommended_list %}
+					<div class="list-item">
+						<div class="pull-left">
+							<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}" class="img-list">
+						</div>
+						<div class="span2 pull-right">
+							<strong><a href="/event/{{ event.id }}">{{ event.name|truncatechars:19 }}</a><br>
+								{% if event.start_date.date == event.end_date.date %}
+									<small>{{ event.start_date|date:"l, F j" }}, {{ event.start_date|date:"g:i A" }} - {{ event.end_date|date:"g:i A" }}</small>
+								{% else %}
+									<small>{{ event.start_date|date:"F j, g:i A" }} - {{ event.end_date|date:"F j, g:i A" }}</small>
+							</strong>
+								{% endif %}
+						</div>
+					</div>
+					 {% empty %}
+					<p>
+						 No similar events found.
+					</p>
+					 {% endfor %} {% else %}
+					<p>
+						 No similar events found.
+					</p>
+					 {% endif %}
+				</div>
+				<!-- /well-->
+			</div>
+		</div>
+	</div>
 </div>
 {% include "footer.html" %}

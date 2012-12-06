@@ -18,6 +18,12 @@ from django.utils.functional import lazy
 
 lazy_inter = lazy(lambda a,b: str(a) % b, str)
 
+# Validation error messages
+ERROR_MSG_INCORRECT_USERPASS = \
+    'Please enter a correct email address and password.'
+ERROR_MSG_USER_INACTIVE = \
+    'This account is inactive. Please check your email for the activation link. If you have lost it, or it has expired, please go <a href="/resend">here</a> to get a new link sent to your email.'
+
 def isUniqueEmail(field_data):
     '''Test if email is unique'''
     try:
@@ -97,11 +103,11 @@ class EmailAuthenticationForm(forms.Form):
         if email and password:
             self.user_cache = authenticate(email=email, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct email address and password."))
+                raise forms.ValidationError(_(ERROR_MSG_INCORRECT_USERPASS))
             elif not self.user_cache.is_active:
                 # User hasn't been activated; allow login for now
                 #pass
-                raise forms.ValidationError(mark_safe('This account is inactive. Please check your email for the activation link. If you have lost it, or it has expired, please go <a href="/resend">here</a> to get a new link sent to your email.'))
+                raise forms.ValidationError(mark_safe(ERROR_MSG_USER_INACTIVE))
 #        self.check_for_test_cookie()
         return self.cleaned_data
 

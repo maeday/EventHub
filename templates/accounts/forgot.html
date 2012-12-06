@@ -3,34 +3,32 @@
 <div class="well well-custom">
     <form method="post">
       {% csrf_token %}
-      <div class="row">
-        <div class="registration-title"">
+        <div class="registration-title">
             <h2 class="registration-title-h2">Forgot your password?</h2>
-            <p>Please enter your email address and we will email you a link to reset your password.</p>
-        </div>
-      </div>
+        </div>	
       {% if success %}
       <div id="login-error" class="alert alert-success" style="display:none;margin-top:10px;margin-bottom:0;">
-		<button type="button" class="close" data-dismiss="alert">×</button>
+		<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
 		A link has been sent to your email with instructions on resetting your password.		
 	  </div>
       {% elif form.errors %}
       <div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
-		<button type="button" class="close" data-dismiss="alert">×</button>
+		<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
 	    <strong>Oh snap!</strong> {% for error in form.email.errors %}{{ error|escape }} {% endfor %}	
 	  </div>
       {% endif %}
       <div class="row">
-        <div class="registration-title">
+        <div class="registration-centered">
+		  <p>Please enter your email address and we will email you a link to reset your password.</p>
           <label for="user_login">Email Address&nbsp;&nbsp;
           <input class="span3" id="user_login" size="30" type="text" name="email" >&nbsp;&nbsp;
-          <button id="reset-btn" class="btn btn-primary" type="submit" name="reset" style="margin-bottom: 10px;">Reset Password</button> </label>
+          <button id="reset-btn" class="btn btn-primary" type="submit" name="reset" style="margin-bottom: 10px;">Send Email</button> </label>
         </div>
       </div>
-      <div class="row registration-title"">
-        <div class="form-actions">
-            <a href="login">Return to Login</a>
-        </div>      
+      <div class="row">
+			<div class="registration-centered">
+				<strong><a href="login">Return to Login</a></strong>
+			</div>
       </div>
     </form>
 </div>

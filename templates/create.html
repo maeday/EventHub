@@ -45,15 +45,16 @@
 					<span id="err-description" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
-			<div class="control-group">
+			<div id="ctrl-location" class="control-group">
 				<label class="control-label-custom" for="input-location">Location</label>
 				<div class="controls-custom">
 					<select id="input-location">
+					<option value=-1>-- Select a Neighborhood --</option>
 					{% if neighborhoods_list %} {% for neighborhood in neighborhoods_list %}
 					<option value={{ neighborhood.id }}>{{ neighborhood.name }}</option>
 					{% endfor %} {% endif %}
 					</select>
-					<span class="help-inline"></span>
+					<span id="err-location" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 			<div id="ctrl-venue" class="control-group">
@@ -73,7 +74,8 @@
 			<div id="ctrl-city" class="control-group">
 				<label class="control-label-custom" for="input-city">City</label>
 				<div class="controls-custom controls-row">
-					<input type="text" id="input-city" style="width:60px;" value="Seattle">&nbsp;&nbsp;&nbsp; State &nbsp;<input type="text" id="input-state" style="text-transform:uppercase;width:25px;" maxlength="2" value="WA">&nbsp;&nbsp;&nbsp; Zip Code &nbsp;<input type="text" style="width:50px;" id="input-zip" maxlength="5">
+					<input type="text" id="input-city" style="width:60px;" value="Seattle">&nbsp;&nbsp;&nbsp; State &nbsp;
+					<input type="text" id="input-state" style="text-transform:uppercase;width:25px;" maxlength="2" value="WA">&nbsp;&nbsp;&nbsp; Zip Code &nbsp;<input type="text" style="width:50px;" id="input-zip" maxlength="5">
 					<span id="err-city" class="help-block" style="display:none;padding-top:5px;"></span>
 				</div>
 			</div>
@@ -87,8 +89,9 @@
 						<span class="add-on">Max</span><input type="text" class="input-mini" id="input-cost-max" placeholder="$">
 					</div>
 					<label class="checkbox">
-					<input type="checkbox" value="">
+					<input id="input-free" type="checkbox">
 					Free </label>
+					<span id="err-cost" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 			<div id="ctrl-url" class="control-group">
@@ -108,6 +111,7 @@
 					<input class="c-cat" type="checkbox" value={{ category.id }}>
 					{{ category.name }} </label>
 					{% endfor %} {% endif %}
+					<span id="err-categories" class="help-block" style="display:none;padding-top:5px;"></span>
 				</div>
 			</div>
 			<div id="ctrl-image" class="control-group">
@@ -123,6 +127,7 @@
 	</div>
 	<!-- modal-->
 	<div class="modal-footer">
+		<div id="createLoader"><img src="{{ STATIC_URL }}img/loader.gif" width="20"></div>
 		<button class="btn" data-dismiss="modal">Cancel</button>
 		<button id="publish" class="btn btn-primary">Publish Event</button>
 	</div>

@@ -1,24 +1,13 @@
 {% include 'header.html' %}
 {% include "create.html" %}
+{% include 'messages.html' %}
 
 <div class="row">
-	{% if error == "ALREADY_EXISTS" %}
-		<div id="login-error" class="alert alert-error" style="display:none;margin-top:10px;margin-bottom:0;">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<strong>Oh snap!</strong> That Facebook account is already connected to an existing EventHub account.
-			If you would like to connect a different Facebook account, please log out of Facebook and try again.		
-		</div>
-	{% endif %}
-
 	<!--My Profile-->
-	<div class="span5">
+	<div class="span12">
 		<div class="well well-custom">
-			<div class="title">
-				<h3>My Profile<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top: 3px;" >Edit Profile</button></h3>
-			</div>
-			<div>
 				<div class="row">
-					<div class="span2" style="margin-right: 0px;padding-right0px;width:120px">
+					<div class="span2" >
 					{% if user.get_profile.use_fb_pic == 1 %}
 						{% if user.get_profile.fbid != -1 %}
 						<img src="https://graph.facebook.com/{{ user.get_profile.fbid }}/picture?type=normal" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
@@ -26,139 +15,196 @@
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
 						{% endif %}
 					{% else %}
-						{% if user.get_profile.pic %}
-						<img src="{{user.get_profile.pic.url}}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+						{% if user.get_profile.pic_url %}
+						<img src="{{user.get_profile.pic_url}}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
 						{% else %}
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
 						{% endif %}
 					{% endif %}
 					</div>
-					<div class="span3" style="margin-left: 0px;padding-left: 0px">
+					<div class="span9" style="margin-left: 0px;padding-left: 0px">
+						<div class="title">
+							{% if user.get_profile.fbid == -1 %}<a class="pull-right" href="https://www.facebook.com/dialog/oauth?client_id={{ FACEBOOK_APP_ID }}&redirect_uri={{ WEB_ROOT|urlencode:"" }}{{ request.path|urlencode:"" }}&state=test">
+                <!---Image from http://www.mobileinc.co.uk/2011/01/i-made-some-free-facebook-connect-buttons-in-png-psd/-->
+                <img src="{{ STATIC_URL }}img/fbconnect-small.png" style="margin-top:7px;">
+              </a>{% endif %}
+							<h3>My Profile</h3>
+						</div>
 						<p>
-							<strong>First name:</strong> {{ user.first_name }}
+							<h4>{{ user.first_name }} {{ user.last_name }}</h4> 
 						</p>
 						<p>
-							<strong>Last name: </strong>{{ user.last_name }}
+							<span class="email-text"><strong>{{ user.email }}</strong></span>
+							<button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#EditProfile" style="margin-top:-15px;" >Edit Profile</button>
 						</p>
-						<p>
-							<strong>Email address:</strong> {{ user.email }}
-						</p>
-						{% if user.get_profile.fbid == -1 %}<a href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">Connect with Facebook</a>{% endif %}
-						
 					</div>
 				</div>
-			</div>
+			
 		</div>
 	</div>
 	
 	
 	<!--My events-->
-	<div class="span7">
+	<div class="span6">
 		<div class="well well-custom">
 			<div>
 				<h3>My Events <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#createEvent" style="margin-top:5px;">Create Event</button></h3>
 			</div>
-			<table class="table table-hover">
+			<table class="table table-hover table-compact">
 			<tbody>
-			{% if user_events %} {% for event in user_events %}
+			{% if user_events %} {% for event in user_events reversed %}
 			<tr>
-				<td>
-					<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:140px;height:90px">
+				<td style="width:110px;">
+					<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px">
 				</td>
 				<td>
-					<div style="padding-top:0;padding-bottom:0;">
-						<h4>{{ event.name }}<button class="close" rel="popover" title="Delete Event">&times;</button></h4>
+					<div>
+						<h4><a href="/event/{{ event.id }}">{{ event.name }}</a></h4>
 					</div>
 					<strong>{{ event.start_date|date:"l, F j" }} </strong>
 					<p>
 						{{ event.start_date|date:"g:i A" }}
+						
+					    <button class="btn btn-small btn-primary pull-right edit-event-btn" type="button" data-toggle="modal" rel="popover" title="Edit Event" data-target="#editEvent" style="margin-top:5px;margin-left:3px;" value={{ event.id }}>
+								<i class="icon-pencil icon-white"></i>
+					    </button>
+						<button class="btn btn-small btn-primary pull-right delete-close" type="button" data-toggle="modal" rel="popover" title="Delete Event" data-target="#deleteEvent" style="margin-top:5px;" value={{ event.id }}>
+								<i class="icon-trash icon-white"></i>
+						</button>
 					</p>
+
+
 				</td>
 			</tr>
 			{% endfor %} {% else %}
 			<p>
-					No events are available.
+				You have not created any events.
 			</p>
  			{% endif %}
+ 			<!-- Edit Event modal -->
+            {% include "edit.html" %}
+            <!-- Delete Event modal -->
+            {% include "delete.html" %}
 			</tbody>
 			</table>
-			<p>
-				<a href="#">See all (7)...</a>
-			</p>
 		</div>
 	</div>
+	<!-- Followed events -->
+		<div class="span6">
+			<div class="well well-custom">
+				<div>
+					<h3>Following Events</h3>
+				</div>
+				<table class="table table-hover table-compact">
+						<tbody>
+						 {% if subscribed_events %}
+						   {% for event in subscribed_events %}
+								<tr>
+									<td width="105px;">
+										<img src="{% if event.image_url %}{{ event.image_url }}{% else %}{{ STATIC_URL }}photos/no-image-big.png{% endif %}"  class="img-polaroid" style="width:100px;height:80px;">
+									</td>
+									<td>
+										<div>
+											<h4><a href="/event/{{ event.id }}">{{ event.name }}</a>
+													<a href="/mypage/unfollow/{{ event.id }}"><button class="close pull-right" rel="popover" title="Remove event from subscribed events" value={{ event.id }}>
+														<i class="icon-remove"></i>
+												</button></a>
+											</h4>
+										</div>
+										<strong>{{ event.start_date|date:"l, F j" }} </strong>
+										<p>
+											 {{ event.start_date|date:"g:i A" }}
+										</p>
+									</td>
+								</tr>
+                {% endfor %}
+              {% else %}
+								<p>You are not following any events.</p>
+              {% endif %}
+						</tbody>
+				</table>
+			</div>
+		</div>
 </div>
 
 <!-- Edit Profile modal-->
 <div id="EditProfile" class="modal modal-profile hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3 id="myModalLabel">Edit My Profile</h3>
+		<h3 id="myModalLabel">Edit my Profile</h3>
 	</div>
 	<div class="modal-body">
 		<div class="form-horizontal">
+		    <legend><small>Personal</small></legend>
 			<div class="control-group">
-				<label class="control-label-custom" for="input01">First name</label>
-				<div class="controls-custom">
-					<input id="first-name" type="text" class="input-large" id="input01" name="title" value="{{ user.first_name }}" ><span class="help-inline"></span>
+				<div class="row">
+						<label class="control-label-custom" for="input01">First name</label>
+						<div class="controls-custom">
+							<input id="first-name" type="text" class="input-medium" id="input01" name="title" value="{{ user.first_name }}">
+						</div>
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label-custom" for="input01">Last name</label>
-				<div class="controls-custom">
-					<input id="last-name" type="text" class="input-large" id="input01" name="title" value="{{ user.last_name }}" ><span class="help-inline"></span>
+				<div class="row">
+						<label class="control-label-custom" for="input02">Last name</label>
+						<div class="controls-custom">
+							<input id="last-name" type="text" class="input-medium" id="input02" name="title" value="{{ user.last_name }}">
+						</div>
 				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input01">Email&nbsp;address</label>
-				<div class="controls-custom">
-					<input id="user-email" type="text" class="input-large" id="input01" name="title" value="{{ user.email }}" disabled="disabled"><span class="help-inline"></span>
+				<div class="control-label-text">
+					Email address: &nbsp;<span class="email-text" id="user-email">{{ user.email }}</span>
 				</div>
-			</div>
-			
-			<div class="control-group">
-				<label class="control-label-custom" for="input01">Old&nbsp;Password</label>
-				<div class="controls-custom">
-					<input id="old-password" type="password" class="input-large" id="input01" name="title"  ><span class="help-inline"></span>
-				</div>
-			</div>
-				
-			<div class="control-group">
-				<label class="control-label-custom" for="input01">New&nbsp;Password</label>
-				<div class="controls-custom">
-					<input id="new-password-1" type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input01">Again</label>
-				<div class="controls-custom">
-					<input id="new-password-2" type="password" class="input-large" id="input01" name="title" ><span class="help-inline"></span>
-				</div>
-			</div>
-			
-			<div class="control-group">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    </div>
+
+    		<div class="control-group">
+				<legend><small>Profile Picture</small></legend>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<label class="radio inline">
 					<input type="radio" name="picType" id="fbPic" value="fbPic" onChange="disablefield();">
 					Use Facebook Picture
-				</label>
+				</label>&nbsp;&nbsp;
 				<label class="radio inline">
 					<input type="radio" name="picType" id="noFbPic" value="pic" checked="checked" onChange="disablefield();" >
 					Upload picture
 				</label>
 			</div>
 			<div class="control-group">
-				<label class="control-label-custom" for="input11">Image</label>
-				<div class="controls-custom">
-					<div class="input-append">
-						<input type="file" name="uploadPic" id="uploadPic"/>
-					</div>
+				<label class="control-label-upload">Image</label>
+				<div>
+					<input type="file" name="uploadPic" id="uploadPic">
 				</div>
 			</div>
+
+			
+			<div id="ctrl-old-password" class="control-group">
+				 <legend><small>Change Password</small></legend>
+				<label class="control-label-profile" for="old-password">Current Password</label>
+				<div class="controls-profile">
+					<input id="old-password" type="password" class="input-medium" name="password"><!---<span class="help-inline"></span>--->
+					<span id="err-old-password" class="help-block" style="display:none;"></span>
+				</div>
+			</div>
+				
+			<div id="ctrl-new-password-1" class="control-group">
+				<label class="control-label-profile" for="new-password-1">New Password</label>
+				<div class="controls-profile">
+					<input id="new-password-1" type="password" class="input-medium" name="newpassword"><!---<span class="help-inline"></span>--->
+					<span id="err-new-password-1" class="help-block" style="display:none;"></span>
+				</div>
+			</div>
+			<div id="ctrl-new-password-2" class="control-group">
+				<label class="control-label-profile" for="new-password-2">Repeat Password</label>
+				<div class="controls-profile">
+					<input id="new-password-2" type="password" class="input-medium" name="newpassword2"><!---<span class="help-inline"></span>--->
+					<span id="err-new-password-2" class="help-block" style="display:none;"></span>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 	<div class="modal-footer">
+	    <div id="editProfLoader" class="modal-loader"><img src="{{ STATIC_URL }}img/loader.gif" width="20"></div>
 		<button class="btn" data-dismiss="modal">Cancel</button>
-		<button id = "editProfile_btn" class="btn btn-primary">Edit Profile</button>
+		<button id="editProfile_btn" class="btn btn-primary">Save</button>
 	</div>
 </div>
 

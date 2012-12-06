@@ -42,18 +42,18 @@
 	<!--/span-->
 	<div class="span9">
 		<div class="row-fluid">
-			<div class="well well-custom">
+			<div class="well well-custom" style="padding-bottom:0;">
 				<div class="span12">
 					<h2><span id="search-title">Upcoming Events</span>
 					  {% if user.is_authenticated %}
 					  <button class="btn btn-medium btn-primary pull-right" type="button" data-toggle="modal" data-target="#createEvent" style="margin-top:8px;" >Create Event</button>
 					  {% else %}
-					  <a href="login"><button class="btn btn-medium btn-primary pull-right" type="button" style="margin-top:8px;">Create Event</button></a>
+					  <a href="login?next={{ request.path }}"><button class="btn btn-medium btn-primary pull-right" type="button" style="margin-top:8px;">Create Event</button></a>
 					  {% endif %}
 					</h2>
 					<table class="table table-hover table-bordered table-striped" style="margin-bottom:0;">
 						<tbody id="refresher">
-								 {% include "eventlist.html" %}
+								 {# include "eventlist.html" #}
 						</tbody>
 					</table>
 					<div id="contentLoader">
@@ -66,4 +66,11 @@
 			<!-- well-->
 		</div>
 		<!--/row-->
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+      eventSearch(true);
+    });
+    </script>
+    
 {% include "footer.html" %}
