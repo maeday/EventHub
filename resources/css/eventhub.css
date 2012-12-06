@@ -409,13 +409,7 @@ body {
 	padding-bottom: 10px;
 }
 
-#createLoader, #editProfLoader {
-	display: none;
-	padding-top: 3px;
-	float: left;
-}
-
-.modal-loader {
+#createLoader, #editProfLoader, #editEventLoader {
 	display: none;
 	padding-top: 3px;
 	float: left;
