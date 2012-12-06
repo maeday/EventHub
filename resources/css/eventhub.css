@@ -402,3 +402,9 @@ body {
 	line-height: 15px;
 	padding-bottom: 10px;
 }
+
+#createLoader {
+	display: none;
+	padding-top: 3px;
+	float: left;
+}
