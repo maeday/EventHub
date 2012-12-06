@@ -4,6 +4,9 @@ from os import path
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+# **Change this to update settings**
+APP_NAME = 'EventHub'
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -121,10 +124,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'EventHub.urls'
+ROOT_URLCONF = APP_NAME + '.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'EventHub.wsgi.application'
+WSGI_APPLICATION = APP_NAME +'.wsgi.application'
 
 # Template context processors
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -135,6 +138,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    APP_NAME + '.context_processors.config',
 )
 
 TEMPLATE_DIRS = (

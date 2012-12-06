@@ -12,7 +12,6 @@ from django.core.urlresolvers import reverse
 from django.template.context import RequestContext
 from django.utils import timezone
 
-from EventHub import settings
 from events.models import Event, Categories, Neighborhoods
 from django.contrib.auth.models import User
 from django.db.models.fields import DateTimeField

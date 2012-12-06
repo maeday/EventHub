@@ -69,10 +69,7 @@ def register(request):
     Handles user registration request
     """
     template = 'accounts/register-1.html'
-    template_context = {
-        'app_id': settings.FACEBOOK_APP_ID,
-        'web_root': settings.WEB_ROOT
-    }
+    template_context = {}
     if request.user.is_authenticated():
         # They are already logged on, don't let them register again
         return redirect('/mypage')
@@ -217,7 +214,6 @@ def user_login(request):
         'success'   : False,
         'active'    : True,
         'invalid'   : False,
-        'app_id'    : settings.FACEBOOK_APP_ID,
         'redir_uri' : settings.WEB_ROOT + '/loginfb'
     }
     if request.user.is_authenticated():

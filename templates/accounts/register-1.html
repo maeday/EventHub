@@ -7,7 +7,7 @@
 </style>
 
 <div id="fb-root"></div>
-<script src="https://connect.facebook.net/en_US/all.js#appId={{ app_id }}&xfbml=1"></script>
+<script src="https://connect.facebook.net/en_US/all.js#appId={{ FACEBOOK_APP_ID }}&xfbml=1"></script>
 
 <div class="row-fluid">
   <div class="span12">
@@ -21,7 +21,7 @@
 <div class="row-fluid align-center">
   <div class="span12">
     <fb:registration
-        redirect-uri="{{ web_root }}/register"
+        redirect-uri="{{ WEB_ROOT }}/register"
         fields="[
           {'name':'name','view':'prefilled'},
           {'name':'first_name','view':'not_prefilled'},
