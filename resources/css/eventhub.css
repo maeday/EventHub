@@ -24,8 +24,13 @@ a:active {
   color: #005580;
 }
 
-.full-event{
-		margin-left: 5px;
+.full-event {
+	margin-left: 5px;
+}
+
+.full-event .alert {
+	margin-left: -25px;
+	padding-left: 25px;
 }
 
 .title {

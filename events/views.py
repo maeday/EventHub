@@ -291,10 +291,13 @@ def follow_event(request, event_id):
     template_context = {}
     if request.user.is_authenticated():
         event_id = int(event_id)
-        event = get_object_or_404(Event, id=event_id)
-        event.add_follower(request.user)
-        event.save()
-        template_context['text'] = '1'
+        try:
+            event = Event.objects.get(id=event_id)
+            event.add_follower(request.user)
+            event.save()
+            template_context['text'] = '1'
+        except Event.DoesNotExist:
+            template_context['text'] = '0'
     template = 'text.html'
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
@@ -303,10 +306,13 @@ def unfollow_event(request, event_id):
     template_context = {}
     if request.user.is_authenticated():
         event_id = int(event_id)
-        event = get_object_or_404(Event, id=event_id)
-        event.remove_follower(request.user)
-        event.save()
-        template_context['text'] = '1'
+        try:
+            event = Event.objects.get(id=event_id)
+            event.remove_follower(request.user)
+            event.save()
+            template_context['text'] = '1'
+        except Event.DoesNotExist:
+            template_context['text'] = '0'
     template = 'text.html'
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)

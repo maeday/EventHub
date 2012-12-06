@@ -50,14 +50,20 @@ def dashboard(request):
     request_context = RequestContext(request, template_context)
     return render_to_response(template, request_context)
 
+@login_required
 def dashboard_unfollow(request, event_id):
     if request.user.is_authenticated():
         event_id = int(event_id)
-        event = get_object_or_404(Event, id=event_id)
-        event.remove_follower(request.user)
-        event.save()
-        info_msg = 'You have unfollowed the event "' + event.name + '".'
-        messages.add_message(request, messages.INFO, info_msg)
+        try:
+            event = Event.objects.get(id=event_id)
+            event.remove_follower(request.user)
+            event.save()
+            info_msg = 'You have unfollowed the event "' + event.name + '".'
+            messages.add_message(request, messages.INFO, info_msg)
+        except Event.DoesNotExist:
+            error_msg = 'That event does not exist! It has either been deleted \
+                or was never created.'
+            messages.add_message(request, messages.ERROR, error_msg)
     return redirect('/mypage')
 
 def profile(request, user_id):
