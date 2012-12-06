@@ -24,7 +24,7 @@
 					</div>
 					<div class="span9" style="margin-left: 0px;padding-left: 0px">
 						<div class="title">
-							{% if user.get_profile.fbid == -1 %}<a class="pull-right" href="https://www.facebook.com/dialog/oauth?client_id={{ app_id }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">
+							{% if user.get_profile.fbid == -1 %}<a class="pull-right" href="https://www.facebook.com/dialog/oauth?client_id={{ FACEBOOK_APP_ID }}&redirect_uri={{ WEB_ROOT|urlencode:"" }}{{ request.path|urlencode:"" }}&state=test">
                 <!---Image from http://www.mobileinc.co.uk/2011/01/i-made-some-free-facebook-connect-buttons-in-png-psd/-->
                 <img src="{{ STATIC_URL }}img/fbconnect-small.png" style="margin-top:7px;">
               </a>{% endif %}
