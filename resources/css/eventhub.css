@@ -385,6 +385,7 @@ body {
 #refresher {
 	background-color: rgba(255, 255, 255, 1.0);
 }
+
 #contentLoader {
 	display: none;
 	text-align: center;
@@ -409,6 +410,12 @@ body {
 }
 
 #createLoader {
+	display: none;
+	padding-top: 3px;
+	float: left;
+}
+
+.modal-loader {
 	display: none;
 	padding-top: 3px;
 	float: left;

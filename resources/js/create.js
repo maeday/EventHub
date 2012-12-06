@@ -88,6 +88,8 @@ $(document).ready(function(){
     	if (!check_all()) {
     		return false;
     	}
+    	$(this).addClass("disabled");
+    	$(this).attr("disabled", true);
     	$("#createLoader").show();
     	requestCreate();
     });
@@ -240,6 +242,10 @@ function requestCreate() {
 			$("#createLoader").hide();
 			alert("Error: Could not create event");
 		}
+		
+		// Reset state of "Publish" button
+		$("#publish").removeClass("disabled");
+    	$("#publish").removeAttr("disabled");
 	});
 	
 	// Ajax call that occurs when there is an unexpected error from the server.

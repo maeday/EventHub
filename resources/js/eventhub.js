@@ -232,6 +232,11 @@ function editProfile() {
 	var useFbPic = document.getElementById("fbPic").checked;
 	var userPic = document.getElementById("uploadPic").files[0];
 	
+	// Show loader and disable "Save" button
+	$("#editProfLoader").show();
+	$("#editProfile_btn").addClass("disabled");
+	$("#editProfile_btn").attr("disabled", true);
+	
 	$("#ctrl-old-password").removeClass("error");
 	$("#err-old-password").hide();
 	$("#ctrl-new-password-1").removeClass("error");
@@ -287,6 +292,11 @@ function editProfile() {
 		} else {
 			alert("Error: User Profile editing failed.");
 		}
+		
+		// Reset state
+		$("#editProfLoader").hide();
+		$("#editProfile_btn").removeClass("disabled");
+		$("#editProfile_btn").removeAttr("disabled");
 	});
 	
 	request.fail(function(jqXHR, textStatus) {
