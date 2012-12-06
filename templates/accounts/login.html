@@ -40,7 +40,7 @@
         <button id="login-btn" class="btn btn-primary btn-large" type="submit" name="login" style="float:left;margin-left:15px;">Log in</button>
           <div class="pull-right">
 	    Or
-	    <a href="https://www.facebook.com/dialog/oauth?client_id={{ FACEBOOK_APP_ID }}&redirect_uri={{ redir_uri|urlencode:"" }}&state=test">
+	    <a href="https://www.facebook.com/dialog/oauth?client_id={{ FACEBOOK_APP_ID }}&redirect_uri={{ redir_uri|urlencode:"" }}&state={{ next|default:'test' }}">
 	      Log in with Facebook
 	    </a>
 	  </div>

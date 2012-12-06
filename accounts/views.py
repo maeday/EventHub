@@ -222,12 +222,13 @@ def user_login(request):
     else:
         form = EmailAuthenticationForm
         prev = request.GET.get('next', '/mypage')
+        template_context['next'] = prev
         if request.POST:
             form = EmailAuthenticationForm(request.POST)
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)
-                if(prev != '/' and prev != '/index' and prev != '/mypage'):
+                if (prev != '/' and prev != '/index' and prev != '/mypage'):
                     return redirect(prev)
                 else:
                     return redirect('/mypage')
@@ -264,7 +265,7 @@ def login_facebook(request):
                 'code': request.GET['code'],
             }
             
-            #csrf_token = request.GET['state']
+            prev = request.GET['state'];
 
             url = 'https://graph.facebook.com/oauth/access_token?' + \
                     urllib.urlencode(args)
@@ -289,7 +290,11 @@ def login_facebook(request):
                 if user:
                     if user.is_active:
                         login(request, user)
-                        return HttpResponseRedirect('/mypage')
+                        if (prev != '/' and prev != '/index' \
+                            and prev != '/mypage' and prev != 'test'):
+                            return redirect(prev)
+                        else:    
+                            return HttpResponseRedirect('/mypage')
                     else:
                         messages.add_message(request, messages.ERROR, 
                                              ERROR_MSG_USER_INACTIVE, 
