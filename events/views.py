@@ -348,7 +348,8 @@ def testfilter(request):
 #        qs = SmartCachingQuerySet(model=Event)
 #        pickle_str = cPickle.dumps(event_list)
 #        event_list = SmartCachingQuerySet(event_list)
-        key = "filter-" + str(datetime.now())
+        key = "filters-" + str(datetime.now())
+        key = key.replace(" ", "-")
         old_key = key
         while not cache.add(key, event_list):
             # Cache collision, add a random number to key
