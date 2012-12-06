@@ -24,8 +24,16 @@
 				</div>	
 				<div class="row full-event">
 					<p>
-						{% for category in event.categories.all %} <span class="gray-text"><small class="pull-right">{{ category.name }}&nbsp;</small></span>
-						{% endfor %}
+						<span class="gray-text">
+							<small class="pull-left">
+								{{ event.neighborhood.name }}
+							</small>
+							<small class="pull-right" style="text-align:right;">
+							{% for category in event.categories.all %} 
+						    	{{ category.name }}{% if not forloop.last %}&nbsp;| {% endif %}
+							{% endfor %}
+							</small>
+						</span>
 					</p>
 				</div>
 				<div class="row full-event">
