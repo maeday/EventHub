@@ -545,7 +545,7 @@ def edit_profile(request):
         oldPassword = request.POST.get('oldPassword')
         newPassword = request.POST.get('newPassword')
         userEmail = request.POST.get('userEmail')
-        useFbPic = request.POST.get('useFbPic')
+        useFbPic = (request.POST.get('useFbPic') == "true")
         userPic = request.FILES.get('userPic')
         accessGranted = True
         user = authenticate(email=userEmail, password=oldPassword)
@@ -563,7 +563,8 @@ def edit_profile(request):
                 if len(newPassword)>0:
                     user.set_password(newPassword)
                 userProfile = user.get_profile()
-                if useFbPic=='1':
+                
+                if useFbPic:
                     userProfile.use_fb_pic=True
                 else:
                     userProfile.use_fb_pic=False
@@ -604,3 +605,9 @@ def storeToAmazonS3(fileObject):
     
 def id_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
+
+# This really doesn't belong here, but there isn't another place to put it right now
+def csrf_failure(request, reason=""):
+    template = "csrffailure.html"
+    request_context = RequestContext(request)
+    return render_to_response(template, request_context)

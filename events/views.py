@@ -447,6 +447,11 @@ def delete_event(request):
         
             template_context = {'text': "1"}
             request_context = RequestContext(request, template_context)
+            
+            # Set message so user sees that the event was successfully deleted
+            success_msg = 'You have successfully deleted the event \"' + event.name + '"'
+            messages.add_message(request, messages.SUCCESS, success_msg)
+            
             return render_to_response(template, request_context)
         else:
             template_context = {}
@@ -525,6 +530,10 @@ def edit_event(request):
                     
             template_context = {'text': "1"}
             request_context = RequestContext(request, template_context)
+            
+            # Set message so user sees that the event was successfully edited
+            success_msg = 'You have successfully edited the event \"' + eName + '"'
+            messages.add_message(request, messages.SUCCESS, success_msg)
             
             return render_to_response(template, request_context)
         else:
