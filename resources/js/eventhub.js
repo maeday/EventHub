@@ -87,11 +87,15 @@ $(document).ready(function(){
 	
     // triggers infinite scroll
     $(window).scroll(function() {
+		if (waitingForScroll) {
+			return;
+		}
+	
         var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
         var scrolltrigger = 0.95;
 
         if ((wintop/(docheight-winheight)) > scrolltrigger) {
-			if (!waitingForScroll && last_index < max_res) {
+			if (last_index < max_res) {
 				waitingForScroll = true;
 				infinite_scroll();
 			}
@@ -306,6 +310,9 @@ function infinite_scroll() {
 				$('#contentLoader').empty();
 			}
 			$('#contentLoader').hide();
+			
+			// This needs to go here since post request is asynchronous
+			waitingForScroll = false;
 		});
 	} else {
 		// Default behavior (load everything). Should never reach here.
@@ -318,7 +325,6 @@ function infinite_scroll() {
 			$('#contentLoader').hide();
 		});
 	}
-	waitingForScroll = false;
 }
 
 function followEvent(eventId) {
