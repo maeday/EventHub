@@ -87,11 +87,14 @@ $(document).ready(function(){
 	
     // triggers infinite scroll
     $(window).scroll(function() {
+		if (waitingForScroll) {
+			return;
+		}
         var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
         var scrolltrigger = 0.95;
 
         if ((wintop/(docheight-winheight)) > scrolltrigger) {
-			if (!waitingForScroll && last_index < max_res) {
+			if (last_index < max_res) {
 				waitingForScroll = true;
 				infinite_scroll();
 			}
@@ -243,6 +246,11 @@ function editProfile() {
 	var useFbPic = document.getElementById("fbPic").checked;
 	var userPic = document.getElementById("uploadPic").files[0];
 	
+	// Show loader and disable "Save" button
+	$("#editProfLoader").show();
+	$("#editProfile_btn").addClass("disabled");
+	$("#editProfile_btn").attr("disabled", true);
+	
 	$("#ctrl-old-password").removeClass("error");
 	$("#err-old-password").hide();
 	$("#ctrl-new-password-1").removeClass("error");
@@ -298,6 +306,11 @@ function editProfile() {
 		} else {
 			alert("Error: User Profile editing failed.");
 		}
+		
+		// Reset state
+		$("#editProfLoader").hide();
+		$("#editProfile_btn").removeClass("disabled");
+		$("#editProfile_btn").removeAttr("disabled");
 	});
 	
 	request.fail(function(jqXHR, textStatus) {
@@ -321,6 +334,9 @@ function infinite_scroll() {
 				$('#contentLoader').empty();
 			}
 			$('#contentLoader').hide();
+			
+			// This needs to go here since post request is asynchronous
+			waitingForScroll = false;
 		});
 	} else {
 		// Default behavior (load everything). Should never reach here.
@@ -333,7 +349,6 @@ function infinite_scroll() {
 			$('#contentLoader').hide();
 		});
 	}
-	waitingForScroll = false;
 }
 
 function followEvent(eventId) {
