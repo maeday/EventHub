@@ -46,8 +46,8 @@
 					<span id="edit-err-description" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label-custom" for="input-location">Location</label>
+			<div id="edit-ctrl-location" class="control-group">
+				<label class="control-label-custom" for="edit-input-location">Location</label>
 				<div class="controls-custom">
 					<select id="edit-input-location">
 					<option value=-1>-- Select a Neighborhood --</option>
@@ -55,7 +55,7 @@
 					<option value={{ neighborhood.id }}>{{ neighborhood.name }}</option>
 					{% endfor %} {% endif %}
 					</select>
-					<span class="help-inline"></span>
+					<span id="edit-err-location" class="help-block" style="display:none;"></span>
 				</div>
 			</div>
 			<div id="edit-ctrl-venue" class="control-group">
@@ -111,6 +111,7 @@
 					<input id=checkbox-{{ category.id }} class="edit-c-cat" type="checkbox" value={{ category.id }}>
 					{{ category.name }} </label>
 					{% endfor %} {% endif %}
+					<span id="edit-err-categories" class="help-block" style="display:none;padding-top:5px;"></span>
 				</div>
 			</div>
 			<div id="edit-ctrl-image" class="control-group">

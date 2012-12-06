@@ -87,15 +87,11 @@ $(document).ready(function(){
 	
     // triggers infinite scroll
     $(window).scroll(function() {
-		if (waitingForScroll) {
-			return;
-		}
-	
         var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
         var scrolltrigger = 0.95;
 
         if ((wintop/(docheight-winheight)) > scrolltrigger) {
-			if (last_index < max_res) {
+			if (!waitingForScroll && last_index < max_res) {
 				waitingForScroll = true;
 				infinite_scroll();
 			}
@@ -163,6 +159,14 @@ $(document).ready(function(){
 		}
     });
     
+    $("#edit-input-location").change(function() {
+    	if ($(this).val() != -1) {
+			$("#edit-ctrl-location").removeClass("error");
+			$("#edit-err-location").hide();
+			return true;
+		}
+    }); 
+    
     $("#edit-input-venue").keyup(function() {
     	if ($(this).val() != "") {
 			$("#edit-ctrl-venue").removeClass("error");
@@ -178,6 +182,13 @@ $(document).ready(function(){
 			return true;
 		}
     });
+    
+    $('.edit-c-cat').change(function(event){
+		if ($(this).is(':checked')) {
+			$("#edit-ctrl-categories").removeClass("error");
+			$("#edit-err-categories").hide();
+		}
+	});
     
     $("#edit-input-startdate").blur(function() {
 	    edit_check_date($(this), $("#edit-err-start"), $("#edit-ctrl-start"));
@@ -231,11 +242,6 @@ function editProfile() {
 	var userEmail = $.trim(document.getElementById("user-email").innerHTML);
 	var useFbPic = document.getElementById("fbPic").checked;
 	var userPic = document.getElementById("uploadPic").files[0];
-	
-	// Show loader and disable "Save" button
-	$("#editProfLoader").show();
-	$("#editProfile_btn").addClass("disabled");
-	$("#editProfile_btn").attr("disabled", true);
 	
 	$("#ctrl-old-password").removeClass("error");
 	$("#err-old-password").hide();
@@ -292,11 +298,6 @@ function editProfile() {
 		} else {
 			alert("Error: User Profile editing failed.");
 		}
-		
-		// Reset state
-		$("#editProfLoader").hide();
-		$("#editProfile_btn").removeClass("disabled");
-		$("#editProfile_btn").removeAttr("disabled");
 	});
 	
 	request.fail(function(jqXHR, textStatus) {
@@ -320,9 +321,6 @@ function infinite_scroll() {
 				$('#contentLoader').empty();
 			}
 			$('#contentLoader').hide();
-			
-			// This needs to go here since post request is asynchronous
-			waitingForScroll = false;
 		});
 	} else {
 		// Default behavior (load everything). Should never reach here.
@@ -335,6 +333,7 @@ function infinite_scroll() {
 			$('#contentLoader').hide();
 		});
 	}
+	waitingForScroll = false;
 }
 
 function followEvent(eventId) {
@@ -518,15 +517,6 @@ function editEvent(id) {
 	}).get();
 	var input_categories_string = input_categories.join();
 	
-	if(input_location==-1){
-	    alert("Please select a neighborhood.");
-	    return;
-	}
-	
-	if(input_categories_string==""){
-		alert("Please choose at least 1 category.");
-		return;
-	}
 	var start_clock = "am";
 	if ($("#edit-clockswitch-1").html() == "&nbsp;PM&nbsp;") { // if start clock is PM
 		start_clock = "pm";
@@ -683,7 +673,7 @@ function populate_fields(event_id) {
 
 // Checks for errors in the form.
 function edit_check_all() {
-	return edit_check_title() && edit_check_times_comprehensive() && edit_check_summary() && edit_check_venue() && edit_check_street() && edit_check_city() && edit_check_state() && edit_check_costs();
+	return edit_check_title() && edit_check_times_comprehensive() && edit_check_summary() && edit_check_location() && edit_check_venue() && edit_check_street() && edit_check_city() && edit_check_state() && edit_check_costs() && edit_check_categories();
 }
 
 function edit_check_title() {
@@ -1014,4 +1004,31 @@ function edit_disableImage() {
     } else {
         $("#edit-input-photo").prop('disabled', false);
     }
+}
+
+function edit_check_location() {
+	if ($("#edit-input-location").val() == -1) {
+		$("#edit-ctrl-location").addClass("error");
+		$("#edit-err-location").text("Please select a neighborhood.");
+		$("#edit-err-location").show();
+		$("#edit-input-location").focus();
+	    return false;
+	} else {
+		$("#edit-ctrl-location").removeClass("error");
+		$("#edit-err-location").hide();
+		return true;
+	}
+}
+
+function edit_check_categories() {
+	if ($(".edit-c-cat:checked").map(function() { return $(this).val(); }).get() == "") {
+		$("#edit-ctrl-categories").addClass("error");
+		$("#edit-err-categories").text("Please select at least one category.");
+		$("#edit-err-categories").show();
+		return false;
+	} else {
+		$("#edit-ctrl-categories").removeClass("error");
+		$("#edit-err-categories").hide();
+		return true;
+	}
 }
