@@ -46,7 +46,7 @@ p.event-description {
 	line-height: 23px;
 }
 .event-time strong {
-	font-size: 16px;
+	font-size: 15px;
 }
 .event-author {
 	padding: 21px 10px 0 0;
@@ -401,4 +401,10 @@ body {
 .form-horizontal legend {
 	line-height: 15px;
 	padding-bottom: 10px;
+}
+
+#createLoader {
+	display: none;
+	padding-top: 3px;
+	float: left;
 }

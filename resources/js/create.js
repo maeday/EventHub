@@ -88,6 +88,7 @@ $(document).ready(function(){
     	if (!check_all()) {
     		return false;
     	}
+    	$("#createLoader").show();
     	requestCreate();
     });
     	
@@ -236,12 +237,14 @@ function requestCreate() {
 			}
 		} else {
 			// Error so just inform user of error.
+			$("#createLoader").hide();
 			alert("Error: Could not create event");
 		}
 	});
 	
 	// Ajax call that occurs when there is an unexpected error from the server.
 	request.fail(function(jqXHR, textStatus) {
+		$("#createLoader").hide();
 		alert("Ajax request failed: " + textStatus);
 	});
 }
