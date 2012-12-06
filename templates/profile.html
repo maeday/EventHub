@@ -6,14 +6,14 @@
 		<div class="well well-custom">
 				<div class="row">
 					<div class="span2" >
-					{% if user.get_profile.use_fb_pic == 1 %}
-						{% if user.get_profile.fbid != -1 %}
-						<img src="https://graph.facebook.com/{{ p_user.get_profile.fbid }}/picture?type=normal" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
+					{% if p_user.get_profile.use_fb_pic == 1 %}
+						{% if p_user.get_profile.fbid != -1 %}
+						<img src="https://graph.facebook.com/{{ p_user.get_profile.fbid }}/picture?type=normal" class="img-polaroid profile-medium" name = "{{p_user.get_profile.use_fb_pic}}" />
 						{% else %}
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
 						{% endif %}
 					{% else %}
-						{% if user.get_profile.pic %}
+						{% if p_user.get_profile.pic %}
 						<img src="{{ p_user.get_profile.pic.url }}" class="img-polaroid profile-medium" name = "{{user.get_profile.use_fb_pic}}" />
 						{% else %}
 						<img src="{{ STATIC_URL }}img/profilePicPlaceholder.png" alt="No profile pic chosen" class="img-polaroid profile-medium" />
