@@ -276,6 +276,10 @@ function editProfile() {
 			$("#err-new-password-2").text("Passwords do not match.");
 			$("#err-new-password-2").show();
 			$("#new-password-2").focus();
+			// Reset state
+			$("#editProfLoader").hide();
+			$("#editProfile_btn").removeClass("disabled");
+			$("#editProfile_btn").removeAttr("disabled");
 			return;
 		}
 	}
